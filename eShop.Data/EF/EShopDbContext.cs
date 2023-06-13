@@ -1,5 +1,6 @@
 ﻿using eShop.Data.Configurations;
 using eShop.Data.Entities;
+using eShop.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace eShop.Data.EF
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // config by fluent API
             modelBuilder.ApplyConfiguration(new CartConfiguration());
 
             modelBuilder.ApplyConfiguration(new AppConfigConfiguration());
@@ -29,6 +31,11 @@ namespace eShop.Data.EF
             modelBuilder.ApplyConfiguration(new ProductTranslationConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+
+            //data seeding
+
+            modelBuilder.Seed();
+
         }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
