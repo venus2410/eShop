@@ -14,6 +14,7 @@ namespace eShop.Data.Configurations
             builder.ToTable("Carts");
             builder.HasKey(x => x.Id);
             builder.HasOne(m=>m.Product).WithMany(n=>n.Carts).HasForeignKey(x=>x.ProductId);
+            builder.HasOne(x => x.AppUser).WithMany(x => x.Carts).HasForeignKey(x => x.UserId);
         }
     }
 }
