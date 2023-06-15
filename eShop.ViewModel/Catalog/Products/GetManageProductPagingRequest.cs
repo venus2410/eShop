@@ -1,4 +1,4 @@
-﻿using eShop.ViewModel.Catalog.DTOs;
+﻿using eShop.ViewModel.Catalog.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
