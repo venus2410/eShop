@@ -1,11 +1,10 @@
-﻿using eShop.ViewModel.Catalog.DTOs;
-using eShop.ViewModel.Catalog.Products.DTOs;
+﻿using eShop.ViewModel.Catalog.Common;
 using eShop.Data.EF;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using eShop.ViewModel.Catalog.Products.DTOs.Manage;
+using eShop.ViewModel.Catalog.Products;
 
 namespace eShop.Application.Catalog.Products
 {
@@ -16,7 +15,7 @@ namespace eShop.Application.Catalog.Products
         {
             _context = context;
         }
-        public async Task<PageResult<ProductViewModel>> GetAllByCategory(PublicProductPagingRequest request)
+        public async Task<PageResult<ProductViewModel>> GetAllByCategory(GetPublicProductPagingRequest request)
         {
             throw new NotImplementedException();
         }
