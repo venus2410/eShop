@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
 using System.Text;
 
-namespace eShop.ViewModel.Catalog.Products.DTOs
+namespace eShop.ViewModel.Catalog.Products
 {
     public class ProductImageViewModel
     {

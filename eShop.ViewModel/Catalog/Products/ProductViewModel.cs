@@ -1,13 +1,18 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace eShop.ViewModel.Catalog.Products.DTOs.Manage
+namespace eShop.ViewModel.Catalog.Products
 {
-    public class ProductUpdateRequest
+    public class ProductViewModel
     {
-        public int Id { set; get; }
+        public int Id { get; set; }
+        public decimal Price { get; set; }
+        public decimal OriginalPrice { get; set; }
+        public int Stock { get; set; }
+        public int ViewCount { get; set; }
+        public DateTime DateCreated { get; set; }
+
         public string Name { set; get; }
         public string Description { set; get; }
         public string Details { set; get; }
@@ -16,7 +21,5 @@ namespace eShop.ViewModel.Catalog.Products.DTOs.Manage
 
         public string SeoAlias { get; set; }
         public string LanguageId { set; get; }
-        public IFormFile ThumbnailImage { set; get; }
-
     }
 }
