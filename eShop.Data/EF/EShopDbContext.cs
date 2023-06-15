@@ -22,6 +22,8 @@ namespace eShop.Data.EF
 
             modelBuilder.ApplyConfiguration(new AppConfigConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductImageConfiguration());
+
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ProductInCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
@@ -69,6 +71,8 @@ namespace eShop.Data.EF
 
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<ProductTranslation> ProductTranslations { get; set; }
+
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         public DbSet<Promotion> Promotions { get; set; }
 
