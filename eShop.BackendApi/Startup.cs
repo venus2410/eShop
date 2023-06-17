@@ -33,6 +33,12 @@ namespace eShop.BackendApi
         {
             services.AddDbContext<EShopDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString(SystemConstant.MainConnectionString)));
+
+            //loop handling
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
             //swagger
 
             services.AddSwaggerGen(c =>
@@ -41,7 +47,7 @@ namespace eShop.BackendApi
             });
 
             //add DI
-            services.AddTransient<IPublicProductService,PublicProductService>();
+            services.AddTransient<IPublicProductService, PublicProductService>();
             services.AddTransient<IManageProductService, ManageProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
 

@@ -41,7 +41,7 @@ namespace eShop.BackendApi.Controllers
 
             var product = _manageService.GetById(productId, request.LanguageId);
 
-            return CreatedAtAction(nameof(GetById),new {id=productId},product);
+            return CreatedAtAction(nameof(GetById),new {productId=productId, languageId=request.LanguageId},product);
         }
 
         [HttpPut]
@@ -78,7 +78,7 @@ namespace eShop.BackendApi.Controllers
 
             var image = _manageService.GetImageById(imageId);
 
-            return CreatedAtAction(nameof(GetImageById), new { id = productId}, image);
+            return CreatedAtAction(nameof(GetImageById), new {productId=productId ,imageId = imageId}, image);
         }
         [HttpPut("{productId}/images/{imageId}")]
         public async Task<IActionResult> UpdateImage(int imageId, [FromForm] ProductImageUpdateRequest request)
