@@ -2,7 +2,6 @@
 using eShop.Data.EF;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using eShop.ViewModel.Catalog.Products;
 using Microsoft.EntityFrameworkCore;
