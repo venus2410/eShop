@@ -88,7 +88,7 @@ namespace eShop.Application.Catalog.Products
         public async Task<int> Delete(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
-            if (product != null) throw new EShopException($"Cannot find a product with id: {productId}");
+            if (product == null) throw new EShopException($"Cannot find a product with id: {productId}");
 
             var images = _context.ProductImages.Where(x => x.ProductId == productId);
             foreach (var image in images)
@@ -254,20 +254,20 @@ namespace eShop.Application.Catalog.Products
         public async Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request)
         {
             var productImage = await _context.ProductImages.FindAsync(imageId);
-            if (productImage == null) { return -1; }
-            if (request.ImageFile == null) { return -1; }
+            if (productImage == null) { throw new EShopException($"Cannot find an image with id {imageId}"); }
+            if (request.ImageFile == null) { throw new EShopException("There is no image file inserted"); }
 
             productImage.ImagePath = await SaveFile(request.ImageFile);
             productImage.FileSize = request.ImageFile.Length;
 
-            await _context.ProductImages.AddAsync(productImage);
+            _context.ProductImages.Update(productImage);
             return await _context.SaveChangesAsync();
         }
 
         public async Task<ProductImageViewModel> GetImageById(int imageId)
         {
             var image= await _context.ProductImages.FindAsync(imageId);
-            if(image == null) { return null; }
+            if(image == null) { throw new EShopException($"Cannot find an image with id {imageId}"); }
             var model = new ProductImageViewModel()
             {
                 Id = image.Id,
