@@ -62,7 +62,7 @@ namespace eShop.Application.System.Users
                 FirstName=request.FirstName,
                 LastName=request.LastName,
                 PhoneNumber=request.PhoneNumber,
-                Dob=request.Dob
+                Dob=request.Dob??default
             };
             var result=await _userManager.CreateAsync(user,request.Password);
             if (result.Succeeded)

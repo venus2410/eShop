@@ -4,6 +4,9 @@ using eShop.Application.System.Users;
 using eShop.Data.EF;
 using eShop.Data.Entities;
 using eShop.Utilities.Constants;
+using eShop.ViewModel.System.Users;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,9 +43,13 @@ namespace eShop.BackendApi
                 options.UseSqlServer(Configuration.GetConnectionString(SystemConstant.MainConnectionString)));
 
             //loop handling
-            services.AddControllers().AddNewtonsoftJson(options =>
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
+            // fluent validator
+            services.AddValidatorsFromAssemblyContaining<LoginModelRequestValidator>();
+            
 
             //swagger
 
