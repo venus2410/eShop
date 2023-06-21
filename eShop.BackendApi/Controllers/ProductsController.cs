@@ -1,11 +1,13 @@
 ﻿using eShop.Application.Catalog.Products;
 using eShop.ViewModel.Catalog.ProductImages;
 using eShop.ViewModel.Catalog.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace eShop.BackendApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductsController : Controller
