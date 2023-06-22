@@ -23,7 +23,7 @@ namespace eShop.BackendApi.Controllers
         }
         [HttpPost("authenticate")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromForm]LoginModelRequest request)
+        public async Task<IActionResult> Login([FromBody]LoginModelRequest request)
         {
             //if (!ModelState.IsValid) return BadRequest(ModelState);
             var validateResult=await _loginValidator.ValidateAsync(request);
@@ -41,7 +41,7 @@ namespace eShop.BackendApi.Controllers
         }
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromForm] RegisterModelRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterModelRequest request)
         {
             var validateResult= await _registerValidator.ValidateAsync(request);
             if (!validateResult.IsValid)
