@@ -10,6 +10,7 @@ namespace eShop.BackendApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly IUserService _userService;
@@ -23,27 +24,27 @@ namespace eShop.BackendApi.Controllers
         }
         [HttpPost("authenticate")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody]LoginModelRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginModelRequest request)
         {
             //if (!ModelState.IsValid) return BadRequest(ModelState);
-            var validateResult=await _loginValidator.ValidateAsync(request);
+            var validateResult = await _loginValidator.ValidateAsync(request);
             if (!validateResult.IsValid)
             {
                 validateResult.AddToModelState(this.ModelState);
                 return BadRequest(ModelState);
             }
-            var result =await _userService.Login(request);
-            if(string.IsNullOrEmpty(result))
+            var result = await _userService.Login(request);
+            if (string.IsNullOrEmpty(result))
             {
                 return BadRequest("Wrong user name or password");
             }
             return Ok(result);
         }
-        [HttpPost("register")]
+        [HttpPost()]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterModelRequest request)
         {
-            var validateResult= await _registerValidator.ValidateAsync(request);
+            var validateResult = await _registerValidator.ValidateAsync(request);
             if (!validateResult.IsValid)
             {
                 validateResult.AddToModelState(this.ModelState);
@@ -55,6 +56,12 @@ namespace eShop.BackendApi.Controllers
                 return BadRequest("Register fail");
             }
             return Ok();
+        }
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPaging([FromQuery] UserPagingRequest request)
+        {
+            var result =await _userService.GetUserPaging(request);
+            return Ok(result);
         }
     }
 }

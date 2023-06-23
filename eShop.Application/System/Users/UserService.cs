@@ -1,13 +1,18 @@
 ﻿using eShop.Data.Entities;
 using eShop.Utilities.Exceptions;
+using eShop.ViewModel.Catalog.Common;
+using eShop.ViewModel.Catalog.Products;
 using eShop.ViewModel.System.Users;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,13 +32,50 @@ namespace eShop.Application.System.Users
             _roleManager = roleManager;
             _configuration = configuration;
         }
+
+        public async Task<PageResult<UserViewModel>> GetUserPaging(UserPagingRequest request)
+        {
+            var query = _userManager.Users;
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                query = query.Where(m => EF.Functions.Like(m.UserName, $"%{request.Keyword}%")
+                    || EF.Functions.Like(m.Email, $"%{request.Keyword}%")
+                    || EF.Functions.Like(m.PhoneNumber, $"%{request.Keyword}%")
+                );
+            }
+            //paging
+            int totalRecord = await query.CountAsync();
+
+            var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new UserViewModel()
+                {
+                    Id= x.Id,
+                    FirstName= x.FirstName,
+                    LastName= x.LastName,
+                    PhoneNumber= x.PhoneNumber,
+                    UserName= x.UserName,
+                    Email= x.Email
+                }).ToListAsync();
+
+            // return data
+            var result = new PageResult<UserViewModel>()
+            {
+                Items = data,
+                TotalRecord = totalRecord
+            };
+
+            return result;
+
+        }
+
         public async Task<string> Login(LoginModelRequest request)
         {
-            var user=await _userManager.FindByNameAsync(request.UserName);
+            var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null) { return null; }
-            var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe,true);
+            var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
             if (!result.Succeeded) { return null; }
-            var roles =await _userManager.GetRolesAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email,user.Email),
@@ -57,17 +99,17 @@ namespace eShop.Application.System.Users
         {
             var user = new AppUser()
             {
-                UserName=request.UserName,
-                Email=request.Email,
-                FirstName=request.FirstName,
-                LastName=request.LastName,
-                PhoneNumber=request.PhoneNumber,
-                Dob=request.Dob??default
+                UserName = request.UserName,
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                PhoneNumber = request.PhoneNumber,
+                Dob = request.Dob ?? default
             };
-            var result=await _userManager.CreateAsync(user,request.Password);
+            var result = await _userManager.CreateAsync(user, request.Password);
             if (result.Succeeded)
             {
-                return true;    
+                return true;
             }
             return false;
         }

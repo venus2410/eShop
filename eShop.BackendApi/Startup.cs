@@ -93,8 +93,7 @@ namespace eShop.BackendApi
 
             //add DI
             //product services
-            services.AddTransient<IPublicProductService, PublicProductService>();
-            services.AddTransient<IManageProductService, ManageProductService>();
+            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IStorageService, FileStorageService>();
 
             //managers
