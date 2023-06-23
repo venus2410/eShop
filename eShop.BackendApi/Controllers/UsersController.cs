@@ -37,7 +37,7 @@ namespace eShop.BackendApi.Controllers
             {
                 return BadRequest("Wrong user name or password");
             }
-            return Ok(new {token= result });
+            return Ok(result);
         }
         [HttpPost("register")]
         [AllowAnonymous]
