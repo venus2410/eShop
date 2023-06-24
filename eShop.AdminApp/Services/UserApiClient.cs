@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -21,6 +22,18 @@ namespace eShop.AdminApp.Services
         {
             _httpClientFactory= httpClientFactory;
             _configuration= configuration;
+        }
+
+        public async Task<bool> Create(RegisterModelRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, Application.Json);
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new System.Uri(_configuration["BaseAddress"]);
+            var response = await client.PostAsync("/api/users/", httpContent);
+            
+            return response.IsSuccessStatusCode;
         }
 
         public async Task<PageResult<UserViewModel>> GetUsersPaging(UserPagingRequest model)
