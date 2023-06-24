@@ -8,5 +8,6 @@ namespace eShop.AdminApp.Services
     {
         public Task<string> Login(LoginModelRequest model);
         public Task<PageResult<UserViewModel>> GetUsersPaging(UserPagingRequest model);
+        public Task<bool> Create(RegisterModelRequest request);
     }
 }
