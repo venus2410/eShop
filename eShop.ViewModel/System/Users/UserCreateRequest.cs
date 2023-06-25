@@ -5,7 +5,7 @@ using System.Text;
 
 namespace eShop.ViewModel.System.Users
 {
-    public class RegisterModelRequest
+    public class UserCreateRequest
     {
         [Display(Name = "Tên")]
         [Required]
@@ -17,7 +17,7 @@ namespace eShop.ViewModel.System.Users
 
         [Display(Name = "Ngày sinh")]
         [DataType(DataType.Date)]
-        public DateTime? Dob { get; set; }
+        public DateTime Dob { get; set; }
 
         [Display(Name = "Email")]
         [Required]

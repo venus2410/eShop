@@ -4,6 +4,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
@@ -37,13 +38,14 @@ namespace eShop.AdminApp
     });
             services.AddHttpClient();
 
+            services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
+
             services.AddTransient<IUserApiClient, UserApiClient>();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSession(option => option.IdleTimeout = TimeSpan.FromMinutes(30));
 
             // fluent validator
-            services.AddValidatorsFromAssemblyContaining<LoginModelRequestValidator>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
