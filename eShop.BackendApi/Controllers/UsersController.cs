@@ -1,9 +1,13 @@
 ﻿using eShop.Application.System.Users;
+using eShop.ViewModel.Catalog.Common;
 using eShop.ViewModel.System.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace eShop.BackendApi.Controllers
@@ -14,53 +18,72 @@ namespace eShop.BackendApi.Controllers
     public class UsersController : Controller
     {
         private readonly IUserService _userService;
-        private readonly IValidator<LoginModelRequest> _loginValidator;
-        private readonly IValidator<RegisterModelRequest> _registerValidator;
-        public UsersController(IUserService service, IValidator<LoginModelRequest> loginValidator, IValidator<RegisterModelRequest> registerValidator)
+        public UsersController(IUserService service)
         {
             _userService = service;
-            _loginValidator = loginValidator;
-            _registerValidator = registerValidator;
         }
         [HttpPost("authenticate")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] LoginModelRequest request)
+        public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
-            //if (!ModelState.IsValid) return BadRequest(ModelState);
-            var validateResult = await _loginValidator.ValidateAsync(request);
-            if (!validateResult.IsValid)
+            if (!ModelState.IsValid)
             {
-                validateResult.AddToModelState(this.ModelState);
                 return BadRequest(ModelState);
             }
             var result = await _userService.Login(request);
-            if (string.IsNullOrEmpty(result))
+            if (!result.IsSucceed)
             {
-                return BadRequest("Wrong user name or password");
+                return BadRequest(result);
             }
             return Ok(result);
         }
         [HttpPost()]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromBody] RegisterModelRequest request)
+        public async Task<IActionResult> Register([FromBody] UserCreateRequest request)
         {
-            var validateResult = await _registerValidator.ValidateAsync(request);
-            if (!validateResult.IsValid)
+            if (!ModelState.IsValid)
             {
-                validateResult.AddToModelState(this.ModelState);
                 return BadRequest(ModelState);
             }
             var result = await _userService.Register(request);
-            if (!result)
+            if (!result.IsSucceed)
             {
-                return BadRequest("Register fail");
+                return BadRequest(result);
             }
-            return Ok();
+            return Ok(result);
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id,[FromBody] UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userService.Update(request);
+            if (!result.IsSucceed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
         [HttpGet("paging")]
         public async Task<IActionResult> GetAllPaging([FromQuery] UserPagingRequest request)
         {
             var result =await _userService.GetUserPaging(request);
+            if (!result.IsSucceed)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid Id)
+        {
+            var result = await _userService.GetUserById(Id);
+            if (!result.IsSucceed)
+            {
+                return BadRequest(result);
+            }
             return Ok(result);
         }
     }

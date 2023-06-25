@@ -1,4 +1,4 @@
-﻿@model eShop.ViewModel.System.Users.RegisterModelRequest
+﻿@model eShop.ViewModel.System.Users.UserCreateRequest
 
 @{
     ViewData["Title"] = "Create";
@@ -19,9 +19,9 @@
             <div class="col-md-4">
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="FirstName" class="control-label"></label>
-                        <input asp-for="FirstName" class="form-control" />
+                    <div class="form-floating mb-3">
+                        <input asp-for="FirstName" class="form-control" type="text" placeholder="nhập tài khoản"/>
+                        <label asp-for="FirstName"></label>
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
                     <div class="form-group">

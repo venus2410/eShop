@@ -32,14 +32,19 @@ namespace eShop.AdminApp.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModelRequest request)
+        public async Task<IActionResult> Login(UserLoginRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
-            var token = await _userApiClient.Login(request);
-
+            var result = await _userApiClient.Login(request);
+            if (!result.IsSucceed)
+            {
+                ModelState.AddModelError("", result.Errors);
+                return View();
+            }
+            var token = result.Data;
             var userPrincipal = this.ValidateToken(token);
             var authProperties = new AuthenticationProperties
             {

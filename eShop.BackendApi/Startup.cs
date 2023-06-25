@@ -48,7 +48,6 @@ namespace eShop.BackendApi
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
             // fluent validator
-            services.AddValidatorsFromAssemblyContaining<LoginModelRequestValidator>();
             
 
             //swagger

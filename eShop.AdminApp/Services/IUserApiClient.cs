@@ -1,13 +1,16 @@
 ﻿using eShop.ViewModel.Catalog.Common;
 using eShop.ViewModel.System.Users;
+using System;
 using System.Threading.Tasks;
 
 namespace eShop.AdminApp.Services
 {
     public interface IUserApiClient
     {
-        public Task<string> Login(LoginModelRequest model);
-        public Task<PageResult<UserViewModel>> GetUsersPaging(UserPagingRequest model);
-        public Task<bool> Create(RegisterModelRequest request);
+        public Task<ServiceResult<string>> Login(UserLoginRequest model);
+        public Task<ServiceResult<PageResult<UserViewModel>>> GetUsersPaging(UserPagingRequest model);
+        public Task<ServiceResult<UserViewModel>> GetById(Guid Id);
+        public Task<ServiceResult<bool>> Create(UserCreateRequest request);
+        public Task<ServiceResult<bool>> Update(UserUpdateRequest request);
     }
 }
