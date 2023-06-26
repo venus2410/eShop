@@ -93,7 +93,9 @@ namespace eShop.Application.System.Users
                 var result = new PageResult<UserViewModel>()
                 {
                     Items = data,
-                    TotalRecord = totalRecord
+                    PageIndex=request.PageIndex,
+                    PageSize=request.PageSize,
+                    TotalRecords = totalRecord
                 };
 
                 return new ServiceResultSuccess<PageResult<UserViewModel>>(result);
