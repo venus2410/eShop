@@ -14,6 +14,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using eShop.ViewModel.Catalog.Common;
 
 namespace eShop.AdminApp.Controllers
 {
@@ -39,24 +40,23 @@ namespace eShop.AdminApp.Controllers
             return View(result.Data);
         }
         [HttpGet]
-        public IActionResult Create()
+        public PartialViewResult Create()
         {
-            return View();
+            return PartialView("_Create");
         }
         [HttpPost]
-        public async Task<IActionResult> Create(UserCreateRequest request)
+        public async Task<JsonResult> Create(UserCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return View(request);
+                var rs = new ServiceResultFail<bool>("Dữ liệu không hợp lệ");
+                return Json(rs);
             }
             var result = await _userApiClient.Create(request);
-            if (result.IsSucceed) return RedirectToAction("Index", "User");
-            ModelState.AddModelError("", result.Errors);
-            return View(request);
+            return Json(result);
         }
         [HttpGet]
-        public async Task<IActionResult> Update(Guid Id)
+        public async Task<PartialViewResult> Update(Guid Id)
         {
             var result =await _userApiClient.GetById(Id);
             if (result.IsSucceed)
@@ -71,21 +71,20 @@ namespace eShop.AdminApp.Controllers
                     Email=user.Email,
                     PhoneNumber=user.PhoneNumber
                 };
-                return View(userUpdate);
+                return PartialView("_Update",userUpdate);
             }
-            return RedirectToAction("Error", "Home");
+            return PartialView("_Update");
         }
         [HttpPost]
         public async Task<IActionResult> Update(UserUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return View(request);
+                var rs = new ServiceResultFail<bool>("Dữ liệu không hợp lệ");
+                return Json(rs);
             }
             var result = await _userApiClient.Update(request);
-            if (result.IsSucceed) return RedirectToAction("Index", "User");
-            ModelState.AddModelError("", result.Errors);
-            return View(request);
+            return Json(result);
         }
         [HttpPost]
         public async Task<IActionResult> Logout()
@@ -97,14 +96,8 @@ namespace eShop.AdminApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(UserDeleteRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(request);
-            }
             var result = await _userApiClient.Delete(request.Id);
-            if (result.IsSucceed) 
-                ModelState.AddModelError("", result.Errors);
-            return RedirectToAction("Index", "User");
+            return Json(result); 
         }
     }
 }
