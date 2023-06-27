@@ -74,7 +74,8 @@ namespace eShop.Application.System.Users
                     LastName = user.LastName,
                     PhoneNumber = user.PhoneNumber,
                     Email = user.Email,
-                    UserName = user.UserName
+                    UserName = user.UserName,
+                    Dob=user.Dob
                 };
                 return new ServiceResultSuccess<UserViewModel>(result);
             }
