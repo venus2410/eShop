@@ -36,6 +36,28 @@ namespace eShop.Application.System.Users
             _configuration = configuration;
         }
 
+        public async Task<ServiceResult<bool>> Delete(Guid id)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(id.ToString());
+                if (user == null)
+                {
+                    return new ServiceResultFail<bool>("Không tìm thấy người dùng");
+                }
+                var result=await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    return new ServiceResultSuccess<bool>();
+                }
+                return new ServiceResultFail<bool>("Xóa không thành công");
+            }
+            catch (Exception e)
+            {
+                return new ServiceResultFail<bool>(e.Message.ToString());
+            }
+        }
+
         public async Task<ServiceResult<UserViewModel>> GetUserById(Guid id)
         {
             try

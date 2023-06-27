@@ -12,5 +12,6 @@ namespace eShop.AdminApp.Services
         public Task<ServiceResult<UserViewModel>> GetById(Guid Id);
         public Task<ServiceResult<bool>> Create(UserCreateRequest request);
         public Task<ServiceResult<bool>> Update(UserUpdateRequest request);
+        public Task<ServiceResult<bool>> Delete(Guid Id);
     }
 }
