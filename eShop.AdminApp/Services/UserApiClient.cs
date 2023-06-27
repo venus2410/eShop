@@ -42,6 +42,20 @@ namespace eShop.AdminApp.Services
             return result;
         }
 
+        public async Task<ServiceResult<bool>> Delete(Guid Id)
+        {
+            var token = _contextAccessor.HttpContext.Session.GetString("Token");
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new System.Uri(_configuration["BaseAddress"]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.DeleteAsync($"/api/users/{Id}");
+
+            var body = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ServiceResult<bool>>(body);
+            return result;
+        }
+
         public async Task<ServiceResult<UserViewModel>> GetById(Guid model)
         {
             var token = _contextAccessor.HttpContext.Session.GetString("Token");
