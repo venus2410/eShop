@@ -15,8 +15,6 @@
     <div class="card mb-4">
         <div class="card-header">
             <div class="row">
-
-
                 <div class="col-md-3">
                     <button type="button" class="btn btn-outline-success" id="create" onclick="loadCreatModal()">
 
@@ -58,7 +56,13 @@
                 </div>
             </div>
         </div>
+        
         <div class="card-body" id="tableData">
+            @*<div class="row">
+                <div class="alert alert-success" role="alert" id="alertDiv">
+                    
+                </div>
+            </div>*@
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -121,8 +125,8 @@
             </table>
             @await Component.InvokeAsync("Pager", Model)
         </div>
+        </div>
     </div>
-</div>
 
 <!--Modal-->
 <!-- Button trigger modal -->
@@ -134,7 +138,7 @@
 @section Scripts{
     <script src="~/js/bootbox.min.js"></script>
     <script>
-
+        //create
         function loadCreatModal() {
             $.ajax({
                 url: '@Url.Action("Create","User")',
@@ -144,6 +148,38 @@
                 }
             });
         }
+        function createUser() {
+            if ($("#createForm").valid()) {
+                var data = $("#createForm").serialize();
+        //console.log(data);
+        //alert(data);
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Create","User")',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // when we use .serialize() this generates the data in query string format. this needs the default contentType (default content type is: contentType: 'application/x-www-form-urlencoded; charset=UTF-8') so it is optional, you can remove it
+                    data: data,
+                    dataType: 'json',
+                    success: function (result) {
+                        /*alert(JSON.stringify(result));*/
+                        if (result.isSucceed == true) {
+                            $("#exampleModal").modal('hide');
+                            bootbox.alert("Tạo mới thành công");
+                            setInterval(function () {
+                                location.reload();
+                            }, 2000);
+                        }
+                        else {
+                            bootbox.alert(result.errors);
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert('Failed to receive the Data');
+                    }
+                });
+            }
+
+        }
+        //update
         function loadUpdateModal(id) {
             $.ajax({
                 url: '@Url.Action("Update","User")',
@@ -154,15 +190,52 @@
                 }
             });
         }
+        function updateUser() {
+            if ($("#updateForm").valid()) {
+                var data = $("#updateForm").serialize();
+        //console.log(data);
+        //alert(data);
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Update","User")',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // when we use .serialize() this generates the data in query string format. this needs the default contentType (default content type is: contentType: 'application/x-www-form-urlencoded; charset=UTF-8') so it is optional, you can remove it
+                    data: data,
+                    dataType: 'json',
+                    async: false,
+                    success: function (result) {
+                        /*alert(JSON.stringify(result));*/
+                        if (result.isSucceed == true) {
+                            $("#exampleModal").modal('hide');
+                            
+                            bootbox.alert("Cập nhật thành công");
+                            setInterval(function () {
+                                location.reload();
+                            }, 2000);
+                        }
+                        else {
+                            bootbox.alert(result.errors);
+                        }
+                    },
+                    error: function () {
+                        alert('Failed to receive the Data');
+                    }
+                });
+            }
+
+        }
+        //delete
         function deleteUser(id) {
             $.ajax({
                 url:'@Url.Action("Delete","User")',
                 method: "Post",
                 data: { id: id },
+                async:false,
                 success: function (data) {
                     if (data.isSucceed == true) {
-                        bootbox.alert("Xóa thành công!");
-                        location.reload();
+                        bootbox.alert("Xóa thành công");
+                        setInterval(function () {
+                            location.reload();
+                        }, 2000);
                     }
                     else {
                         bootbox.alert(data.errors);
@@ -185,6 +258,9 @@
                     $("#tableData").html(data);
                 }
             });
+        }
+        function alertForm(message) {
+            $("#alertDiv").text(message).fadeIn("slow").delay(3000).fadeOut("slow");
         }
         //for search
         $("#pageSizeSelect").on('change', function () {

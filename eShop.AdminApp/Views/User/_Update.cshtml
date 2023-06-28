@@ -1,37 +1,10 @@
 ﻿@model eShop.ViewModel.System.Users.UserUpdateRequest
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/js/bootbox.min.js"></script>
 
 <script type="text/javascript">
-        function updateUser() {
-            if ($("#updateForm").valid()) {
-                var data = $("#updateForm").serialize();
-        //console.log(data);
-        //alert(data);
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("Update","User")',
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // when we use .serialize() this generates the data in query string format. this needs the default contentType (default content type is: contentType: 'application/x-www-form-urlencoded; charset=UTF-8') so it is optional, you can remove it
-                    data: data,
-                    dataType: 'json',
-                    success: function (result) {
-                        /*alert(JSON.stringify(result));*/
-                        if (result.isSucceed == true) {
-                            alert('Cập nhật thành công');
-                            $("#exampleModal").modal('hide');
-                            location.reload();
-                        }
-                        else {
-                            alert(result.errors);
-                        }
-                    },
-                    error: function () {
-                        alert('Failed to receive the Data');
-                    }
-                });
-            }
-
-    }
+        
 
 </script>
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
