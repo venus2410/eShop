@@ -58,11 +58,11 @@
         </div>
         
         <div class="card-body" id="tableData">
-            @*<div class="row">
-                <div class="alert alert-success" role="alert" id="alertDiv">
+            <div class="row">
+                <div class="alert alert-success" role="alert" id="alertDiv" style="display:none">
                     
                 </div>
-            </div>*@
+            </div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -163,7 +163,7 @@
                         /*alert(JSON.stringify(result));*/
                         if (result.isSucceed == true) {
                             $("#exampleModal").modal('hide');
-                            bootbox.alert("Tạo mới thành công");
+                            alertForm("Tạo mới thành công");
                             setInterval(function () {
                                 location.reload();
                             }, 2000);
@@ -207,9 +207,9 @@
                         if (result.isSucceed == true) {
                             $("#exampleModal").modal('hide');
                             
-                            bootbox.alert("Cập nhật thành công");
+                            alertForm("Cập nhật thành công");
                             setInterval(function () {
-                                location.reload();
+                                location.reload(true);
                             }, 2000);
                         }
                         else {
@@ -232,7 +232,7 @@
                 async:false,
                 success: function (data) {
                     if (data.isSucceed == true) {
-                        bootbox.alert("Xóa thành công");
+                        alertForm("Xóa thành công");
                         setInterval(function () {
                             location.reload();
                         }, 2000);
