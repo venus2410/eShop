@@ -27,7 +27,7 @@ namespace eShop.AdminApp.Controllers
             _userApiClient = userApiClient;
             _configuration = configuration;
         }
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 1)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 5)
         {
             var userRequest = new UserPagingRequest()
             {
@@ -39,6 +39,19 @@ namespace eShop.AdminApp.Controllers
             var result = await _userApiClient.GetUsersPaging(userRequest);
             return View(result.Data);
         }
+        public async Task<IActionResult> GetUserPaging(string keyword, int pageIndex = 1, int pageSize = 5)
+        {
+            var userRequest = new UserPagingRequest()
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                Keyword = keyword
+            };
+
+            var result = await _userApiClient.GetUsersPaging(userRequest);
+            return PartialView("_GetUserPaging",result.Data);
+        }
+
         [HttpGet]
         public PartialViewResult Create()
         {

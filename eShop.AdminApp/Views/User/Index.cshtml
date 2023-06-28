@@ -14,16 +14,55 @@
     </ol>
     <div class="card mb-4">
         <div class="card-header">
-            <button type="button" class="btn btn-outline-success" id="create" onclick="loadCreatModal()">
+            <div class="row">
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-outline-success" id="create" onclick="loadCreatModal()">
 
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
-                    <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-                    <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
-                </svg>
-                Tạo mới
-            </button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                            <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                            <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
+                        </svg>
+                        Tạo mới
+                    </button>
+                </div>
+                <div class="col-md-9">
+                    <div class="row justify-content-between">
+                        <div class="col-md-3">
+                            <select class="form-select w-auto" aria-label="Default select example" name="pagesize" id="pageSizeSelect">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-flex justify-content-end">
+                            <div class="d-flex justify-content-end">
+                                <div class="input-group">
+                                    <div class="form-outline">
+                                        <input type="search" id="keywordTextBox" class="form-control" />
+                                    </div>
+                                    <button id="search-button" type="button" class="btn btn-primary">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
         </div>
-        <div class="card-body">
+        
+        <div class="card-body" id="tableData">
+            @*<div class="row">
+                <div class="alert alert-success" role="alert" id="alertDiv">
+                    
+                </div>
+            </div>*@
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -86,8 +125,8 @@
             </table>
             @await Component.InvokeAsync("Pager", Model)
         </div>
+        </div>
     </div>
-</div>
 
 <!--Modal-->
 <!-- Button trigger modal -->
@@ -99,6 +138,7 @@
 @section Scripts{
     <script src="~/js/bootbox.min.js"></script>
     <script>
+        //create
         function loadCreatModal() {
             $.ajax({
                 url: '@Url.Action("Create","User")',
@@ -108,6 +148,38 @@
                 }
             });
         }
+        function createUser() {
+            if ($("#createForm").valid()) {
+                var data = $("#createForm").serialize();
+        //console.log(data);
+        //alert(data);
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Create","User")',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // when we use .serialize() this generates the data in query string format. this needs the default contentType (default content type is: contentType: 'application/x-www-form-urlencoded; charset=UTF-8') so it is optional, you can remove it
+                    data: data,
+                    dataType: 'json',
+                    success: function (result) {
+                        /*alert(JSON.stringify(result));*/
+                        if (result.isSucceed == true) {
+                            $("#exampleModal").modal('hide');
+                            bootbox.alert("Tạo mới thành công");
+                            setInterval(function () {
+                                location.reload();
+                            }, 2000);
+                        }
+                        else {
+                            bootbox.alert(result.errors);
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert('Failed to receive the Data');
+                    }
+                });
+            }
+
+        }
+        //update
         function loadUpdateModal(id) {
             $.ajax({
                 url: '@Url.Action("Update","User")',
@@ -118,15 +190,52 @@
                 }
             });
         }
+        function updateUser() {
+            if ($("#updateForm").valid()) {
+                var data = $("#updateForm").serialize();
+        //console.log(data);
+        //alert(data);
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Update","User")',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // when we use .serialize() this generates the data in query string format. this needs the default contentType (default content type is: contentType: 'application/x-www-form-urlencoded; charset=UTF-8') so it is optional, you can remove it
+                    data: data,
+                    dataType: 'json',
+                    async: false,
+                    success: function (result) {
+                        /*alert(JSON.stringify(result));*/
+                        if (result.isSucceed == true) {
+                            $("#exampleModal").modal('hide');
+                            
+                            bootbox.alert("Cập nhật thành công");
+                            setInterval(function () {
+                                location.reload();
+                            }, 2000);
+                        }
+                        else {
+                            bootbox.alert(result.errors);
+                        }
+                    },
+                    error: function () {
+                        alert('Failed to receive the Data');
+                    }
+                });
+            }
+
+        }
+        //delete
         function deleteUser(id) {
             $.ajax({
                 url:'@Url.Action("Delete","User")',
                 method: "Post",
                 data: { id: id },
+                async:false,
                 success: function (data) {
                     if (data.isSucceed == true) {
-                        bootbox.alert("Xóa thành công!");
-                        location.reload();
+                        bootbox.alert("Xóa thành công");
+                        setInterval(function () {
+                            location.reload();
+                        }, 2000);
                     }
                     else {
                         bootbox.alert(data.errors);
@@ -134,24 +243,60 @@
                 },
                 error: function () {
                     bootbox.alert("Xóa không thành công!");
-                }                
+                }
                 });
         }
-
-        $('.btn-edit').off('click').on('click', function () {
-            var id = $(this).data('id');
-            loadUpdateModal(id);
-        });
-        $('.btn-delete').off('click').on('click', function () {
-            var id = $(this).data('id');
-            bootbox.confirm("Bạn chắc chắn muốn xóa?", function (result) {
-                if (result) {
-                    deleteUser(id);
+        function getUserPaging(keyword, pageIndex, pageSize) {
+            $.ajax({
+                url: '@Url.Action("GetUserPaging","User")',
+                data: {
+                    keyword: keyword,
+                    pageIndex: pageIndex,
+                    pageSize:pageSize
+                },
+                success: function (data) {
+                    $("#tableData").html(data);
                 }
             });
-            
+        }
+        function alertForm(message) {
+            $("#alertDiv").text(message).fadeIn("slow").delay(3000).fadeOut("slow");
+        }
+        //for search
+        $("#pageSizeSelect").on('change', function () {
+            var pageIndex = 1;
+            var pageSize = $(this).val();
+            var keyword = $("#keywordTextBox").val();
+            getUserPaging(keyword, pageIndex, pageSize);
         });
+        $("#search-button").on('click', function () {
+            bootbox.alert("Clicked!");
+            var pageIndex = 1;
+            var pageSize = $("#pageSizeSelect").val();
+            var keyword = $("#keywordTextBox").val();
+            getUserPaging(keyword, pageIndex, pageSize);
+        });
+        $(document).on('click', '.page-link', function () {
+                var pageIndex = $(this).data("pageindex");
+                var pageSize = $("#pageSizeSelect").val();
+                var keyword = $("#keywordTextBox").val();
+                getUserPaging(keyword, pageIndex, pageSize);
+            });
 
+        //for edit
+        $(document).on('click', '.btn-edit', function () {
+                var id = $(this).data('id');
+                loadUpdateModal(id);
+        });
+        //dor delete
+        $(document).on('click', '.btn-delete', function () {
+                var id = $(this).data('id');
+                bootbox.confirm("Bạn chắc chắn muốn xóa?", function (result) {
+                    if (result) {
+                        deleteUser(id);
+                    }
+                });
+            });
     </script>
 }
 
