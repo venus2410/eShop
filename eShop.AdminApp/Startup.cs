@@ -2,6 +2,7 @@ using eShop.AdminApp.Services;
 using eShop.ViewModel.System.Users;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -41,6 +42,7 @@ namespace eShop.AdminApp
             services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
 
             services.AddTransient<IUserApiClient, UserApiClient>();
+            services.AddTransient<IRoleApiClient, RoleApiClient>();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSession(option => option.IdleTimeout = TimeSpan.FromMinutes(30));

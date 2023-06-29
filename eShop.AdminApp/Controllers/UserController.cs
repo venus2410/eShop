@@ -21,11 +21,13 @@ namespace eShop.AdminApp.Controllers
     public class UserController : BaseController
     {
         private readonly IUserApiClient _userApiClient;
+        private readonly IRoleApiClient _roleApiClient;
         private readonly IConfiguration _configuration;
-        public UserController(IUserApiClient userApiClient, IConfiguration configuration)
+        public UserController(IUserApiClient userApiClient, IConfiguration configuration, IRoleApiClient roleApiClient)
         {
             _userApiClient = userApiClient;
             _configuration = configuration;
+            _roleApiClient = roleApiClient;
         }
         public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 5)
         {
@@ -55,6 +57,8 @@ namespace eShop.AdminApp.Controllers
         [HttpGet]
         public PartialViewResult Create()
         {
+            var listRoles = _roleApiClient.GetAll();
+            ViewBag.Roles = listRoles.Result.Data;
             return PartialView("_Create");
         }
         [HttpPost]
@@ -82,7 +86,8 @@ namespace eShop.AdminApp.Controllers
                     LastName = user.LastName,
                     Dob=user.Dob,
                     Email=user.Email,
-                    PhoneNumber=user.PhoneNumber
+                    PhoneNumber=user.PhoneNumber,
+                    Roles=user.Roles
                 };
                 return PartialView("_Update",userUpdate);
             }
