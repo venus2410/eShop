@@ -1,4 +1,5 @@
-﻿using System;
+﻿using eShop.ViewModel.Catalog.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -28,5 +29,6 @@ namespace eShop.ViewModel.System.Users
 
         [Display(Name = "Số điện thoại")]
         public string PhoneNumber { get; set; }
+        public List<SelectItem> Roles { get; set; } = new List<SelectItem>();
     }
 }

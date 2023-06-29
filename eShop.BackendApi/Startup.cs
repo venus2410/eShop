@@ -1,5 +1,6 @@
 using eShop.Application.Catalog.Products;
 using eShop.Application.Common;
+using eShop.Application.System.Roles;
 using eShop.Application.System.Users;
 using eShop.Data.EF;
 using eShop.Data.Entities;
@@ -100,8 +101,9 @@ namespace eShop.BackendApi
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 
-            //user services
+            //system services
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRoleService, RoleService>();
 
             services.AddControllers();
             string issuer = Configuration.GetValue<string>("Tokens:Issuer");

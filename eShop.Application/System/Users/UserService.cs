@@ -45,7 +45,7 @@ namespace eShop.Application.System.Users
                 {
                     return new ServiceResultFail<bool>("Không tìm thấy người dùng");
                 }
-                var result=await _userManager.DeleteAsync(user);
+                var result = await _userManager.DeleteAsync(user);
                 if (result.Succeeded)
                 {
                     return new ServiceResultSuccess<bool>();
@@ -67,6 +67,12 @@ namespace eShop.Application.System.Users
                 {
                     return new ServiceResultFail<UserViewModel>("Không tìm thấy người dùng");
                 }
+                var rolesOfUSer=(List<string>)await _userManager.GetRolesAsync(user);
+                var allRoles=_roleManager.Roles.Select(r => new SelectItem { 
+                    Id=r.Id.ToString(),
+                    Name=r.Name,
+                    Selected=rolesOfUSer.Any(x=>x==r.Name)
+                }).ToList();
                 var result = new UserViewModel
                 {
                     Id = user.Id,
@@ -75,7 +81,8 @@ namespace eShop.Application.System.Users
                     PhoneNumber = user.PhoneNumber,
                     Email = user.Email,
                     UserName = user.UserName,
-                    Dob=user.Dob
+                    Dob = user.Dob,
+                    Roles=allRoles
                 };
                 return new ServiceResultSuccess<UserViewModel>(result);
             }
@@ -116,8 +123,8 @@ namespace eShop.Application.System.Users
                 var result = new PageResult<UserViewModel>()
                 {
                     Items = data,
-                    PageIndex=request.PageIndex,
-                    PageSize=request.PageSize,
+                    PageIndex = request.PageIndex,
+                    PageSize = request.PageSize,
                     TotalRecords = totalRecord
                 };
 
@@ -195,11 +202,50 @@ namespace eShop.Application.System.Users
                     Dob = request.Dob
                 };
                 var result = await _userManager.CreateAsync(user, request.Password);
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
-                    return new ServiceResultSuccess<bool>();
+                    return new ServiceResultFail<bool>("Đăng ký không thành công");
                 }
-                return new ServiceResultFail<bool>("Đăng ký không thành công");
+
+                //create role for user
+                var roles=request.Roles.Where(r=>r.Selected).Select(r=>r.Name).ToList();
+                await _userManager.AddToRolesAsync(user, roles);
+
+                return new ServiceResultSuccess<bool>();
+            }
+            catch (Exception e)
+            {
+                return new ServiceResultFail<bool>(e.Message.ToString());
+            }
+        }
+
+        public async Task<ServiceResult<bool>> RoleAssign(Guid Id, UserRoleAssignRequest request)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(Id.ToString());
+                if (user == null)
+                {
+                    return new ServiceResultFail<bool>("Không tìm thấy người dùng");
+                }
+                foreach (var role in request.Roles)
+                {
+                    if (role.Selected)
+                    {
+                        if (await _userManager.IsInRoleAsync(user, role.Name) == false)
+                        {
+                            await _userManager.AddToRoleAsync(user, role.Name);
+                        }
+                    }
+                    else
+                    {
+                        if (await _userManager.IsInRoleAsync(user, role.Name) == true)
+                        {
+                            await _userManager.RemoveFromRoleAsync(user, role.Name);
+                        }
+                    }
+                }
+                return new ServiceResultSuccess<bool>();
             }
             catch (Exception e)
             {
@@ -211,13 +257,18 @@ namespace eShop.Application.System.Users
         {
             try
             {
+                var user = await _userManager.FindByIdAsync(request.Id.ToString());
+                if (user == null)
+                {
+                    return new ServiceResultFail<bool>("Không tìm thấy người dùng");
+                }
+
                 if (await _userManager.Users.AnyAsync(u => u.Email == request.Email && u.Id != request.Id))
                 {
                     return new ServiceResultFail<bool>("Email đã tồn tại");
                 }
 
-                var user = await _userManager.FindByIdAsync(request.Id.ToString());
-
+                //update user
                 user.Email = request.Email;
                 user.FirstName = request.FirstName;
                 user.LastName = request.LastName;
@@ -225,11 +276,30 @@ namespace eShop.Application.System.Users
                 user.Dob = request.Dob;
 
                 var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
+                if (!result.Succeeded)
                 {
-                    return new ServiceResultSuccess<bool>();
+                    return new ServiceResultFail<bool>("Cập nhật không thành công");
                 }
-                return new ServiceResultFail<bool>("Cập nhật không thành công");
+
+                //update roles of user
+                var existingRoles =await _userManager.GetRolesAsync(user);
+                var newRoles=request.Roles.Where(r=>r.Selected).Select(r => r.Name).ToList();
+                foreach(var r in existingRoles)
+                {
+                    if (!newRoles.Contains(r))
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, r);
+                    }
+                }
+                foreach(var r in newRoles)
+                {
+                    if (!existingRoles.Contains(r))
+                    {
+                        await _userManager.AddToRoleAsync(user, r);
+                    }
+                }
+
+                return new ServiceResultSuccess<bool>();
             }
             catch (Exception e)
             {

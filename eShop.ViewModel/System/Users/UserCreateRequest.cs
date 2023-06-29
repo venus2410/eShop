@@ -1,4 +1,5 @@
-﻿using System;
+﻿using eShop.ViewModel.Catalog.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -41,5 +42,6 @@ namespace eShop.ViewModel.System.Users
         [Required]
         [Compare(nameof(Password),ErrorMessage = "Xác nhận mật khẩu không khớp với mật khẩu")]
         public string ConfirmPassword { get; set; }
+        public List<SelectItem> Roles { get; set; } = new List<SelectItem>();
     }
 }
