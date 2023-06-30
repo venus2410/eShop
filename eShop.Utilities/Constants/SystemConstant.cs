@@ -7,5 +7,12 @@ namespace eShop.Utilities.Constants
     public class SystemConstant
     {
         public const string MainConnectionString = "EShopDatabase";
+        public class AppSetting
+        {
+            public const string CurrentLanguageId = "CurrentLanguageId";
+            public const string Token = "Token";
+            public const string BaseAddress = "BaseAddress";
+            public const string Bearer = "Bearer";
+        }
     }
 }
