@@ -1,5 +1,6 @@
 ﻿using eShop.AdminApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using static eShop.Utilities.Constants.SystemConstant;
 
 namespace eShop.AdminApp.Controllers
 {
@@ -34,6 +36,12 @@ namespace eShop.AdminApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        [HttpPost]
+        public IActionResult ChangeLanguage(string currentLanguageId)
+        {
+            HttpContext.Session.SetString(AppSetting.CurrentLanguageId, currentLanguageId);
+            return RedirectToAction("Index");
         }
     }
 }
