@@ -14,11 +14,11 @@ namespace eShop.Application.Catalog.Products
         Task<int> Create(ProductCreateRequest request);
         Task<int> Update(ProductUpdateRequest request);
         Task<int> Delete(int productId);
-        Task<ProductViewModel> GetById(int productId, string languageId);
+        Task<ProductVM> GetById(int productId, string languageId);
         Task<bool> UpdatePrice(int productId, decimal newPrice);
         Task<bool> UpdateStock(int productId, int addedStock);
         Task AddViewCount(int productId);
-        Task<PageResult<ProductViewModel>> GetByPaging(string languageId,GetManageProductPagingRequest request);
+        Task<ServiceResult<PageResult<ProductVM>>> GetByPaging(GetManageProductPagingRequest request);
         Task<int> AddImage(int productId, ProductImageCreateRequest request);
 
         Task<int> RemoveImage(int imageId);
@@ -27,6 +27,6 @@ namespace eShop.Application.Catalog.Products
 
         Task<ProductImageViewModel> GetImageById(int imageId);
         Task<List<ProductImageViewModel>> GetListImage(int productId);
-        Task<PageResult<ProductViewModel>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
+        Task<PageResult<ProductVM>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
     }
 }

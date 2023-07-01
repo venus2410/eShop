@@ -4,7 +4,7 @@ using System.Text;
 
 namespace eShop.ViewModel.Catalog.Products
 {
-    public class ProductViewModel
+    public class ProductVM
     {
         public int Id { get; set; }
         public decimal Price { get; set; }

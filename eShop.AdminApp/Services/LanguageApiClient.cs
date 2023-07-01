@@ -11,32 +11,21 @@ using System.Threading.Tasks;
 using eShop.Utilities.Constants;
 using System.IO.Pipes;
 using static eShop.Utilities.Constants.SystemConstant;
+using eShop.ViewModel.Catalog.Products;
 
 namespace eShop.AdminApp.Services
 {
     public class LanguageApiClient : ILanguageApiClient
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _contextAccessor;
-        public LanguageApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor contextAccessor)
+        private readonly IBaseApiClient _baseApiClient;
+        private const string baseURL = "/api/languages";
+        public LanguageApiClient(IBaseApiClient baseApiClient)
         {
-            _httpClientFactory = httpClientFactory;
-            _configuration = configuration;
-            _contextAccessor = contextAccessor;
+            _baseApiClient = baseApiClient;
         }
         public async Task<ServiceResult<List<LanguageVM>>> GetLanguages()
         {
-            var token = _contextAccessor.HttpContext.Session.GetString(AppSetting.Token);
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new System.Uri(_configuration[AppSetting.BaseAddress]);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AppSetting.Bearer, token);
-
-            var response = await client.GetAsync($"/api/languages");
-
-            var body = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ServiceResult<List<LanguageVM>>>(body);
-            return result;
+            return await _baseApiClient.GetAllAsync<List<LanguageVM>>(baseURL);
         }
     }
 }

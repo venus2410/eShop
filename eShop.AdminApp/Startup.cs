@@ -41,9 +41,12 @@ namespace eShop.AdminApp
 
             services.AddSingleton<IHttpContextAccessor,HttpContextAccessor>();
 
+            services.AddTransient<IBaseApiClient, BaseApiClient>();
+
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<IRoleApiClient, RoleApiClient>();
             services.AddTransient<ILanguageApiClient, LanguageApiClient>();
+            services.AddTransient<IProductApiClient, ProductApiClient>();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSession(option => option.IdleTimeout = TimeSpan.FromMinutes(30));

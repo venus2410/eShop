@@ -14,27 +14,15 @@ namespace eShop.AdminApp.Services
 {
     public class RoleApiClient : IRoleApiClient
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _contextAccessor;
-        public RoleApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor contextAccessor)
+        private readonly IBaseApiClient _baseApiClient;
+        private const string baseURL = "/api/roles";
+        public RoleApiClient(IBaseApiClient baseApiClient)
         {
-            _httpClientFactory = httpClientFactory;
-            _configuration = configuration;
-            _contextAccessor = contextAccessor;
+            _baseApiClient = baseApiClient;
         }
         public async Task<ServiceResult<List<RoleVM>>> GetAll()
         {
-            var token = _contextAccessor.HttpContext.Session.GetString("Token");
-            var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new System.Uri(_configuration["BaseAddress"]);
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            var response = await client.GetAsync($"/api/roles");
-
-            var body = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ServiceResult<List<RoleVM>>>(body);
-            return result;
+            return await _baseApiClient.GetAllAsync<List<RoleVM>>(baseURL);
         }
     }
 }
