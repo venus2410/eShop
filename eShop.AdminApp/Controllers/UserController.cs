@@ -51,7 +51,7 @@ namespace eShop.AdminApp.Controllers
             };
 
             var result = await _userApiClient.GetUsersPaging(userRequest);
-            return PartialView("_GetUserPaging",result.Data);
+            return ViewComponent("UserTable",result.Data);
         }
 
         [HttpGet]

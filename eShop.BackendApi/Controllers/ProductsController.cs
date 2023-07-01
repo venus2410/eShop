@@ -18,10 +18,11 @@ namespace eShop.BackendApi.Controllers
             _productService = productService;
         }
 
-        [HttpGet("{languageId}")]
-        public async Task<IActionResult> Get(string languageId, [FromQuery]GetPublicProductPagingRequest request)
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetPaging([FromQuery]GetManageProductPagingRequest request)
         {
-            var result = await _productService.GetAllByCategoryId(languageId,request);
+            var result = await _productService.GetByPaging(request);
+            if(!result.IsSucceed) return BadRequest(result);
             return Ok(result);
         }
         [HttpGet("{productId}/{languageId}")]
@@ -44,8 +45,8 @@ namespace eShop.BackendApi.Controllers
             return CreatedAtAction(nameof(GetById),new {id=productId},product);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromForm] ProductUpdateRequest request)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id,[FromForm] ProductUpdateRequest request)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var affectedResult = await _productService.Update(request);

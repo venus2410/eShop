@@ -1,19 +1,16 @@
-﻿@using eShop.ViewModel.System.Users
-@using eShop.ViewModel.Catalog.Common
-@model PageResult<UserViewModel>
+﻿@model eShop.ViewModel.Catalog.Common.PageResult<eShop.ViewModel.Catalog.Products.ProductVM>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Danh sách người dùng</h1>
+    <h1 class="mt-4">Danh sách sản phẩm</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
-        <li class="breadcrumb-item active">Danh sách người dùng</li>
+        <li class="breadcrumb-item active">Danh sách sản phẩm</li>
     </ol>
     <div class="card mb-4">
-        
         <div class="card-header">
             <div class="row">
                 <div class="col-md-3">
@@ -59,7 +56,7 @@
         </div>
 
         <div class="card-body" id="tableData">
-            @await Component.InvokeAsync("UserTable", Model)
+            @await Component.InvokeAsync("ProductTable",Model)
         </div>
     </div>
 </div>
@@ -184,7 +181,7 @@
         }
         function getUserPaging(keyword, pageIndex, pageSize) {
             $.ajax({
-                url: '@Url.Action("GetUserPaging","User")',
+                url: '@Url.Action("GetProductPaging", "Product")',
                 data: {
                     keyword: keyword,
                     pageIndex: pageIndex,
@@ -234,4 +231,3 @@
             });
     </script>
 }
-

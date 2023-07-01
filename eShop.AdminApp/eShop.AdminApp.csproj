@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="Scripts\User\" />
+    <Folder Include="Views\User\Components\UserTable\" />
   </ItemGroup>
 
 </Project>
