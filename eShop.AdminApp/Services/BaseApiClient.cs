@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text;
 using System;
+using System.Reflection;
+using System.IO;
 
 namespace eShop.AdminApp.Services
 {
@@ -81,6 +83,40 @@ namespace eShop.AdminApp.Services
             var client = CreateAuthenticatedClient();
 
             var response = await client.PostAsync(url,httpContent);
+
+            var body = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
+            return result;
+        }
+
+        public async Task<ServiceResult<ReturnType>> PostWithFileAsync<ReturnType, Ptype>(string url, Ptype model)
+        {
+            var httpContent = new MultipartFormDataContent();
+
+            foreach(PropertyInfo propertyInfo in model.GetType().GetProperties())
+            {
+                if(propertyInfo.PropertyType == typeof(IFormFile))
+                {
+                    if (propertyInfo.GetValue(model) != null)
+                    {
+                        IFormFile file = (IFormFile)propertyInfo.GetValue(model);
+                        byte[] data;
+                        using (var br = new BinaryReader(file.OpenReadStream()))
+                        {
+                            data = br.ReadBytes((int)file.OpenReadStream().Length);
+                        }
+                        ByteArrayContent bytes = new ByteArrayContent(data);
+                        httpContent.Add(bytes, "thumbnailImage", file.FileName);
+                    }
+                }
+                else
+                {
+                    httpContent.Add(new StringContent(propertyInfo.GetValue(model).ToString()), propertyInfo.Name);
+                }
+            }
+
+            var client = CreateAuthenticatedClient();
+            var response = await client.PostAsync(url, httpContent);
 
             var body = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);

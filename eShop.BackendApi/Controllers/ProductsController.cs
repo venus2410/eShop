@@ -34,18 +34,17 @@ namespace eShop.BackendApi.Controllers
         }
 
         [HttpPost]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState);
-            var productId = await _productService.Create(request);
-            if(productId<=0) return BadRequest();
-
-            var product = _productService.GetById(productId, request.LanguageId);
-
-            return CreatedAtAction(nameof(GetById),new {id=productId},product);
+            var result = await _productService.Create(request);
+            if(!result.IsSucceed) return BadRequest(result);
+            return Ok(result);            
         }
 
         [HttpPut("{id}")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> Update(int id,[FromForm] ProductUpdateRequest request)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

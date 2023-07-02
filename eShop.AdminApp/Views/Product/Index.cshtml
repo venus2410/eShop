@@ -56,7 +56,7 @@
         </div>
 
         <div class="card-body" id="tableData">
-            @await Component.InvokeAsync("ProductTable",Model)
+            @await Component.InvokeAsync("ProductTable", Model)
         </div>
     </div>
 </div>
@@ -70,27 +70,65 @@
 <!-- Modal -->
 @section Scripts{
     <script src="~/js/bootbox.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/38.1.0/classic/ckeditor.js"></script>
+    <script type="text/javascript">
+        function registerCKEditor(elementId) {
+            window.addEventListener("load", (e) => {
+                ClassicEditor.create(document.querySelector(elementId))
+                    .then(editor => {
+                        console.log(editor);
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            });
+        }
+        $(document).ready(function () {
+            registerCKEditor("#Details");
+            registerCKEditor("#Description");
+        });
+    </script>
     <script>
         //create
         function loadCreatModal() {
             $.ajax({
-                url: '@Url.Action("Create","User")',
+                url: '@Url.Action("Create","Product")',
                 success: function (data) {
                     $("#modalHere").html(data);
                     $("#exampleModal").modal('show');
                 }
             });
         }
-        function createUser() {
+        function create() {
             if ($("#createForm").valid()) {
-                var data = $("#createForm").serialize();
-        //console.log(data);
-        //alert(data);
+                var formData = new FormData();
+                formData.append('Price', $('#Price').val());
+                formData.append('OriginalPrice', $('#OriginalPrice').val());
+                formData.append('Stock', $('#Stock').val());
+                formData.append('Name', $('#Name').val());
+                formData.append('Description', $('#Description').val());
+                formData.append('Details', $('#Details').val());
+                formData.append('SeoDescription', $('#SeoDescription').val());
+                formData.append('SeoTitle', $('#SeoTitle').val());
+                formData.append('SeoAlias', $('#SeoAlias').val());
+                formData.append('LanguageId', $('#LanguageId').val());
+
+
+                var file = document.getElementById("ThumbnailImage").files[0];
+                formData.append('ThumbnailImage', file);
+
+
+                for (var pair of formData.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("Create","User")',
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // when we use .serialize() this generates the data in query string format. this needs the default contentType (default content type is: contentType: 'application/x-www-form-urlencoded; charset=UTF-8') so it is optional, you can remove it
-                    data: data,
+                    url: '@Url.Action("Create","Product")',
+                    contentType: false,
+                    processData: false,
+                    cache:false,
+                    data: formData,
                     dataType: 'json',
                     success: function (result) {
                         /*alert(JSON.stringify(result));*/
@@ -109,8 +147,8 @@
                         bootbox.alert('Failed to receive the Data');
                     }
                 });
-            }
 
+            }
         }
         //update
         function loadUpdateModal(id) {

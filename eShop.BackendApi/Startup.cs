@@ -1,3 +1,4 @@
+using eShop.Application.Catalog.Categories;
 using eShop.Application.Catalog.Products;
 using eShop.Application.Common;
 using eShop.Application.System.Languages;
@@ -106,6 +107,7 @@ namespace eShop.BackendApi
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ILanguageService, LanguageService>();
+            services.AddTransient<ICatergoriesService, CatergoriesService>();
 
             services.AddControllers();
             string issuer = Configuration.GetValue<string>("Tokens:Issuer");

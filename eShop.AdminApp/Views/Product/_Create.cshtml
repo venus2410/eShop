@@ -1,0 +1,131 @@
+﻿@using eShop.ViewModel.System.Languages
+@model eShop.ViewModel.Catalog.Products.ProductCreateRequest
+@{
+    var languagesList = ViewBag.LanguagesList as List<eShop.ViewModel.System.Languages.LanguageVM>;
+}
+
+<h4>ProductCreateRequest</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+
+    </div>
+</div>
+
+@*<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>*@
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/38.1.0/classic/ckeditor.js"></script>
+<script type="text/javascript">
+    //$('.nav-item').on('click', function () {
+        var editor
+        ClassicEditor
+            .create(document.querySelector('#Details'))
+            .catch(error => {
+                console.error(error);
+            });
+        ClassicEditor
+            .create(document.querySelector('#Description'))
+            .catch(error => {
+                console.error(error);
+            });
+    //});
+
+</script>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                        <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
+                    </svg>
+                    Tạo mới
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form enctype="multipart/form-data" id="createForm">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label asp-for="Price" class="control-label"></label>
+                            <input asp-for="Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label asp-for="OriginalPrice" class="control-label"></label>
+                            <input asp-for="OriginalPrice" class="form-control" />
+                            <span asp-validation-for="OriginalPrice" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label asp-for="Stock" class="control-label"></label>
+                            <input asp-for="Stock" class="form-control" />
+                            <span asp-validation-for="Stock" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label asp-for="ThumbnailImage" class="control-label"></label>
+                            <input asp-for="ThumbnailImage" class="form-control" />
+                            <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label asp-for="SeoTitle" class="control-label"></label>
+                            <input asp-for="SeoTitle" class="form-control" />
+                            <span asp-validation-for="SeoTitle" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label asp-for="SeoAlias" class="control-label"></label>
+                            <input asp-for="SeoAlias" class="form-control" />
+                            <span asp-validation-for="SeoAlias" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label asp-for="SeoDescription" class="control-label"></label>
+                            <input asp-for="SeoDescription" class="form-control" />
+                            <span asp-validation-for="SeoDescription" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="LanguageId" class="control-label"></label>
+                            <select asp-for="LanguageId" class="form-select" asp-items="new SelectList(languagesList,nameof(LanguageVM.Id),nameof(LanguageVM.Name))">
+                            </select>
+                            <span asp-validation-for="LanguageId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @{ 
+                            var rows = 30;
+                        }   
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label asp-for="Details" class="control-label"></label>
+                                <textarea asp-for="Details" class="form-control" rows="@rows" id="Details"></textarea>
+                                <span asp-validation-for="Details" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="Description" class="control-label"></label>
+                                <textarea asp-for="Description" class="form-control" rows="@rows"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="create()">Tạo mới</button>
+            </div>
+        </div>
+    </div>
+</div>
+
