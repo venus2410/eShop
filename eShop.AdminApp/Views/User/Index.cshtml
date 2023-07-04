@@ -17,7 +17,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-3">
-                    <button type="button" class="btn btn-outline-success" id="create" onclick="loadCreatModal()">
+                    <button type="button" class="btn btn-outline-success" id="btnCreate" onclick="loadCreatModal()">
 
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
                             <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
@@ -76,6 +76,7 @@
     <script>
         //create
         function loadCreatModal() {
+            $(this).off('click');
             $.ajax({
                 url: '@Url.Action("Create","User")',
                 success: function (data) {
@@ -198,6 +199,9 @@
         function alertForm(message) {
             $("#alertDiv").text(message).fadeIn("slow").delay(3000).fadeOut("slow");
         }
+        //for create
+        /*$('#btnCreate').on('click','#loadCreatModal',loadCreatModal());*/
+
         //for search
         $("#pageSizeSelect").on('change', function () {
             var pageIndex = 1;
@@ -219,11 +223,11 @@
             });
 
         //for edit
-        $(document).on('click', '.btn-edit', function () {
+        $(document).off('click','.btn-edit').on('click', '.btn-edit', function () {
                 var id = $(this).data('id');
                 loadUpdateModal(id);
         });
-        //dor delete
+        //for delete
         $(document).on('click', '.btn-delete', function () {
                 var id = $(this).data('id');
                 bootbox.confirm("Bạn chắc chắn muốn xóa?", function (result) {

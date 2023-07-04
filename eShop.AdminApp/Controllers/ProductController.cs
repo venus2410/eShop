@@ -16,14 +16,21 @@ namespace eShop.AdminApp.Controllers
         private readonly IProductApiClient _productApiClient;
         private readonly ILanguageApiClient _languageApiClient;
         private readonly IRoleApiClient _roleApiClient;
-        public ProductController(IProductApiClient userApiClient,ILanguageApiClient languageApiClient, IRoleApiClient roleApiClient)
+        private readonly ICatergoryApiClient _catergoryApiClient;
+        public ProductController(IProductApiClient userApiClient,ILanguageApiClient languageApiClient, IRoleApiClient roleApiClient, ICatergoryApiClient catergoryApiClient)
         {
             _productApiClient = userApiClient;
             _roleApiClient = roleApiClient;
             _languageApiClient = languageApiClient;
+            _catergoryApiClient = catergoryApiClient;
         }
         public async Task<IActionResult> Index(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 5, string languageId="vi")
         {
+            var curLanguageId = HttpContext.Session.GetString(AppSetting.CurrentLanguageId);
+            var languages =_languageApiClient.GetLanguages().Result.Data;
+            ViewBag.Languages = languages;
+            var catergories=_catergoryApiClient.GetCatergories(curLanguageId).Result.Data;
+            ViewBag.Catergories = catergories;
             var request = new GetManageProductPagingRequest
             {
                 Keyword= keyword,

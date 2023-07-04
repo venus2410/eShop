@@ -53,6 +53,7 @@ namespace eShop.AdminApp.Controllers
                 IsPersistent = false
             };
             HttpContext.Session.SetString(AppSetting.Token, token);
+            HttpContext.Session.SetString(AppSetting.CurrentLanguageId, _configuration[AppSetting.CurrentLanguageId]);
             await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         userPrincipal,

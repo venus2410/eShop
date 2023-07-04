@@ -21,7 +21,8 @@ namespace eShop.Application.Catalog.Categories
         {
             try
             {
-                if (string.IsNullOrEmpty(languageId))
+                var language=await _context.Languages.Where(x=>x.Id==languageId).FirstOrDefaultAsync();
+                if (string.IsNullOrEmpty(languageId)||language==null)
                 {
                     languageId =await _context.Languages.Select(x=>x.Id).FirstOrDefaultAsync();
                 }
