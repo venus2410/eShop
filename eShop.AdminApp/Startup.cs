@@ -47,6 +47,7 @@ namespace eShop.AdminApp
             services.AddTransient<IRoleApiClient, RoleApiClient>();
             services.AddTransient<ILanguageApiClient, LanguageApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
+            services.AddTransient<ICatergoryApiClient, CatergoryApiClient>();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddSession(option => option.IdleTimeout = TimeSpan.FromMinutes(30));

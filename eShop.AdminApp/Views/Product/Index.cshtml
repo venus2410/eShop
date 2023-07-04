@@ -1,8 +1,12 @@
-﻿@model eShop.ViewModel.Catalog.Common.PageResult<eShop.ViewModel.Catalog.Products.ProductVM>
+﻿@using eShop.ViewModel.System.Languages
+@using eShop.ViewModel.Catalog.Catergories
+@model eShop.ViewModel.Catalog.Common.PageResult<eShop.ViewModel.Catalog.Products.ProductVM>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var languages = ViewBag.Languages as List<LanguageVM>;
+    var catergories = ViewBag.Catergories as List<CatergoryVM>;
 }
 <div class="container-fluid px-4">
     <h1 class="mt-4">Danh sách sản phẩm</h1>
@@ -13,7 +17,7 @@
     <div class="card mb-4">
         <div class="card-header">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <button type="button" class="btn btn-outline-success" id="create" onclick="loadCreatModal()">
 
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
@@ -23,9 +27,9 @@
                         Tạo mới
                     </button>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-10">
                     <div class="row justify-content-between">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <select class="form-select w-auto" aria-label="Default select example" name="pagesize" id="pageSizeSelect">
                                 <option value="5">5</option>
                                 <option value="10">10</option>
@@ -35,8 +39,18 @@
                                 <option value="100">100</option>
                             </select>
                         </div>
-                        <div class="col-md-6 d-flex justify-content-end">
-                            <div class="d-flex justify-content-end">
+                        <div class="col-md-2">
+                            <select class="form-select w-auto" aria-label="Default select   example" name="languageId" id="languageIdSelect" asp-items="new SelectList(languages,nameof(LanguageVM.Id),nameof(LanguageVM.Name))">
+                                <option value="" selected>Tất cả ngôn ngữ </option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-select w-auto" aria-label="Default select   example" name="catergoryId" id="catergoryIdSelect" asp-items="new SelectList(catergories,nameof(CatergoryVM.Id),nameof(CatergoryVM.Name))">
+                                <option value="" selected>Tất cả danh mục</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <div class="d-flex">
                                 <div class="input-group">
                                     <div class="form-outline">
                                         <input type="search" id="keywordTextBox" class="form-control" />
@@ -46,17 +60,16 @@
                                     </button>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </div>
-
+        <div class="card-body">
+            
+        </div>
         <div class="card-body" id="tableData">
-            @await Component.InvokeAsync("ProductTable",Model)
+            @await Component.InvokeAsync("ProductTable", Model)
         </div>
     </div>
 </div>
@@ -70,27 +83,49 @@
 <!-- Modal -->
 @section Scripts{
     <script src="~/js/bootbox.min.js"></script>
+
     <script>
         //create
         function loadCreatModal() {
+            $(this).off('click');
             $.ajax({
-                url: '@Url.Action("Create","User")',
+                url: '@Url.Action("Create","Product")',
                 success: function (data) {
                     $("#modalHere").html(data);
                     $("#exampleModal").modal('show');
                 }
             });
         }
-        function createUser() {
+        function create() {
             if ($("#createForm").valid()) {
-                var data = $("#createForm").serialize();
-        //console.log(data);
-        //alert(data);
+                var formData = new FormData();
+                formData.append('Price', $('#Price').val());
+                formData.append('OriginalPrice', $('#OriginalPrice').val());
+                formData.append('Stock', $('#Stock').val());
+                formData.append('Name', $('#Name').val());
+                formData.append('Description', $('#Description').val());
+                formData.append('Details', $('#Details').val());
+                formData.append('SeoDescription', $('#SeoDescription').val());
+                formData.append('SeoTitle', $('#SeoTitle').val());
+                formData.append('SeoAlias', $('#SeoAlias').val());
+                formData.append('LanguageId', $('#LanguageId').val());
+
+
+                var file = document.getElementById("ThumbnailImage").files[0];
+                formData.append('ThumbnailImage', file);
+
+
+                for (var pair of formData.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
+
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("Create","User")',
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // when we use .serialize() this generates the data in query string format. this needs the default contentType (default content type is: contentType: 'application/x-www-form-urlencoded; charset=UTF-8') so it is optional, you can remove it
-                    data: data,
+                    url: '@Url.Action("Create","Product")',
+                    contentType: false,
+                    processData: false,
+                    cache:false,
+                    data: formData,
                     dataType: 'json',
                     success: function (result) {
                         /*alert(JSON.stringify(result));*/
@@ -109,8 +144,8 @@
                         bootbox.alert('Failed to receive the Data');
                     }
                 });
-            }
 
+            }
         }
         //update
         function loadUpdateModal(id) {
@@ -179,13 +214,19 @@
                 }
                 });
         }
-        function getUserPaging(keyword, pageIndex, pageSize) {
+        function getPaging(pageIndex=1) {
+            var keyword = $('#keywordTextBox').val();
+            var pageSize = $('#pageSizeSelect').val();
+            var languageId = $('#languageIdSelect').val();
+            var catergoryId = $('#catergoryIdSelect').val();
             $.ajax({
                 url: '@Url.Action("GetProductPaging", "Product")',
                 data: {
                     keyword: keyword,
                     pageIndex: pageIndex,
-                    pageSize:pageSize
+                    pageSize: pageSize,
+                    languageId: languageId,
+                    categoryId: catergoryId
                 },
                 success: function (data) {
                     $("#tableData").html(data);
@@ -197,22 +238,20 @@
         }
         //for search
         $("#pageSizeSelect").on('change', function () {
-            var pageIndex = 1;
-            var pageSize = $(this).val();
-            var keyword = $("#keywordTextBox").val();
-            getUserPaging(keyword, pageIndex, pageSize);
+            getPaging();
+        });
+        $("#catergoryIdSelect").on('change', function () {
+            getPaging();
+        });
+        $("#languageIdSelect").on('change', function () {
+            getPaging();
         });
         $("#search-button").on('click', function () {
-            var pageIndex = 1;
-            var pageSize = $("#pageSizeSelect").val();
-            var keyword = $("#keywordTextBox").val();
-            getUserPaging(keyword, pageIndex, pageSize);
+            getPaging();
         });
         $(document).on('click', '.page-link', function () {
                 var pageIndex = $(this).data("pageindex");
-                var pageSize = $("#pageSizeSelect").val();
-                var keyword = $("#keywordTextBox").val();
-                getUserPaging(keyword, pageIndex, pageSize);
+                getPaging(pageIndex);
             });
 
         //for edit

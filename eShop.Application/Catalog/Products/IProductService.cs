@@ -11,7 +11,7 @@ namespace eShop.Application.Catalog.Products
 {
     public interface IProductService
     {
-        Task<int> Create(ProductCreateRequest request);
+        Task<ServiceResult<bool>> Create(ProductCreateRequest request);
         Task<int> Update(ProductUpdateRequest request);
         Task<int> Delete(int productId);
         Task<ProductVM> GetById(int productId, string languageId);
