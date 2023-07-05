@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace eShop.AdminApp.Services
+namespace eShop.ApiIntergration
 {
     public class ProductApiClient : IProductApiClient
     {

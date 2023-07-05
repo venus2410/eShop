@@ -2,7 +2,7 @@
 using eShop.ViewModel.Catalog.Products;
 using System.Threading.Tasks;
 
-namespace eShop.AdminApp.Services
+namespace eShop.ApiIntergration
 {
     public interface IProductApiClient
     {

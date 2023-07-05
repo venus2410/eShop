@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace eShop.AdminApp.Services
+namespace eShop.ApiIntergration
 {
     public class UserApiClient : IUserApiClient
     {

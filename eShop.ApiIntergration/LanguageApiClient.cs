@@ -13,7 +13,7 @@ using System.IO.Pipes;
 using static eShop.Utilities.Constants.SystemConstant;
 using eShop.ViewModel.Catalog.Products;
 
-namespace eShop.AdminApp.Services
+namespace eShop.ApiIntergration
 {
     public class LanguageApiClient : ILanguageApiClient
     {

@@ -28,7 +28,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Hosts", "3. Hosts", "{57
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShop.AdminApp", "eShop.AdminApp\eShop.AdminApp.csproj", "{B932943A-8E53-4DD3-A33B-91429A9B00A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestClientvalidation", "TestClientvalidation\TestClientvalidation.csproj", "{D264C568-C277-4167-857B-644477A4388B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestClientvalidation", "TestClientvalidation\TestClientvalidation.csproj", "{D264C568-C277-4167-857B-644477A4388B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShop.ApiIntergration", "eShop.ApiIntergration\eShop.ApiIntergration.csproj", "{BCF563AF-D092-40FC-A2E2-A9AE252B5EA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +70,10 @@ Global
 		{D264C568-C277-4167-857B-644477A4388B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D264C568-C277-4167-857B-644477A4388B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D264C568-C277-4167-857B-644477A4388B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCF563AF-D092-40FC-A2E2-A9AE252B5EA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCF563AF-D092-40FC-A2E2-A9AE252B5EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCF563AF-D092-40FC-A2E2-A9AE252B5EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCF563AF-D092-40FC-A2E2-A9AE252B5EA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{16A01DEE-BEAF-4C7A-A230-B045044F7BB7} = {57756682-5C96-418D-9E12-6A6206A5D3A5}
 		{B932943A-8E53-4DD3-A33B-91429A9B00A7} = {57756682-5C96-418D-9E12-6A6206A5D3A5}
 		{D264C568-C277-4167-857B-644477A4388B} = {57756682-5C96-418D-9E12-6A6206A5D3A5}
+		{BCF563AF-D092-40FC-A2E2-A9AE252B5EA5} = {57756682-5C96-418D-9E12-6A6206A5D3A5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C0D44883-7705-4C29-8C9A-B7B89209534C}

@@ -14,7 +14,7 @@ using System;
 using System.Reflection;
 using System.IO;
 
-namespace eShop.AdminApp.Services
+namespace eShop.ApiIntergration
 {
     public class BaseApiClient:IBaseApiClient
     {
