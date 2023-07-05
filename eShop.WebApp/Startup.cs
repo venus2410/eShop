@@ -1,7 +1,9 @@
+using eShop.ApiIntergration;
 using eShop.WebApp.LocalizationResources;
 using LazZiya.ExpressLocalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
@@ -62,6 +64,15 @@ namespace eShop.WebApp
                     o.DefaultRequestCulture = new RequestCulture("vi");
                 };
             });
+            services.AddHttpClient();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient<IBaseApiClient, BaseApiClient>();
+            services.AddTransient<ISlideApiClient, SlideApiClient>();
+            services.AddTransient<IProductApiClient, ProductApiClient>();
+
+
+            services.AddSession(option => option.IdleTimeout = TimeSpan.FromMinutes(30));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,8 +94,8 @@ namespace eShop.WebApp
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSession();
             app.UseRequestLocalization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

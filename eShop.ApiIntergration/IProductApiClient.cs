@@ -1,5 +1,6 @@
 ﻿using eShop.ViewModel.Catalog.Common;
 using eShop.ViewModel.Catalog.Products;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace eShop.ApiIntergration
@@ -8,5 +9,6 @@ namespace eShop.ApiIntergration
     {
         Task<ServiceResult<PageResult<ProductVM>>> GetPage(GetManageProductPagingRequest request);
         Task<ServiceResult<bool>> Create(ProductCreateRequest request);
+        Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take);
     }
 }

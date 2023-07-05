@@ -20,7 +20,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="user-content\" />
+    <Folder Include="wwwroot\user-content\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\user-content\0b155d05-8133-43ef-bbdd-7c55891f5c54.png" />
+    <None Include="wwwroot\user-content\1709482e-3fc9-4b86-9b0c-c2375b86b00d.jpg" />
+    <None Include="wwwroot\user-content\1f6bb2b6-46c5-42d9-926c-6cc6157218e8.jpg" />
+    <None Include="wwwroot\user-content\2008d659-f091-439e-9dab-bea5bc9a6cab.png" />
+    <None Include="wwwroot\user-content\21e70c12-520c-477c-ab7c-f34aaa240530.png" />
+    <None Include="wwwroot\user-content\3493765b-1283-4897-95b2-c8222a5867ae.png" />
+    <None Include="wwwroot\user-content\7d425c2e-a7eb-4978-af62-79bc9eee4496.png" />
+    <None Include="wwwroot\user-content\89410c05-b600-436c-83da-9bfe3c6fdf12.jpg" />
+    <None Include="wwwroot\user-content\98887b5b-ca35-4ebe-9b78-aaa0318eae4e.png" />
+    <None Include="wwwroot\user-content\b270b0bb-8fa9-4b81-8b30-9c835eb41b5d.jpg" />
+    <None Include="wwwroot\user-content\bd6d3a39-89d5-4350-ba65-e8dbed97d506.jpg" />
+    <None Include="wwwroot\user-content\c7a5af26-c8ec-466e-8e8b-35534e6621fc.png" />
+    <None Include="wwwroot\user-content\d305d209-315d-4799-83c9-4415a7739640.jpg" />
+    <None Include="wwwroot\user-content\ecc2df24-f9fe-4b98-b78f-229b0cbcb1f0.png" />
+    <None Include="wwwroot\user-content\eeb63c5a-8ba6-446e-aa37-09987c2a5039.png" />
   </ItemGroup>
 
 

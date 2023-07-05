@@ -1,5 +1,6 @@
 using eShop.Application.Catalog.Categories;
 using eShop.Application.Catalog.Products;
+using eShop.Application.Catalog.Slides;
 using eShop.Application.Common;
 using eShop.Application.System.Languages;
 using eShop.Application.System.Roles;
@@ -51,14 +52,14 @@ namespace eShop.BackendApi
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
             // fluent validator
-            
+
 
             //swagger
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop", Version = "v1" });
-
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Swagger eShop Solution", Version = "v1" });
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n
@@ -95,7 +96,7 @@ namespace eShop.BackendApi
 
             //add DI
             //product services
-            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IProductsService, ProductsService>();
             services.AddTransient<IStorageService, FileStorageService>();
 
             //managers
@@ -108,6 +109,7 @@ namespace eShop.BackendApi
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ILanguageService, LanguageService>();
             services.AddTransient<ICatergoriesService, CatergoriesService>();
+            services.AddTransient<ISlidesService, SlidesService>();
 
             services.AddControllers();
             string issuer = Configuration.GetValue<string>("Tokens:Issuer");

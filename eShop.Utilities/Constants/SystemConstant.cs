@@ -14,5 +14,10 @@ namespace eShop.Utilities.Constants
             public const string BaseAddress = "BaseAddress";
             public const string Bearer = "Bearer";
         }
+        public class ProductSetting
+        {
+            public const int NumberOfFeaturedProducts = 16;
+            public const int NumberOfLatestProducts = 6;
+        }
     }
 }

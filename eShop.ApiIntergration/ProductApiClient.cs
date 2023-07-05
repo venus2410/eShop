@@ -20,6 +20,12 @@ namespace eShop.ApiIntergration
             return await _baseApiClient.PostWithFileAsync<bool, ProductCreateRequest>(baseUrl,request);
         }
 
+        public async Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take)
+        {
+            string url = baseUrl + $"/featured/{languageId}/{take}";
+            return await _baseApiClient.GetAllAsync<List<ProductVM>>(url);
+        }
+
         public async Task<ServiceResult<PageResult<ProductVM>>> GetPage(GetManageProductPagingRequest request)
         {
             string getURI = baseUrl + $"/paging?" + $"{nameof(request.PageIndex)}={request.PageIndex}&" + $"{nameof(request.PageSize)}={request.PageSize}&" + $"{nameof(request.Keyword)}={request.Keyword}&" + $"{nameof(request.LanguageId)}={request.LanguageId}&" + $"{nameof(request.CategoryId)}={request.CategoryId}";

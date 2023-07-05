@@ -19,4 +19,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\eShop.ApiIntergration\eShop.ApiIntergration.csproj" />
+    <ProjectReference Include="..\eShop.Utilities\eShop.Utilities.csproj" />
+    <ProjectReference Include="..\eShop.ViewModel\eShop.ViewModel.csproj" />
+  </ItemGroup>
+
 </Project>
