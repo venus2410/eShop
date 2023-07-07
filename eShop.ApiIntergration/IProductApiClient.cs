@@ -10,5 +10,6 @@ namespace eShop.ApiIntergration
         Task<ServiceResult<PageResult<ProductVM>>> GetPage(GetManageProductPagingRequest request);
         Task<ServiceResult<bool>> Create(ProductCreateRequest request);
         Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take);
+        Task<ServiceResult<List<ProductVM>>> GetLatestProduct(string languageId, int take);
     }
 }

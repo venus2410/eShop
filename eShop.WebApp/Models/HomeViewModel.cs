@@ -9,5 +9,6 @@ namespace eShop.WebApp.Models
         public string BaseAddress { get; set; }
         public List<SlideVM> Slides { get; set; }
         public List<ProductVM> FeaturedProducts { get; set; }
+        public List<ProductVM> LatestProducts { get; set; }
     }
 }

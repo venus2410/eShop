@@ -39,12 +39,14 @@ namespace eShop.WebApp.Controllers
             var culture = CultureInfo.CurrentCulture.Name;
             var baseAddress=_configuration[AppSetting.BaseAddress];
             var slides = _slideApiClient.GetAll().Result.Data;
-            var featuredProduct = _productApiClient.GetFeaturedProduct(culture, ProductSetting.NumberOfFeaturedProducts).Result.Data;
+            var featuredProducts = _productApiClient.GetFeaturedProduct(culture, ProductSetting.NumberOfFeaturedProducts).Result.Data;
+            var latestProducts= _productApiClient.GetLatestProduct(culture, ProductSetting.NumberOfLatestProducts).Result.Data;
             var homeVM = new HomeViewModel()
             {
                 BaseAddress =baseAddress ,
                 Slides=slides,
-                FeaturedProducts=featuredProduct
+                FeaturedProducts=featuredProducts,
+                LatestProducts=latestProducts
             };
             return View(homeVM);
         }

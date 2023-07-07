@@ -70,6 +70,7 @@ namespace eShop.WebApp
             services.AddTransient<IBaseApiClient, BaseApiClient>();
             services.AddTransient<ISlideApiClient, SlideApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
+            services.AddTransient<ICatergoryApiClient, CatergoryApiClient>();
 
 
             services.AddSession(option => option.IdleTimeout = TimeSpan.FromMinutes(30));
