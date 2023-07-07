@@ -4,7 +4,7 @@ using eShop.ViewModel.System.Languages;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace eShop.AdminApp.Services
+namespace eShop.ApiIntergration
 {
     public interface ICatergoryApiClient
     {

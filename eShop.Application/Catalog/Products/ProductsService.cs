@@ -22,11 +22,11 @@ using Microsoft.AspNetCore.Http.Features;
 
 namespace eShop.Application.Catalog.Products
 {
-    public class ProductService : IProductService
+    public class ProductsService : IProductsService
     {
         private readonly EShopDbContext _context;
         private readonly IStorageService _storageService;
-        public ProductService(EShopDbContext context, IStorageService storageService)
+        public ProductsService(EShopDbContext context, IStorageService storageService)
         {
             _context = context;
             _storageService = storageService;
@@ -372,6 +372,76 @@ namespace eShop.Application.Catalog.Products
             };
 
             return result;
+        }
+
+        public async Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take)
+        {
+            try
+            {
+                var query = from p in _context.Products
+                            join pt in _context.ProductTranslations on p.Id equals pt.ProductId
+                            join pi in _context.ProductImages on p.Id equals pi.ProductId
+                            where pt.LanguageId == languageId && p.IsFeatured == true
+                            select new { p, pt, pi };
+                var result = await query.Take(take).Select(x => new ProductVM
+                {
+                    Id = x.p.Id,
+                    Name = x.pt.Name,
+                    DateCreated = x.p.DateCreated,
+                    Description = x.pt.Description,
+                    Details = x.pt.Details,
+                    LanguageId = x.pt.LanguageId,
+                    OriginalPrice = x.p.OriginalPrice,
+                    Price = x.p.Price,
+                    SeoAlias = x.pt.SeoAlias,
+                    SeoDescription = x.pt.SeoDescription,
+                    SeoTitle = x.pt.SeoTitle,
+                    Stock = x.p.Stock,
+                    ViewCount = x.p.ViewCount,
+                    ThumbnailImage = x.pi.ImagePath
+                }
+                ).ToListAsync();
+                return new ServiceResultSuccess<List<ProductVM>>(result);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResultFail<List<ProductVM>>(e.Message.ToString());
+            }
+        }
+
+        public async Task<ServiceResult<List<ProductVM>>> GetLatestProduct(string languageId, int take)
+        {
+            try
+            {
+                var query = from p in _context.Products
+                            join pt in _context.ProductTranslations on p.Id equals pt.ProductId
+                            join pi in _context.ProductImages on p.Id equals pi.ProductId
+                            where pt.LanguageId == languageId && p.IsFeatured == true
+                            select new { p, pt, pi };
+                var result = await query.OrderByDescending(x=>x.p.DateCreated).Take(take).Select(x => new ProductVM
+                {
+                    Id = x.p.Id,
+                    Name = x.pt.Name,
+                    DateCreated = x.p.DateCreated,
+                    Description = x.pt.Description,
+                    Details = x.pt.Details,
+                    LanguageId = x.pt.LanguageId,
+                    OriginalPrice = x.p.OriginalPrice,
+                    Price = x.p.Price,
+                    SeoAlias = x.pt.SeoAlias,
+                    SeoDescription = x.pt.SeoDescription,
+                    SeoTitle = x.pt.SeoTitle,
+                    Stock = x.p.Stock,
+                    ViewCount = x.p.ViewCount,
+                    ThumbnailImage = x.pi.ImagePath
+                }
+                ).ToListAsync();
+                return new ServiceResultSuccess<List<ProductVM>>(result);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResultFail<List<ProductVM>>(e.Message.ToString());
+            }
         }
     }
 }

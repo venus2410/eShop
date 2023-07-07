@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace eShop.Application.Catalog.Products
 {
-    public interface IProductService
+    public interface IProductsService
     {
         Task<ServiceResult<bool>> Create(ProductCreateRequest request);
         Task<int> Update(ProductUpdateRequest request);
@@ -28,5 +28,7 @@ namespace eShop.Application.Catalog.Products
         Task<ProductImageViewModel> GetImageById(int imageId);
         Task<List<ProductImageViewModel>> GetListImage(int productId);
         Task<PageResult<ProductVM>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
+        Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take);
+        Task<ServiceResult<List<ProductVM>>> GetLatestProduct(string languageId, int take);
     }
 }

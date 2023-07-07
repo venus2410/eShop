@@ -26,10 +26,10 @@ namespace eShop.ViewModel.Catalog.Products
         [Required]
         public string SeoTitle { set; get; }
         [Required]
-
         public string SeoAlias { get; set; }
         public string LanguageId { set; get; }
         [DataType(DataType.Upload)]
         public IFormFile ThumbnailImage { set; get; }
+        public bool? IsFeatured { get; set; }
     }
 }

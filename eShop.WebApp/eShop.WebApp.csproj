@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\MySheet.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\themes\less\oregional\" />
   </ItemGroup>
 
@@ -12,7 +16,17 @@
     <PackageReference Include="LazZiya.ExpressLocalization" Version="4.0.4" />
     <PackageReference Include="LazZiya.TagHelpers" Version="6.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.2" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\eShop.ApiIntergration\eShop.ApiIntergration.csproj" />
+    <ProjectReference Include="..\eShop.Utilities\eShop.Utilities.csproj" />
+    <ProjectReference Include="..\eShop.ViewModel\eShop.ViewModel.csproj" />
   </ItemGroup>
 
 </Project>

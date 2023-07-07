@@ -1,7 +1,7 @@
 ﻿using eShop.ViewModel.Catalog.Common;
 using System.Threading.Tasks;
 
-namespace eShop.AdminApp.Services
+namespace eShop.ApiIntergration
 {
     public interface IBaseApiClient
     {

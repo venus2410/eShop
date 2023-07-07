@@ -10,7 +10,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace eShop.AdminApp.Services
+namespace eShop.ApiIntergration
 {
     public class RoleApiClient : IRoleApiClient
     {

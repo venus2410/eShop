@@ -3,6 +3,9 @@ using eShop.ViewModel.Catalog.ProductImages;
 using eShop.ViewModel.Catalog.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 namespace eShop.BackendApi.Controllers
@@ -12,8 +15,8 @@ namespace eShop.BackendApi.Controllers
     [Route("api/[controller]")]
     public class ProductsController : Controller
     {
-        readonly IProductService _productService;
-        public ProductsController(IProductService productService)
+        readonly IProductsService _productService;
+        public ProductsController(IProductsService productService)
         {
             _productService = productService;
         }
@@ -101,6 +104,20 @@ namespace eShop.BackendApi.Controllers
         {
             var result = await _productService.GetImageById(imageId);
             if (result == null) return BadRequest($"Cannot find image with id: {imageId}");
+            return Ok(result);
+        }
+        [HttpGet("featured/{languageId}/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetFeaturedProduct(string languageId, int take)
+        {
+            var result=await _productService.GetFeaturedProduct(languageId, take);
+            return Ok(result);
+        }
+        [HttpGet("latest/{languageId}/{take}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetLatestProduct(string languageId, int take)
+        {
+            var result = await _productService.GetLatestProduct(languageId, take);
             return Ok(result);
         }
     }

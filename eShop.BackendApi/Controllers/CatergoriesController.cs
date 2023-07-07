@@ -15,11 +15,12 @@ namespace eShop.BackendApi.Controllers
         {
             _catergoriesService = catergoriesService;
         }
-
+        [HttpGet()]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll(string? languageId )
         {
             var result=await _catergoriesService.GetAll(languageId);
-            if(result.IsSucceed) return   Ok(result);
+            if(result.IsSucceed) return Ok(result);
             return BadRequest(result);
         }
     }

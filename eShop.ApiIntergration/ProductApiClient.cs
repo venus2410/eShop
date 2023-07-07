@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace eShop.AdminApp.Services
+namespace eShop.ApiIntergration
 {
     public class ProductApiClient : IProductApiClient
     {
@@ -18,6 +18,18 @@ namespace eShop.AdminApp.Services
         public async Task<ServiceResult<bool>> Create(ProductCreateRequest request)
         {
             return await _baseApiClient.PostWithFileAsync<bool, ProductCreateRequest>(baseUrl,request);
+        }
+
+        public async Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take)
+        {
+            string url = baseUrl + $"/featured/{languageId}/{take}";
+            return await _baseApiClient.GetAllAsync<List<ProductVM>>(url);
+        }
+
+        public async Task<ServiceResult<List<ProductVM>>> GetLatestProduct(string languageId, int take)
+        {
+            string url = baseUrl + $"/latest/{languageId}/{take}";
+            return await _baseApiClient.GetAllAsync<List<ProductVM>>(url);
         }
 
         public async Task<ServiceResult<PageResult<ProductVM>>> GetPage(GetManageProductPagingRequest request)

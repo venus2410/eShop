@@ -1,4 +1,4 @@
-using eShop.AdminApp.Services;
+using eShop.ApiIntergration;
 using eShop.ViewModel.System.Users;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Cookies;

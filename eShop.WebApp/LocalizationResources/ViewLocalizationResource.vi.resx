@@ -134,7 +134,11 @@
     <comment>Layout</comment>
   </data>
   <data name="Specials Offer" xml:space="preserve">
-    <value>Ưu đãi đặc biệt</value>
+    <value>Ưu đãi</value>
     <comment>Layout</comment>
+  </data>
+  <data name="VIEW" xml:space="preserve">
+    <value>XEM</value>
+    <comment>Home/Index</comment>
   </data>
 </root>
