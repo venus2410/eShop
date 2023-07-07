@@ -68,7 +68,7 @@
         <div class="card-body">
             
         </div>
-        <div class="card-body" id="tableData">
+        <div class="card-body table-responsive" id="tableData">
             @await Component.InvokeAsync("ProductTable", Model)
         </div>
     </div>
@@ -98,26 +98,34 @@
         }
         function create() {
             if ($("#createForm").valid()) {
-                var formData = new FormData();
-                formData.append('Price', $('#Price').val());
-                formData.append('OriginalPrice', $('#OriginalPrice').val());
-                formData.append('Stock', $('#Stock').val());
-                formData.append('Name', $('#Name').val());
-                formData.append('Description', $('#Description').val());
-                formData.append('Details', $('#Details').val());
-                formData.append('SeoDescription', $('#SeoDescription').val());
-                formData.append('SeoTitle', $('#SeoTitle').val());
-                formData.append('SeoAlias', $('#SeoAlias').val());
-                formData.append('LanguageId', $('#LanguageId').val());
+                var eles = $(".tab-pane");
+                var translations = [];
+                eles.each(function (index, element) {
+                    var object = {
+                        Name:$(element).find("#Name").val(),
+                        Description:$(element).find("#Description").val(),
+                        Details:$(element).find("#Details").val(),
+                        SeoDescription:$(element).find("#SeoDescription").val(),
+                        SeoTitle:$(element).find("#SeoTitle").val(),
+                        SeoAlias:$(element).find("#SeoAlias").val(),
+                        LanguageId:$(element).find("#LanguageId").val()
+                    };
+                    translations.push(object);
+                });
+                console.log(JSON.stringify(translations));
+                var formData = new FormData($('#createForm').get(0));
+                //var prices = {
+                //    Price: $('#Price').val(),
+                //    OriginalPrice: $('#OriginalPrice').val()
+                //};
+                //formData.append('Prices.Price', $('#Price').val().toString());
+                //formData.append('Prices.OriginalPrice', $('#OriginalPrice').val().toString());
+                //formData.append('Stock', $('#Stock').val());
+                //formData.append('Translations', translations);
 
 
                 var file = document.getElementById("ThumbnailImage").files[0];
                 formData.append('ThumbnailImage', file);
-
-
-                for (var pair of formData.entries()) {
-                    console.log(pair[0] + ', ' + pair[1]);
-                }
 
                 $.ajax({
                     type: 'POST',

@@ -1,7 +1,7 @@
 ﻿@using eShop.ViewModel.System.Languages
 @model eShop.ViewModel.Catalog.Products.ProductCreateRequest
 @{
-    var languagesList = ViewBag.LanguagesList as List<eShop.ViewModel.System.Languages.LanguageVM>;
+    var languages = ViewBag.LanguagesList as List<eShop.ViewModel.System.Languages.LanguageVM>;
 }
 
 <h4>ProductCreateRequest</h4>
@@ -65,38 +65,21 @@
                 <form enctype="multipart/form-data" id="createForm">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <!-- Latest compiled and minified CSS -->
-                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
-                    <!-- Latest compiled and minified JavaScript -->
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-
-                    <!-- (Optional) Latest compiled and minified JavaScript translation files -->
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/i18n/defaults-*.min.js"></script>
-                    <div class="row">
-                        <select class="selectpicker">
-                            <option>Mustard</option>
-                            <option>Ketchup</option>
-                            <option>Barbecue</option>
-                        </select>
-
-                    </div>
-                    <script>
-                        $('.selectpicker').selectpicker();
-                    </script>
 
                     <div class="row">
                         <div class="form-group col-md-3">
-                            <label asp-for="Price" class="control-label"></label>
-                            <input asp-for="Price" class="form-control" />
-                            <span asp-validation-for="Price" class="text-danger"></span>
+                            <label asp-for="Prices.Price" class="control-label"></label>
+                            <input asp-for="Prices.Price" class="form-control" />
+                            <span asp-validation-for="Prices.Price" class="text-danger"></span>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
                         <div class="form-group col-md-3">
-                            <label asp-for="OriginalPrice" class="control-label"></label>
-                            <input asp-for="OriginalPrice" class="form-control" />
-                            <span asp-validation-for="OriginalPrice" class="text-danger"></span>
+                            <label asp-for="Prices.OriginalPrice" class="control-label"></label>
+                            <input asp-for="Prices.OriginalPrice" class="form-control" />
+                            <span asp-validation-for="Prices.OriginalPrice" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-3">
                             <label asp-for="Stock" class="control-label"></label>
@@ -109,52 +92,78 @@
                             <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
                         </div>
                     </div>
+
+                    
                     <div class="row">
-                        <div class="form-group col-md-3">
-                            <label asp-for="Name" class="control-label"></label>
-                            <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
+                        <div class="col-md-12">
+                            <ul class="nav nav-tabs" id="pills-tab" role="tablist">
+                                @for (int i = 0; i < languages.Count; i++)
+                                {
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link@(i==0?" active":"")" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-@i" type="button" role="tab" aria-controls="pills-home" aria-selected="@(i==0)">@languages[i].Name</button>
+                                    </li>
+                                }
+                            </ul>
+                            <div class="tab-content">
+                                @for (int i = 0; i < languages.Count; i++)
+                                {
+                                    <div class="tab-pane fade@(i==0?" show active":"")" id="pills-@i" role="tabpanel" aria-labelledby="pills-home-tab">
+                                        <input asp-for="Translations[i].LanguageId" class="form-control" type="hidden" />
+                                        <div class="row">
+                                            <div class="form-group col-md-3">
+                                                <label asp-for="Translations[i].Name" class="control-label"></label>
+                                                <input asp-for="Translations[i].Name" class="form-control" />
+                                                <span asp-validation-for="Translations[i].Name" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label asp-for="Translations[i].SeoTitle" class="control-label"></label>
+                                                <input asp-for="Translations[i].SeoTitle" class="form-control" />
+                                                <span asp-validation-for="Translations[i].SeoTitle" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label asp-for="Translations[i].SeoAlias" class="control-label"></label>
+                                                <input asp-for="Translations[i].SeoAlias" class="form-control" />
+                                                <span asp-validation-for="Translations[i].SeoAlias" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label asp-for="Translations[i].SeoDescription" class="control-label"></label>
+                                                <input asp-for="Translations[i].SeoDescription" class="form-control" />
+                                                <span asp-validation-for="Translations[i].SeoDescription" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            @{
+                                                var rows = 10;
+                                            }
+                                            <div class="form-group col-md-6">
+                                                <label asp-for="Translations[i].Details" class="control-label"></label>
+                                                <textarea asp-for="Translations[i].Details" class="form-control" rows="@rows" id="Details"></textarea>
+                                                <span asp-validation-for="Translations[i].Details" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label asp-for="Translations[i].Description" class="control-label"></label>
+                                                <textarea asp-for="Translations[i].Description" class="form-control" rows="@rows"></textarea>
+                                                <span asp-validation-for="Translations[i].Description" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
                         </div>
-                        <div class="form-group col-md-3">
-                            <label asp-for="SeoTitle" class="control-label"></label>
-                            <input asp-for="SeoTitle" class="form-control" />
-                            <span asp-validation-for="SeoTitle" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label asp-for="SeoAlias" class="control-label"></label>
-                            <input asp-for="SeoAlias" class="form-control" />
-                            <span asp-validation-for="SeoAlias" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label asp-for="SeoDescription" class="control-label"></label>
-                            <input asp-for="SeoDescription" class="form-control" />
-                            <span asp-validation-for="SeoDescription" class="text-danger"></span>
-                        </div>
+                        
+
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-6">
-                            <label asp-for="LanguageId" class="control-label"></label>
-                            <select asp-for="LanguageId" class="form-select" asp-items="new SelectList(languagesList,nameof(LanguageVM.Id),nameof(LanguageVM.Name))">
-                            </select>
-                            <span asp-validation-for="LanguageId" class="text-danger"></span>
-                        </div>
+                        @*<div class="form-group col-md-6">
+                                <label asp-for="LanguageId" class="control-label"></label>
+                                <select asp-for="LanguageId" class="form-select" asp-items="new SelectList(languagesList,nameof(LanguageVM.Id),nameof(LanguageVM.Name))">
+                                </select>
+                                <span asp-validation-for="LanguageId" class="text-danger"></span>
+                            </div>*@
                     </div>
                     <div class="row">
-                        @{
-                            var rows = 10;
-                        }
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label asp-for="Details" class="control-label"></label>
-                                <textarea asp-for="Details" class="form-control" rows="@rows" id="Details"></textarea>
-                                <span asp-validation-for="Details" class="text-danger"></span>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label asp-for="Description" class="control-label"></label>
-                                <textarea asp-for="Description" class="form-control" rows="@rows"></textarea>
-                                <span asp-validation-for="Description" class="text-danger"></span>
-                            </div>
-                        </div>
+
+
                     </div>
                 </form>
             </div>

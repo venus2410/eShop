@@ -65,7 +65,21 @@ namespace eShop.AdminApp.Controllers
         {
             var result=await _languageApiClient.GetLanguages();
             ViewBag.LanguagesList = result.Data;
-            return PartialView("_Create");
+            var model = new ProductCreateRequest();
+            foreach(var r in result.Data)
+            {
+                var translation= new Translation() { 
+                    LanguageId=r.Id,
+                    Name="N/A",
+                    Description="N/A",
+                    Details= "N/A",
+                    SeoDescription= "N/A",
+                    SeoTitle= "N/A",
+                    SeoAlias= "N/A"
+                };
+                model.Translations.Add(translation);
+            }
+            return PartialView("_Create", model);
         }
         [HttpPost]
         public async Task<IActionResult> Create(ProductCreateRequest request)

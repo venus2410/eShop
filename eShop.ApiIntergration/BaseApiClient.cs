@@ -111,7 +111,21 @@ namespace eShop.ApiIntergration
                 }
                 else
                 {
-                    httpContent.Add(new StringContent(propertyInfo.GetValue(model).ToString()), propertyInfo.Name);
+                    if (propertyInfo.GetValue(model) != null)
+                    {
+                        if(propertyInfo.PropertyType.IsClass
+    && !propertyInfo.PropertyType.FullName.StartsWith("System."))
+                        {
+                            var json = JsonConvert.SerializeObject(propertyInfo.GetValue(model));
+                            httpContent.Add(new StringContent(json, Encoding.UTF8, "application/json"), propertyInfo.Name);
+                        }
+                        else
+                        {
+                            httpContent.Add(new StringContent(propertyInfo.GetValue(model).ToString()), propertyInfo.Name);
+                        }
+                        
+                    }
+                    
                 }
             }
 
