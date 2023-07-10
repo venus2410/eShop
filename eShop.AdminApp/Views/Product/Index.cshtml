@@ -5,8 +5,8 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var languages = ViewBag.Languages as List<LanguageVM>;
-    var catergories = ViewBag.Catergories as List<CatergoryVM>;
+    var languages = ViewBag.Languages;
+    var catergories = ViewBag.Catergories;
 }
 <div class="container-fluid px-4">
     <h1 class="mt-4">Danh sách sản phẩm</h1>
@@ -30,22 +30,16 @@
                 <div class="col-md-10">
                     <div class="row justify-content-between">
                         <div class="col-md-2">
-                            <select class="form-select w-auto" aria-label="Default select example" name="pagesize" id="pageSizeSelect">
-                                <option value="5">5</option>
-                                <option value="10">10</option>
-                                <option value="15">15</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
+                            <select class="form-select w-auto" aria-label="Default select example" name="pagesize" id="pageSizeSelect" asp-items="@ViewBag.pageSizes">
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <select class="form-select w-auto" aria-label="Default select   example" name="languageId" id="languageIdSelect" asp-items="new SelectList(languages,nameof(LanguageVM.Id),nameof(LanguageVM.Name))">
+                            <select class="form-select w-auto" aria-label="Default select   example" name="languageId" id="languageIdSelect" asp-items="languages">
                                 <option value="" selected>Tất cả ngôn ngữ </option>
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <select class="form-select w-auto" aria-label="Default select   example" name="catergoryId" id="catergoryIdSelect" asp-items="new SelectList(catergories,nameof(CatergoryVM.Id),nameof(CatergoryVM.Name))">
+                            <select class="form-select w-auto" aria-label="Default select   example" name="catergoryId" id="categoryIdSelect" asp-items="catergories">
                                 <option value="" selected>Tất cả danh mục</option>
                             </select>
                         </div>
@@ -53,7 +47,7 @@
                             <div class="d-flex">
                                 <div class="input-group">
                                     <div class="form-outline">
-                                        <input type="search" id="keywordTextBox" class="form-control" />
+                                        <input type="search" id="keyword" class="form-control" value="@ViewBag.keywork" />
                                     </div>
                                     <button id="search-button" type="button" class="btn btn-primary">
                                         <i class="fas fa-search"></i>
@@ -65,9 +59,7 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            
-        </div>
+
         <div class="card-body table-responsive" id="tableData">
             @await Component.InvokeAsync("ProductTable", Model)
         </div>
@@ -81,84 +73,31 @@
 </div>
 
 <!-- Modal -->
+
 @section Scripts{
     <script src="~/js/bootbox.min.js"></script>
-
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
     <script>
         //create
         function loadCreatModal() {
-            $(this).off('click');
             $.ajax({
                 url: '@Url.Action("Create","Product")',
                 success: function (data) {
                     $("#modalHere").html(data);
                     $("#exampleModal").modal('show');
                 }
+                
             });
         }
-        function create() {
-            if ($("#createForm").valid()) {
-                var eles = $(".tab-pane");
-                var translations = [];
-                eles.each(function (index, element) {
-                    var object = {
-                        Name:$(element).find("#Name").val(),
-                        Description:$(element).find("#Description").val(),
-                        Details:$(element).find("#Details").val(),
-                        SeoDescription:$(element).find("#SeoDescription").val(),
-                        SeoTitle:$(element).find("#SeoTitle").val(),
-                        SeoAlias:$(element).find("#SeoAlias").val(),
-                        LanguageId:$(element).find("#LanguageId").val()
-                    };
-                    translations.push(object);
-                });
-                console.log(JSON.stringify(translations));
-                var formData = new FormData($('#createForm').get(0));
-                //var prices = {
-                //    Price: $('#Price').val(),
-                //    OriginalPrice: $('#OriginalPrice').val()
-                //};
-                //formData.append('Prices.Price', $('#Price').val().toString());
-                //formData.append('Prices.OriginalPrice', $('#OriginalPrice').val().toString());
-                //formData.append('Stock', $('#Stock').val());
-                //formData.append('Translations', translations);
 
-
-                var file = document.getElementById("ThumbnailImage").files[0];
-                formData.append('ThumbnailImage', file);
-
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("Create","Product")',
-                    contentType: false,
-                    processData: false,
-                    cache:false,
-                    data: formData,
-                    dataType: 'json',
-                    success: function (result) {
-                        /*alert(JSON.stringify(result));*/
-                        if (result.isSucceed == true) {
-                            $("#exampleModal").modal('hide');
-                            alertForm("Tạo mới thành công");
-                            setInterval(function () {
-                                location.reload();
-                            }, 2000);
-                        }
-                        else {
-                            bootbox.alert(result.errors);
-                        }
-                    },
-                    error: function () {
-                        bootbox.alert('Failed to receive the Data');
-                    }
-                });
-
-            }
-        }
         //update
         function loadUpdateModal(id) {
             $.ajax({
-                url: '@Url.Action("Update","User")',
+                url: '@Url.Action("Update","Product")',
                 data: {id:id},
                 success: function (data) {
                     $("#modalHere").html(data);
@@ -166,39 +105,7 @@
                 }
             });
         }
-        function updateUser() {
-            if ($("#updateForm").valid()) {
-                var data = $("#updateForm").serialize();
-        //console.log(data);
-        //alert(data);
-                $.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("Update","User")',
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // when we use .serialize() this generates the data in query string format. this needs the default contentType (default content type is: contentType: 'application/x-www-form-urlencoded; charset=UTF-8') so it is optional, you can remove it
-                    data: data,
-                    dataType: 'json',
-                    async: false,
-                    success: function (result) {
-                        /*alert(JSON.stringify(result));*/
-                        if (result.isSucceed == true) {
-                            $("#exampleModal").modal('hide');
 
-                            alertForm("Cập nhật thành công");
-                            setInterval(function () {
-                                location.reload(true);
-                            }, 2000);
-                        }
-                        else {
-                            bootbox.alert(result.errors);
-                        }
-                    },
-                    error: function () {
-                        alert('Failed to receive the Data');
-                    }
-                });
-            }
-
-        }
         //delete
         function deleteUser(id) {
             $.ajax({
@@ -223,32 +130,35 @@
                 });
         }
         function getPaging(pageIndex=1) {
-            var keyword = $('#keywordTextBox').val();
+            var keyword = $('#keyword').val();
             var pageSize = $('#pageSizeSelect').val();
             var languageId = $('#languageIdSelect').val();
-            var catergoryId = $('#catergoryIdSelect').val();
+            var categoryId = $('#categoryIdSelect').val();
             $.ajax({
                 url: '@Url.Action("GetProductPaging", "Product")',
                 data: {
-                    keyword: keyword,
                     pageIndex: pageIndex,
-                    pageSize: pageSize,
-                    languageId: languageId,
-                    categoryId: catergoryId
+                    keyword:keyword,
+                    pageSize:pageSize, 
+                    languageId:languageId,
+                    categoryId:categoryId
                 },
                 success: function (data) {
+                    console.log("success");
                     $("#tableData").html(data);
                 }
             });
         }
-        function alertForm(message) {
-            $("#alertDiv").text(message).fadeIn("slow").delay(3000).fadeOut("slow");
-        }
+
+        //for create
+
+
+
         //for search
         $("#pageSizeSelect").on('change', function () {
             getPaging();
         });
-        $("#catergoryIdSelect").on('change', function () {
+        $("#categoryIdSelect").on('change', function () {
             getPaging();
         });
         $("#languageIdSelect").on('change', function () {
@@ -258,8 +168,9 @@
             getPaging();
         });
         $(document).on('click', '.page-link', function () {
-                var pageIndex = $(this).data("pageindex");
-                getPaging(pageIndex);
+            var pIndex = $(this).data("pageindex");
+            console.log(pIndex);
+                getPaging(pIndex);
             });
 
         //for edit

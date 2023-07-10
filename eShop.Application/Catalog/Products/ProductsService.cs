@@ -51,13 +51,13 @@ namespace eShop.Application.Catalog.Products
                     productTranslations.Add(
                     new ProductTranslation()
                     {
-                        Name = translation.Name??"N/A",
-                        Description = translation.Description??"N/A",
-                        Details = translation.Details??"N/A",
-                        SeoDescription = translation.SeoDescription??"N/A",
-                        SeoTitle = translation.SeoTitle??"N/A",
-                        SeoAlias = translation.SeoAlias??"N/A",
-                        LanguageId = translation.LanguageId??"N/A"
+                        Name = translation.Name ?? "N/A",
+                        Description = translation.Description ?? "N/A",
+                        Details = translation.Details ?? "N/A",
+                        SeoDescription = translation.SeoDescription ?? "N/A",
+                        SeoTitle = translation.SeoTitle ?? "N/A",
+                        SeoAlias = translation.SeoAlias ?? "N/A",
+                        LanguageId = translation.LanguageId ?? "N/A"
                     });
                 }
                 var product = new Product()
@@ -68,7 +68,7 @@ namespace eShop.Application.Catalog.Products
                     ViewCount = 0,
                     DateCreated = DateTime.Now,
                     ProductTranslations = productTranslations,
-                    IsFeatured=request.IsFeatured??false
+                    IsFeatured = request.IsFeatured ?? false
                 };
 
                 //save image
@@ -205,10 +205,10 @@ namespace eShop.Application.Catalog.Products
             }
         }
 
-        public async Task<int> Update(ProductUpdateRequest request)
+        public async Task<ServiceResult<bool>> Update(ProductUpdateRequest request)
         {
             var product = await _context.Products.FindAsync(request.Id);
-            foreach(var translation in request.Translations)
+            foreach (var translation in request.Translations)
             {
                 var productTranslation = await _context.ProductTranslations.Where(x => x.ProductId == request.Id && x.LanguageId == translation.LanguageId).FirstOrDefaultAsync();
                 if (product == null || productTranslation == null) { throw new EShopException($"Cannot find a product with id: {request.Id}"); }
@@ -220,21 +220,23 @@ namespace eShop.Application.Catalog.Products
                 productTranslation.Description = translation.Description;
                 productTranslation.Details = translation.Details;
             }
-            
+
 
             //save image
-            if (request.ThumbnailImage != null)
-            {
-                var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == request.Id && x.IsDefault);
-                if (thumbnailImage != null)
-                {
-                    thumbnailImage.FileSize = request.ThumbnailImage.Length;
-                    thumbnailImage.ImagePath = await this.SaveFile(request.ThumbnailImage);
-                    _context.ProductImages.Update(thumbnailImage);
-                }
-            }
+            //if (request.ThumbnailImage != null)
+            //{
+            //    var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == request.Id && x.IsDefault);
+            //    if (thumbnailImage != null)
+            //    {
+            //        thumbnailImage.FileSize = request.ThumbnailImage.Length;
+            //        thumbnailImage.ImagePath = await this.SaveFile(request.ThumbnailImage);
+            //        _context.ProductImages.Update(thumbnailImage);
+            //    }
+            //}
 
-            return await _context.SaveChangesAsync();
+            var result= await _context.SaveChangesAsync();
+            if (result <= 0) return new ServiceResultFail<bool>("Cập nhật thất bại");
+            return new ServiceResultSuccess<bool>();
         }
         public async Task<bool> UpdatePrice(int productId, decimal newPrice)
         {
@@ -447,6 +449,36 @@ namespace eShop.Application.Catalog.Products
             catch (Exception e)
             {
                 return new ServiceResultFail<List<ProductVM>>(e.Message.ToString());
+            }
+        }
+#nullable enable
+        public async Task<ServiceResult<List<Translation>>> GetProductTranslation(int productId)
+        {
+            try
+            {
+                var product = await _context.Products.FindAsync(productId);
+                if (product == null)
+                {
+                    return new ServiceResultFail<List<Translation>>("Khong tim thay san pham");
+                }
+                var translations=await _context.ProductTranslations.Where(x=>x.ProductId== productId).Select(
+                    x=> new Translation
+                    {
+                        Id= x.Id,
+                        LanguageId= x.LanguageId,
+                        Name= x.Name,
+                        Description= x.Description,
+                        Details= x.Details,
+                        SeoDescription=x.SeoDescription,
+                        SeoAlias=x.SeoAlias,
+                        SeoTitle=x.SeoTitle
+                    }
+                   ).ToListAsync();
+                return new ServiceResultSuccess<List<Translation>>(translations);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResultFail<List<Translation>>(e.Message.ToString());
             }
         }
     }

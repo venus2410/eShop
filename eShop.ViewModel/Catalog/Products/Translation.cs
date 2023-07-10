@@ -7,6 +7,7 @@ namespace eShop.ViewModel.Catalog.Products
 {
     public class Translation
     {
+        public int Id { get; set; }
         public string LanguageId { set; get; }
         [Required]
         public string Name { set; get; }

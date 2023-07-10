@@ -1,6 +1,7 @@
 ﻿using eShop.Utilities.Constants;
 using eShop.ViewModel.Catalog.Common;
 using eShop.ViewModel.Catalog.Products;
+using eShop.ViewModel.System.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
@@ -58,9 +59,9 @@ namespace eShop.ApiIntergration
             requestContent.Add(new StringContent(request.Prices.Price.ToString()), "Prices.Price");
             requestContent.Add(new StringContent(request.Prices.OriginalPrice.ToString()), "Prices.OriginalPrice");
             requestContent.Add(new StringContent(request.Stock.ToString()), "stock");
-            for(int i = 0; i < request.Translations.Count; i++)
+            for (int i = 0; i < request.Translations.Count; i++)
             {
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Name) ? "" : request.Translations[i].Name.ToString()), nameof(Translation)+$"s[{i}]."+nameof(Translation.Name));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Name) ? "" : request.Translations[i].Name.ToString()), nameof(Translation) + $"s[{i}]." + nameof(Translation.Name));
                 requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Description) ? "" : request.Translations[i].Description.ToString()), nameof(Translation) + $"s[{i}]." + nameof(Translation.Description));
 
                 requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Details) ? "" : request.Translations[i].Details.ToString()), nameof(Translation) + $"s[{i}]." + nameof(Translation.Details));
@@ -98,6 +99,17 @@ namespace eShop.ApiIntergration
             //Dictionary<string,string> dictionary=(Dictionary<string, string>) request;
             //QueryHelpers.AddQueryString(getURI, dictionary);
             return await _baseApiClient.GetAllAsync<PageResult<ProductVM>>(getURI);
+        }
+
+        public async Task<ServiceResult<List<Translation>>> GetProductTranslation(int productId)
+        {
+            string url = baseUrl + $"/{productId}/translations";
+            return await _baseApiClient.GetAllAsync<List<Translation>>(url);
+        }
+
+        public async Task<ServiceResult<bool>> Update(ProductUpdateRequest request)
+        {
+            return await _baseApiClient.PutAsync<bool, ProductUpdateRequest>(baseUrl, request.Id.ToString(), request);
         }
     }
 }

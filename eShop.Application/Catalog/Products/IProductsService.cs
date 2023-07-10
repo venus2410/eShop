@@ -12,7 +12,7 @@ namespace eShop.Application.Catalog.Products
     public interface IProductsService
     {
         Task<ServiceResult<bool>> Create(ProductCreateRequest request);
-        Task<int> Update(ProductUpdateRequest request);
+        Task<ServiceResult<bool>> Update(ProductUpdateRequest request);
         Task<int> Delete(int productId);
         Task<ProductVM> GetById(int productId, string languageId);
         Task<bool> UpdatePrice(int productId, decimal newPrice);
@@ -30,5 +30,6 @@ namespace eShop.Application.Catalog.Products
         Task<PageResult<ProductVM>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
         Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take);
         Task<ServiceResult<List<ProductVM>>> GetLatestProduct(string languageId, int take);
+        Task<ServiceResult<List<Translation>>> GetProductTranslation(int productId);
     }
 }

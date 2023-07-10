@@ -1,8 +1,10 @@
 ﻿using eShop.Application.Catalog.Products;
+using eShop.ViewModel.Catalog.Common;
 using eShop.ViewModel.Catalog.ProductImages;
 using eShop.ViewModel.Catalog.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -47,13 +49,12 @@ namespace eShop.BackendApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [Consumes("multipart/form-data")]
-        public async Task<IActionResult> Update(int id,[FromForm] ProductUpdateRequest request)
+        public async Task<IActionResult> Update([FromRoute] int id,[FromBody] ProductUpdateRequest request)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var affectedResult = await _productService.Update(request);
-            if (affectedResult <= 0) return BadRequest();
-            return Ok();
+            var result = await _productService.Update(request);
+            if (!result.IsSucceed) return BadRequest(result);
+            return Ok(result);
         }
         [HttpDelete("{productId}")]
         public async Task<IActionResult> Delete(int productId)
@@ -119,6 +120,17 @@ namespace eShop.BackendApi.Controllers
         {
             var result = await _productService.GetLatestProduct(languageId, take);
             return Ok(result);
+        }
+        [HttpGet("{productId}/translations")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetProductTranslation(int productId)
+        {
+            var result=await _productService.GetProductTranslation(productId);
+            if (result.IsSucceed)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }
