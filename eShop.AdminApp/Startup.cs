@@ -73,7 +73,7 @@ namespace eShop.AdminApp
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Login/Login";
+        options.LoginPath = "/Login";
         options.AccessDeniedPath = "/Account/Forbidden";
     });
             services.AddHttpClient();
@@ -121,11 +121,13 @@ namespace eShop.AdminApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "login",
+                    pattern: "/Login",
+                    defaults: new { controller="Login", action = "Login" }
+                    );
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{culture=vi}/{controller=Home}/{action=Index}");
-                endpoints.MapControllerRoute(
-                    name: "setcookies",
-                    pattern: "{controller=Home}/{action=SetCultureCookie}");
             });
         }
     }
