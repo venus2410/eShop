@@ -9,25 +9,10 @@ namespace eShop.ViewModel.Catalog.Products
 {
     public class ProductCreateRequest
     {
-        [Required]
-        public decimal Price { get; set; }
-        [Required]
-        public decimal OriginalPrice { get; set; }
+        public ProductPrices Prices { get; set; }
         [Required]
         public int Stock { get; set; }
-        [Required]
-        public string Name { set; get; }
-        [Required]
-        public string Description { set; get; }
-        [Required]
-        public string Details { set; get; }
-        [Required]
-        public string SeoDescription { set; get; }
-        [Required]
-        public string SeoTitle { set; get; }
-        [Required]
-        public string SeoAlias { get; set; }
-        public string LanguageId { set; get; }
+        public List<TranslationOfProduct> Translations { get; set; }=new List<TranslationOfProduct>();
         [DataType(DataType.Upload)]
         public IFormFile ThumbnailImage { set; get; }
         public bool? IsFeatured { get; set; }

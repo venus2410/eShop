@@ -33,7 +33,6 @@ namespace eShop.WebApp.Controllers
             _productApiClient = productApiClient;
             _configuration = configuration;
         }
-
         public IActionResult Index()
         {
             var culture = CultureInfo.CurrentCulture.Name;
