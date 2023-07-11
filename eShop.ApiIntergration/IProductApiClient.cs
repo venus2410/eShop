@@ -13,6 +13,6 @@ namespace eShop.ApiIntergration
         Task<ServiceResult<bool>> Update(ProductUpdateRequest request);
         Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take);
         Task<ServiceResult<List<ProductVM>>> GetLatestProduct(string languageId, int take);
-        Task<ServiceResult<List<Translation>>> GetProductTranslation(int productId);
+        Task<ServiceResult<List<TranslationOfProduct>>> GetProductTranslation(int productId);
     }
 }

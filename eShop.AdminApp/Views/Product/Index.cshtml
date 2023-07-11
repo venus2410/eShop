@@ -8,6 +8,7 @@
     var languages = ViewBag.Languages;
     var catergories = ViewBag.Catergories;
 }
+
 <div class="container-fluid px-4">
     <h1 class="mt-4">Danh sách sản phẩm</h1>
     <ol class="breadcrumb mb-4">
@@ -90,7 +91,7 @@
                     $("#modalHere").html(data);
                     $("#exampleModal").modal('show');
                 }
-                
+
             });
         }
 
@@ -139,7 +140,7 @@
                 data: {
                     pageIndex: pageIndex,
                     keyword:keyword,
-                    pageSize:pageSize, 
+                    pageSize:pageSize,
                     languageId:languageId,
                     categoryId:categoryId
                 },

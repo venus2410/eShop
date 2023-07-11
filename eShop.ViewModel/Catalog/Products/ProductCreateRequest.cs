@@ -12,7 +12,7 @@ namespace eShop.ViewModel.Catalog.Products
         public ProductPrices Prices { get; set; }
         [Required]
         public int Stock { get; set; }
-        public List<Translation> Translations { get; set; }=new List<Translation>();
+        public List<TranslationOfProduct> Translations { get; set; }=new List<TranslationOfProduct>();
         [DataType(DataType.Upload)]
         public IFormFile ThumbnailImage { set; get; }
         public bool? IsFeatured { get; set; }

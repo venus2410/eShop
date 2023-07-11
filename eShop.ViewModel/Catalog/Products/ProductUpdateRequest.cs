@@ -8,6 +8,6 @@ namespace eShop.ViewModel.Catalog.Products
     public class ProductUpdateRequest
     {
         public int Id { set; get; }
-        public List<Translation> Translations { get; set; } = new List<Translation>();
+        public List<TranslationOfProduct> Translations { get; set; } = new List<TranslationOfProduct>();
     }
 }

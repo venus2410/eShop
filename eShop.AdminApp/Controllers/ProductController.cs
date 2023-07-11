@@ -92,13 +92,12 @@ namespace eShop.AdminApp.Controllers
         }
         public async Task<IActionResult> Create()
         {
-            var a = Request.Query;
             var result = await _languageApiClient.GetLanguages();
             ViewBag.LanguagesList = result.Data;
             var model = new ProductCreateRequest();
             foreach (var r in result.Data)
             {
-                var translation = new Translation()
+                var translation = new TranslationOfProduct()
                 {
                     LanguageId = r.Id,
                     Name = "N/A",
@@ -135,6 +134,8 @@ namespace eShop.AdminApp.Controllers
         {
             var response = await _productApiClient.GetProductTranslation(id);
             var translations = response.Data;
+            var result = await _languageApiClient.GetLanguages();
+            ViewBag.LanguagesList = result.Data;
             var model = new ProductUpdateRequest
             {
                 Id = id,

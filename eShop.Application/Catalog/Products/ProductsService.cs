@@ -452,33 +452,38 @@ namespace eShop.Application.Catalog.Products
             }
         }
 #nullable enable
-        public async Task<ServiceResult<List<Translation>>> GetProductTranslation(int productId)
+        public async Task<ServiceResult<List<TranslationOfProduct>>> GetProductTranslation(int productId)
         {
             try
             {
                 var product = await _context.Products.FindAsync(productId);
                 if (product == null)
                 {
-                    return new ServiceResultFail<List<Translation>>("Khong tim thay san pham");
+                    return new ServiceResultFail<List<TranslationOfProduct>>("Không tìm thấy bản dịch");
                 }
-                var translations=await _context.ProductTranslations.Where(x=>x.ProductId== productId).Select(
-                    x=> new Translation
+                var query = from pt in _context.ProductTranslations
+                            join l in _context.Languages on pt.LanguageId equals l.Id
+                            where pt.ProductId == productId
+                            select new { pt, l };
+                var translations=await query.Select(
+                    x=> new TranslationOfProduct
                     {
-                        Id= x.Id,
-                        LanguageId= x.LanguageId,
-                        Name= x.Name,
-                        Description= x.Description,
-                        Details= x.Details,
-                        SeoDescription=x.SeoDescription,
-                        SeoAlias=x.SeoAlias,
-                        SeoTitle=x.SeoTitle
+                        Id= x.pt.Id,
+                        LanguageId= x.pt.LanguageId,
+                        Name= x.pt.Name,
+                        Description= x.pt.Description,
+                        Details= x.pt.Details,
+                        SeoDescription=x.pt.SeoDescription,
+                        SeoAlias=x.pt.SeoAlias,
+                        SeoTitle=x.pt.SeoTitle,
+                        LanguageName=x.l.Name
                     }
                    ).ToListAsync();
-                return new ServiceResultSuccess<List<Translation>>(translations);
+                return new ServiceResultSuccess<List<TranslationOfProduct>>(translations);
             }
             catch (Exception e)
             {
-                return new ServiceResultFail<List<Translation>>(e.Message.ToString());
+                return new ServiceResultFail<List<TranslationOfProduct>>(e.Message.ToString());
             }
         }
     }

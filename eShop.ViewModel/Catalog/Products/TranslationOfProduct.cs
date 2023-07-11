@@ -5,10 +5,11 @@ using System.Text;
 
 namespace eShop.ViewModel.Catalog.Products
 {
-    public class Translation
+    public class TranslationOfProduct
     {
         public int Id { get; set; }
         public string LanguageId { set; get; }
+        public string LanguageName { set; get; }
         [Required]
         public string Name { set; get; }
         [Required]

@@ -61,14 +61,14 @@ namespace eShop.ApiIntergration
             requestContent.Add(new StringContent(request.Stock.ToString()), "stock");
             for (int i = 0; i < request.Translations.Count; i++)
             {
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Name) ? "" : request.Translations[i].Name.ToString()), nameof(Translation) + $"s[{i}]." + nameof(Translation.Name));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Description) ? "" : request.Translations[i].Description.ToString()), nameof(Translation) + $"s[{i}]." + nameof(Translation.Description));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Name) ? "" : request.Translations[i].Name.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.Name));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Description) ? "" : request.Translations[i].Description.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.Description));
 
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Details) ? "" : request.Translations[i].Details.ToString()), nameof(Translation) + $"s[{i}]." + nameof(Translation.Details));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoDescription) ? "" : request.Translations[i].SeoDescription.ToString()), nameof(Translation) + $"s[{i}]." + nameof(Translation.SeoDescription));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoTitle) ? "" : request.Translations[i].SeoTitle.ToString()), nameof(Translation) + $"s[{i}]." + nameof(Translation.SeoTitle));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoAlias) ? "" : request.Translations[i].SeoAlias.ToString()), nameof(Translation) + $"s[{i}]." + nameof(Translation.SeoAlias));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].LanguageId) ? "" : request.Translations[i].LanguageId.ToString()), nameof(Translation) + $"s[{i}]." + nameof(Translation.LanguageId));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Details) ? "" : request.Translations[i].Details.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.Details));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoDescription) ? "" : request.Translations[i].SeoDescription.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.SeoDescription));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoTitle) ? "" : request.Translations[i].SeoTitle.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.SeoTitle));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoAlias) ? "" : request.Translations[i].SeoAlias.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.SeoAlias));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].LanguageId) ? "" : request.Translations[i].LanguageId.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.LanguageId));
             }
 
             requestContent.Add(new StringContent(languageId), "languageId");
@@ -101,10 +101,10 @@ namespace eShop.ApiIntergration
             return await _baseApiClient.GetAllAsync<PageResult<ProductVM>>(getURI);
         }
 
-        public async Task<ServiceResult<List<Translation>>> GetProductTranslation(int productId)
+        public async Task<ServiceResult<List<TranslationOfProduct>>> GetProductTranslation(int productId)
         {
             string url = baseUrl + $"/{productId}/translations";
-            return await _baseApiClient.GetAllAsync<List<Translation>>(url);
+            return await _baseApiClient.GetAllAsync<List<TranslationOfProduct>>(url);
         }
 
         public async Task<ServiceResult<bool>> Update(ProductUpdateRequest request)
