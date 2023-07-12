@@ -65,11 +65,18 @@ namespace eShop.ApiIntergration
             var result = JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
             return result;
         }
-        public async Task<ServiceResult<ReturnType>> GetByIdAsync<ReturnType>(string url, string id)
+#nullable enable
+        public async Task<ServiceResult<ReturnType>> GetByIdAsync<ReturnType>(string url, string id, string? languageId)
         {
             var client = CreateAuthenticatedClient();
 
-            var response = await client.GetAsync($"{url}/{id}");
+            var route = $"{url}/{id}";
+            if(!string.IsNullOrEmpty(languageId))
+            {
+                route += route + $"/{languageId}";
+            }
+
+            var response = await client.GetAsync(route);
 
             var body = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);

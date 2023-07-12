@@ -155,7 +155,8 @@ namespace eShop.Application.Catalog.Products
                 //select join
                 var query = from p in _context.Products
                             join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                            select new { p, pt };
+                            join pi in _context.ProductImages on p.Id equals pi.ProductId
+                            select new { p, pt, pi };
                 //select new { p, pt };
                 //filter
                 if (!string.IsNullOrEmpty(request.LanguageId))
@@ -185,7 +186,8 @@ namespace eShop.Application.Catalog.Products
                         SeoDescription = x.pt.SeoDescription,
                         SeoTitle = x.pt.SeoTitle,
                         Stock = x.p.Stock,
-                        ViewCount = x.p.ViewCount
+                        ViewCount = x.p.ViewCount,
+                        ThumbnailImage= x.pi.ImagePath
                     }).ToListAsync();
 
                 // return data
@@ -336,7 +338,7 @@ namespace eShop.Application.Catalog.Products
             var originalFileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
             var fileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             await _storageService.SaveFileAsync(file.OpenReadStream(), fileName);
-            return fileName;
+            return _storageService.GetFileUrl(fileName);
         }
         public async Task<PageResult<ProductVM>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request)
         {

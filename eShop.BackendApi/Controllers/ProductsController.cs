@@ -24,6 +24,7 @@ namespace eShop.BackendApi.Controllers
         }
 
         [HttpGet("paging")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPaging([FromQuery]GetManageProductPagingRequest request)
         {
             var result = await _productService.GetByPaging(request);

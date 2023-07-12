@@ -43,5 +43,34 @@ namespace eShop.Application.Catalog.Categories
                 return new ServiceResultFail<List<CatergoryVM>>(e.Message.ToString());
             }
         }
+
+        public async Task<ServiceResult<CatergoryVM>> GetById(int categoryId, string languageId)
+        {
+            try
+            {
+                var language = await _context.Languages.Where(x => x.Id == languageId).FirstOrDefaultAsync();
+                if (string.IsNullOrEmpty(languageId) || language == null)
+                {
+                    languageId = await _context.Languages.Select(x => x.Id).FirstOrDefaultAsync();
+                }
+                var query = from c in _context.Categories
+                            join ct in _context.CategoryTranslations on c.Id equals ct.CategoryId
+                            where ct.LanguageId == languageId && ct.CategoryId==categoryId
+                            select new { c, ct };
+                var catergories = await query.Select(x => new CatergoryVM
+                {
+                    Id = x.c.Id,
+                    Name = x.ct.Name,
+                    ParentId = x.c.ParentId,
+                    Description=x.ct.SeoDescription
+                }).FirstOrDefaultAsync();
+
+                return new ServiceResultSuccess<CatergoryVM>(catergories);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResultFail<CatergoryVM>(e.Message.ToString());
+            }
+        }
     }
 }

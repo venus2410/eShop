@@ -9,5 +9,6 @@ namespace eShop.ApiIntergration
     public interface ICatergoryApiClient
     {
         Task<ServiceResult<List<CatergoryVM>>> GetCatergories(string languageId);
+        Task<ServiceResult<CatergoryVM>> GetById(int categoryId,string languageId);
     }
 }

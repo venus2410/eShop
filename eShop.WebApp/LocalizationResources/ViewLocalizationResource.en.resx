@@ -125,16 +125,36 @@
     <value>Delivery</value>
     <comment>Layout</comment>
   </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+    <comment>Layout</comment>
+  </data>
   <data name="Featured Products" xml:space="preserve">
     <value>Featured Products</value>
+    <comment>Home/Index</comment>
+  </data>
+  <data name="Latest Products" xml:space="preserve">
+    <value>Latest Products</value>
     <comment>Home/Index</comment>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
     <comment>Layout</comment>
   </data>
+  <data name="products are available" xml:space="preserve">
+    <value>products are available</value>
+    <comment>Product/ProductByCategory</comment>
+  </data>
+  <data name="ProductsByCategory" xml:space="preserve">
+    <value>Product(s) By Category</value>
+    <comment>Product/ProductsByCategory</comment>
+  </data>
   <data name="Specials Offer" xml:space="preserve">
     <value>Specials Offer</value>
+    <comment>Layout</comment>
+  </data>
+  <data name="Vietnamese" xml:space="preserve">
+    <value>Vietnamese</value>
     <comment>Layout</comment>
   </data>
   <data name="VIEW" xml:space="preserve">

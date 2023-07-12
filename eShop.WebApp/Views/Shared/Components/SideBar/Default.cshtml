@@ -4,6 +4,7 @@
     <ul id="sideManu" class="nav nav-tabs nav-stacked">
         @{
             var parents = Model.Where(x => x.ParentId == null);
+            var culture = CultureInfo.CurrentCulture.Name;
         }
         @foreach (var parent in parents)
         {
@@ -19,12 +20,12 @@
                             {
                                 if (i == 0)
                                 {
-                                    <li><a class="active" href="products.html"><i class="icon-chevron-right"></i>@child.Name </a></li>
+                                    <li><a class="active" href="@($"/{culture}" +Url.Action("ProductsByCategory","Product",new{categoryId=child.Id}))"><i class="icon-chevron-right"></i>@child.Name </a></li>
                                     i++;
                                 }
                                 else
                                 {
-                                    <li><a href="products.html"><i class="icon-chevron-right"></i>@child.Name</a></li>
+                                    <li><a href="@($"/{culture}" +Url.Action("ProductsByCategory","Product",new{categoryId=child.Id}))"><i class="icon-chevron-right"></i>@child.Name</a></li>
                                 }
                             }
                         }

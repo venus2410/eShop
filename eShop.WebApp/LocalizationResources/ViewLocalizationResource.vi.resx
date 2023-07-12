@@ -125,16 +125,36 @@
     <value>Vận chuyển</value>
     <comment>Layout</comment>
   </data>
+  <data name="English" xml:space="preserve">
+    <value>Tiếng Anh</value>
+    <comment>Layout</comment>
+  </data>
   <data name="Featured Products" xml:space="preserve">
     <value>Sản phẩm tiêu biểu</value>
+    <comment>Home/Index</comment>
+  </data>
+  <data name="Latest Products" xml:space="preserve">
+    <value>Sản phẩm mới nhất</value>
     <comment>Home/Index</comment>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Đăng nhập</value>
     <comment>Layout</comment>
   </data>
+  <data name="products are available" xml:space="preserve">
+    <value>sản phẩm có sẵn</value>
+    <comment>Product/ProductByCategory</comment>
+  </data>
+  <data name="ProductsByCategory" xml:space="preserve">
+    <value>Sản phẩm theo loại</value>
+    <comment>Product/ProductsByCategory</comment>
+  </data>
   <data name="Specials Offer" xml:space="preserve">
     <value>Ưu đãi</value>
+    <comment>Layout</comment>
+  </data>
+  <data name="Vietnamese" xml:space="preserve">
+    <value>Tiếng Việt</value>
     <comment>Layout</comment>
   </data>
   <data name="VIEW" xml:space="preserve">
