@@ -141,6 +141,10 @@
     <value>Đăng nhập</value>
     <comment>Layout</comment>
   </data>
+  <data name="Not found" xml:space="preserve">
+    <value>Không tìm thấy</value>
+    <comment>Product/ProductsByCategory</comment>
+  </data>
   <data name="products are available" xml:space="preserve">
     <value>sản phẩm có sẵn</value>
     <comment>Product/ProductByCategory</comment>

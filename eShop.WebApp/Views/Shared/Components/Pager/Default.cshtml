@@ -1,0 +1,74 @@
+﻿@model eShop.ViewModel.Catalog.Common.PagedResultBase
+@{
+    var culture = CultureInfo.CurrentCulture.Name;
+    var urlTemplate = "/"+culture + Url.Action() + "?pageIndex={0}";
+    var request = ViewContext.HttpContext.Request;
+    foreach (var key in request.Query.Keys)
+    {
+        if (key == "pageIndex")
+        {
+            continue;
+        }
+        if (request.Query[key].Count > 1)
+        {
+            foreach (var item in (string[])request.Query[key])
+            {
+                urlTemplate += "&" + key + "=" + item;
+            }
+        }
+        else
+        {
+            urlTemplate += "&" + key + "=" + request.Query[key];
+        }
+    }
+
+    var startIndex = Math.Max(Model.PageIndex - 5, 1);
+    var finishIndex = Math.Min(Model.PageIndex + 5, Model.PageCount);
+}
+
+<div class="pagination">
+    @if (Model.PageCount > 1)
+    {
+        <ul>
+            @if (Model.PageIndex != startIndex)
+            {
+                <li>
+                    <a href="@urlTemplate.Replace("{0}","1")" data-pageIndex="1">&lsaquo;&lsaquo;</a>
+                </li>
+                <li>
+                    <a href="@urlTemplate.Replace("{0}",(Model.PageIndex-1).ToString())" data-pageIndex="@(Model.PageIndex-1)">&lsaquo;</a>
+                </li>
+            }
+            @for (var i = startIndex; i <= finishIndex; i++)
+            {
+                if (i == Model.PageIndex)
+                {
+                    <li class="active">
+                        <a href="#" data-pageIndex="@i">@i</a>
+                    </li>
+                }
+                else
+                {
+                    <li><a title="Trang @i.ToString()" href="@urlTemplate.Replace("{0}",i.ToString())" data-pageIndex="@i">@i</a></li>
+                }
+            }
+            @if (Model.PageIndex != finishIndex)
+            {
+                <li>
+                    <a title="@Model.PageCount.ToString()" href="@urlTemplate.Replace("{0}",(Model.PageIndex+1).ToString())" data-pageIndex="@(Model.PageIndex+1)">&rsaquo;</a>
+                </li>
+                <li>
+                    <a href="@urlTemplate.Replace("{0}",Model.PageCount.ToString())" data-pageIndex="@Model.PageCount">&rsaquo;&rsaquo;</a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <ul>
+            <li>
+                <a href="#" data-pageIndex="1">1</a>
+            </li>
+        </ul>
+    }
+</div>

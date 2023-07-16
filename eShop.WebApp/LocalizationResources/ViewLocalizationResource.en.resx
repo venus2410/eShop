@@ -141,6 +141,10 @@
     <value>Login</value>
     <comment>Layout</comment>
   </data>
+  <data name="Not found" xml:space="preserve">
+    <value>Oops! Not Found</value>
+    <comment>Product/ProductsByCategory</comment>
+  </data>
   <data name="products are available" xml:space="preserve">
     <value>products are available</value>
     <comment>Product/ProductByCategory</comment>

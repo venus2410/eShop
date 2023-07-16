@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var category = ViewBag.Category as eShop.ViewModel.Catalog.Catergories.CatergoryVM;
     var baseAddress = ViewBag.BaseAddress as string;
+    var cultureInfor = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 }
 
 <h1><localize>ProductsByCategory</localize></h1>
@@ -36,7 +37,7 @@
         {
             <div class="row">
                 <div class="span2">
-                    <img src="@(baseAddress+item.ThumbnailImage)" alt="@item.Name" class="image-fit"/>
+                    <img src="@(baseAddress+item.ThumbnailImage)" alt="@item.Name" class="image-fit" />
                 </div>
                 <div class="span4">
                     <h3>New | Available</h3>
@@ -50,7 +51,7 @@
                 </div>
                 <div class="span3 alignR">
                     <form class="form-horizontal qtyFrm">
-                        <h3> @string.Format("{0:c0}", item.Price)</h3>
+                        <h3> @string.Format(cultureInfor, "{0:c}", item.Price)</h3>
                         <label class="checkbox">
                             <input type="checkbox">  Adds product to compair
                         </label><br />
@@ -71,13 +72,13 @@
             {
                 <li class="span3">
                     <div class="thumbnail">
-                        <a href="product_details.html"><img src="@(baseAddress+item.ThumbnailImage)" alt="@item.Name" class="image-fit"/></a>
+                        <a href="product_details.html"><img src="@(baseAddress+item.ThumbnailImage)" alt="@item.Name" class="image-fit" /></a>
                         <div class="caption">
                             <h5>@item.Name</h5>
                             <p>
                                 @item.Description
                             </p>
-                            <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">@string.Format("{0:c0}", item.Price)</a></h4>
+                            <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">@string.Format(cultureInfor, "{0:c}", item.Price)</a></h4>
                         </div>
                     </div>
                 </li>
@@ -87,18 +88,18 @@
         <hr class="soft" />
     </div>
 </div>
-
-<a href="compair.html" class="btn btn-large pull-right">Compair Product</a>
-<div class="pagination">
-    <ul>
-        <li><a href="#">&lsaquo;</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">...</a></li>
-        <li><a href="#">&rsaquo;</a></li>
-    </ul>
-</div>
-<br class="clr" />
-
+@if (Model.TotalRecords > 0)
+{
+    <a href="compair.html" class="btn btn-large pull-right">Compair Product</a>
+    @await Component.InvokeAsync("Pager", Model)
+    <br class="clr" />
+}
+else
+{
+    <div class="alert alert-error">
+        <localize>
+            Not found
+        </localize>
+        
+    </div>
+}

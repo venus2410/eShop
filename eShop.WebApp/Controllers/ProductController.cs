@@ -26,14 +26,14 @@ namespace eShop.WebApp.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> ProductsByCategory(int categoryId, string culture, int page=1)
+        public async Task<IActionResult> ProductsByCategory(int categoryId, string culture, int pageIndex=1)
         {
             ViewBag.Category = (await _catergoryApi.GetById(categoryId, culture)).Data;
             ViewBag.BaseAddress = _configuration[AppSetting.BaseAddress];
 
             var requestProductPage = new GetManageProductPagingRequest {
-                PageIndex= page,
-                PageSize=10,
+                PageIndex= pageIndex,
+                PageSize=5,
                 CategoryId=categoryId,
                 LanguageId=culture
             };
