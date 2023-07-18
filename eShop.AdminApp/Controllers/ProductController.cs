@@ -100,15 +100,20 @@ namespace eShop.AdminApp.Controllers
                 var translation = new TranslationOfProduct()
                 {
                     LanguageId = r.Id,
-                    Name = "N/A",
-                    Description = "N/A",
-                    Details = "N/A",
-                    SeoDescription = "N/A",
-                    SeoTitle = "N/A",
-                    SeoAlias = "N/A"
+                    Name = ProductSetting.DefaultProductInfor,
+                    Description = ProductSetting.DefaultProductInfor,
+                    Details = ProductSetting.DefaultProductInfor,
+                    SeoDescription = ProductSetting.DefaultProductInfor,
+                    SeoTitle = ProductSetting.DefaultProductInfor,
+                    SeoAlias = ProductSetting.DefaultProductInfor
                 };
                 model.Translations.Add(translation);
             }
+            var languageId = "vi";
+            ViewData["Categories"] =(await _catergoryApiClient.GetCatergories(languageId)).Data.Select(x=>new SelectListItem { Text=x.Name,
+                Value=x.Id.ToString()
+                });
+
             return PartialView("_Create", model);
         }
         [HttpPost]

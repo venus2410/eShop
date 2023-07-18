@@ -45,6 +45,7 @@ namespace eShop.Application.Catalog.Products
         {
             try
             {
+                //create product translations for product
                 var productTranslations = new List<ProductTranslation>();
                 foreach (var translation in request.Translations)
                 {
@@ -60,6 +61,15 @@ namespace eShop.Application.Catalog.Products
                         LanguageId = translation.LanguageId ?? "N/A"
                     });
                 }
+                //create product in category for product
+                var pics = new List<ProductInCategory>
+                {
+                    new ProductInCategory
+                    {
+                        CategoryId=request.CategoryId
+                    }
+                };
+
                 var product = new Product()
                 {
                     Price = request.Prices.Price,
@@ -68,7 +78,8 @@ namespace eShop.Application.Catalog.Products
                     ViewCount = 0,
                     DateCreated = DateTime.Now,
                     ProductTranslations = productTranslations,
-                    IsFeatured = request.IsFeatured ?? false
+                    IsFeatured = request.IsFeatured ?? false,
+                    ProductInCategories=pics
                 };
 
                 //save image
@@ -88,7 +99,6 @@ namespace eShop.Application.Catalog.Products
                         }
                     };
                 }
-
 
                 _context.Products.Add(product);
                 var result = await _context.SaveChangesAsync();
@@ -155,12 +165,12 @@ namespace eShop.Application.Catalog.Products
             {
                 //select join
                 var query = from p in _context.Products
-                            join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                            join pi in _context.ProductImages on p.Id equals pi.ProductId
-                            join pic in _context.ProductInCategories on p.Id equals pic.ProductId
-                            select new { p, pt, pi, pic };
+                            join pt in _context.ProductTranslations on p.Id equals pt.ProductId into ppt
+                            from pt in ppt.DefaultIfEmpty()
+                            select new { p, pt};
                 //select new { p, pt };
                 //filter
+
                 if (!string.IsNullOrEmpty(request.LanguageId))
                 {
                     query = query.Where(x => x.pt.LanguageId == request.LanguageId);
@@ -169,9 +179,12 @@ namespace eShop.Application.Catalog.Products
                     query = query.Where(x => x.pt.Name.Contains(request.Keyword));
                 if (request.CategoryId != null)
                 {
-                    query = query.Where(x => _context.ProductInCategories.Any(y => y.ProductId == x.p.Id && _context.Categories.Where(c => c.Id == request.CategoryId || c.ParentId == request.CategoryId).Any(d => d.Id == x.pic.CategoryId)));
+                    var matchedCategories = from c in _context.Categories
+                                          where c.Id == request.CategoryId || c.ParentId == request.CategoryId
+                                          select new { c };
+                    query = query.Where(x => _context.ProductInCategories.Any(y=>y.ProductId==x.p.Id && matchedCategories.Any(z=>z.c.Id==y.CategoryId)));
                 }
-                    
+
                 //paging
                 int totalRecord = await query.CountAsync();
                 //error at take???
@@ -191,9 +204,17 @@ namespace eShop.Application.Catalog.Products
                         SeoDescription = x.pt.SeoDescription,
                         SeoTitle = x.pt.SeoTitle,
                         Stock = x.p.Stock,
-                        ViewCount = x.p.ViewCount,
-                        ThumbnailImage = x.pi.ImagePath
+                        ViewCount = x.p.ViewCount
                     }).ToListAsync();
+                foreach(var d in data)
+                {
+                    var images = _context.ProductImages.Where(x => x.ProductId == d.Id).OrderByDescending(x=>x.IsDefault).Select(x=>x.ImagePath).ToList();
+                    d.ThumbnailImage = images.FirstOrDefault()??null;
+                    if (images.Count >= 2)
+                    {
+                        d.OtherImages = images.Skip(1).Take(images.Count() - 1).ToList();
+                    }
+                }
 
                 // return data
                 var result = new PageResult<ProductVM>()

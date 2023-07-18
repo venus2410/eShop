@@ -22,6 +22,7 @@ namespace eShop.Utilities.Constants
         {
             public const int NumberOfFeaturedProducts = 16;
             public const int NumberOfLatestProducts = 6;
+            public const string DefaultProductInfor = "Default Infor";
         }
     }
 }

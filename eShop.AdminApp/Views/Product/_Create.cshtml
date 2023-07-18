@@ -3,6 +3,7 @@
 @{
     var languages = ViewBag.LanguagesList as List<eShop.ViewModel.System.Languages.LanguageVM>;
     var productSearching = ViewBag.productSearching as eShop.ViewModel.Catalog.Products.ProductSearching;
+    var catergories = ViewBag.Categories;
 }
 
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
@@ -27,7 +28,7 @@
                 <!-- Latest compiled and minified CSS -->
                 <div class="modal-body">
                     <div class="row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label asp-for="Prices.Price" class="control-label"></label>
                             <input asp-for="Prices.Price" class="form-control" />
                             <span asp-validation-for="Prices.Price" class="text-danger"></span>
@@ -35,23 +36,31 @@
                                 Looks good!
                             </div>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label asp-for="Prices.OriginalPrice" class="control-label"></label>
                             <input asp-for="Prices.OriginalPrice" class="form-control" />
                             <span asp-validation-for="Prices.OriginalPrice" class="text-danger"></span>
                         </div>
-                        <div class="form-group col-md-3">
+                        
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-4">
                             <label asp-for="Stock" class="control-label"></label>
                             <input asp-for="Stock" class="form-control" />
                             <span asp-validation-for="Stock" class="text-danger"></span>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label asp-for="ThumbnailImage" class="control-label"></label>
                             <input asp-for="ThumbnailImage" class="form-control" />
                             <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
                         </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="CategoryId" class="control-label"></label>
+                            <select asp-for="CategoryId" class="form-select" asp-items="catergories"></select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
                     </div>
-
+                    <hr />
 
                     <div class="row">
                         <div class="col-md-12">

@@ -59,16 +59,18 @@ namespace eShop.ApiIntergration
             requestContent.Add(new StringContent(request.Prices.Price.ToString()), "Prices.Price");
             requestContent.Add(new StringContent(request.Prices.OriginalPrice.ToString()), "Prices.OriginalPrice");
             requestContent.Add(new StringContent(request.Stock.ToString()), "stock");
+            requestContent.Add(new StringContent(request.CategoryId.ToString()), "CategoryId");
+            var translations = nameof(ProductCreateRequest.Translations);
             for (int i = 0; i < request.Translations.Count; i++)
             {
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Name) ? "" : request.Translations[i].Name.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.Name));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Description) ? "" : request.Translations[i].Description.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.Description));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Name) ? "" : request.Translations[i].Name.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.Name));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Description) ? "" : request.Translations[i].Description.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.Description));
 
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Details) ? "" : request.Translations[i].Details.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.Details));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoDescription) ? "" : request.Translations[i].SeoDescription.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.SeoDescription));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoTitle) ? "" : request.Translations[i].SeoTitle.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.SeoTitle));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoAlias) ? "" : request.Translations[i].SeoAlias.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.SeoAlias));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].LanguageId) ? "" : request.Translations[i].LanguageId.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.LanguageId));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Details) ? "" : request.Translations[i].Details.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.Details));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoDescription) ? "" : request.Translations[i].SeoDescription.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.SeoDescription));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoTitle) ? "" : request.Translations[i].SeoTitle.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.SeoTitle));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoAlias) ? "" : request.Translations[i].SeoAlias.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.SeoAlias));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].LanguageId) ? "" : request.Translations[i].LanguageId.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.LanguageId));
             }
 
             requestContent.Add(new StringContent(languageId), "languageId");
