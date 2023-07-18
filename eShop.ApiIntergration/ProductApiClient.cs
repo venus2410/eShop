@@ -81,6 +81,11 @@ namespace eShop.ApiIntergration
             return new ServiceResultFail<bool>(response.StatusCode.ToString());
         }
 
+        public async Task<ServiceResult<ProductVM>> GetById(int productId, string languageId)
+        {
+            return await _baseApiClient.GetByIdAsync<ProductVM>(baseUrl,productId.ToString(),languageId);
+        }
+
         public async Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take)
         {
             string url = baseUrl + $"/featured/{languageId}/{take}";

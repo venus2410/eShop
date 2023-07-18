@@ -4,6 +4,7 @@ using LazZiya.ExpressLocalization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Globalization;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using static eShop.Utilities.Constants.SystemConstant;
 
@@ -26,10 +27,12 @@ namespace eShop.WebApp.Controllers
         {
             return View();
         }
+        [ViewData]
+        public string BaseAddress { get; set; }
         public async Task<IActionResult> ProductsByCategory(int categoryId, string culture, int pageIndex=1)
         {
             ViewBag.Category = (await _catergoryApi.GetById(categoryId, culture)).Data;
-            ViewBag.BaseAddress = _configuration[AppSetting.BaseAddress];
+            ViewData[nameof(this.BaseAddress)] = _configuration[AppSetting.BaseAddress];
 
             var requestProductPage = new GetManageProductPagingRequest {
                 PageIndex= pageIndex,
@@ -39,6 +42,12 @@ namespace eShop.WebApp.Controllers
             };
             var products=(await _productApi.GetPage(requestProductPage)).Data;
             return View(products);
+        }
+        public async Task<IActionResult> Detail(string culture, int id)
+        {
+            var product =await _productApi.GetById(id,culture);
+            if(!product.IsSucceed) return NotFound();
+            return View(product.Data);
         }
     }
 }

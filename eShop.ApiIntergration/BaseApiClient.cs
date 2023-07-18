@@ -73,7 +73,7 @@ namespace eShop.ApiIntergration
             var route = $"{url}/{id}";
             if(!string.IsNullOrEmpty(languageId))
             {
-                route += route + $"/{languageId}";
+                route += $"/{languageId}";
             }
 
             var response = await client.GetAsync(route);

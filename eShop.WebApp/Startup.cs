@@ -61,7 +61,7 @@ namespace eShop.WebApp
                 {
                     o.SupportedCultures = cultures;
                     o.SupportedUICultures = cultures;
-                    o.DefaultRequestCulture = new RequestCulture("en");
+                    o.DefaultRequestCulture = new RequestCulture("vi");
                 };
             });
             services.AddHttpClient();
@@ -104,7 +104,7 @@ namespace eShop.WebApp
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "default with culture",
-                    pattern: "{culture=en}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{culture=vi}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

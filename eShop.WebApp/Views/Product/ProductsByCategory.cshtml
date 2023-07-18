@@ -3,8 +3,10 @@
     ViewData["Title"] = "ProductsByCategory";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var category = ViewBag.Category as eShop.ViewModel.Catalog.Catergories.CatergoryVM;
-    var baseAddress = ViewBag.BaseAddress as string;
+    var baseAddress = ViewData["BaseAddress"] as string;
+    var culture = CultureInfo.CurrentCulture.Name;
     var cultureInfor = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+    var baseUrlToDetail = $"/{culture}/Product/Detail/";
 }
 
 <h1><localize>ProductsByCategory</localize></h1>
@@ -46,18 +48,26 @@
                     <p>
                         @item.Description
                     </p>
-                    <a class="btn btn-small pull-right" href="product_details.html">View Details</a>
+                    <a class="btn btn-small pull-right" href="@(baseUrlToDetail+item.Id.ToString())">
+                        <localize>
+                            View Details
+                        </localize>
+                    </a>
                     <br class="clr" />
                 </div>
                 <div class="span3 alignR">
                     <form class="form-horizontal qtyFrm">
-                        <h3> @string.Format(cultureInfor, "{0:c}", item.Price)</h3>
+                        <h3> @string.Format(cultureInfor, "{0:c0}", item.Price)</h3>
                         <label class="checkbox">
                             <input type="checkbox">  Adds product to compair
                         </label><br />
 
-                        <a href="product_details.html" class="btn btn-large btn-primary"> Add to <i class=" icon-shopping-cart"></i></a>
-                        <a href="product_details.html" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+                        <a href="@(baseUrlToDetail+item.Id.ToString())" class="btn btn-large btn-primary">
+                            <localize>
+                                Add to cart
+                            </localize> <i class=" icon-shopping-cart"></i>
+                        </a>
+                        <a href="@(baseUrlToDetail+item.Id.ToString())" class="btn btn-large"><i class="icon-zoom-in"></i></a>
 
                     </form>
                 </div>
@@ -72,13 +82,19 @@
             {
                 <li class="span3">
                     <div class="thumbnail">
-                        <a href="product_details.html"><img src="@(baseAddress+item.ThumbnailImage)" alt="@item.Name" class="image-fit" /></a>
+                        <a href="@(baseUrlToDetail+item.Id.ToString())"><img src="@(baseAddress+item.ThumbnailImage)" alt="@item.Name" class="image-fit" /></a>
                         <div class="caption">
                             <h5>@item.Name</h5>
                             <p>
                                 @item.Description
                             </p>
-                            <h4 style="text-align:center"><a class="btn" href="product_details.html"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">Add to <i class="icon-shopping-cart"></i></a> <a class="btn btn-primary" href="#">@string.Format(cultureInfor, "{0:c}", item.Price)</a></h4>
+                            <h4 style="text-align:center">
+                                <a class="btn" href="@(baseUrlToDetail+item.Id.ToString())"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">
+                                    <localize>
+                                        Add to cart
+                                    </localize><i class="icon-shopping-cart"></i>
+                                </a> <a class="btn btn-primary" href="#">@string.Format(cultureInfor, "{0:c0}", item.Price)</a>
+                            </h4>
                         </div>
                     </div>
                 </li>
@@ -100,6 +116,5 @@ else
         <localize>
             Not found
         </localize>
-        
     </div>
 }

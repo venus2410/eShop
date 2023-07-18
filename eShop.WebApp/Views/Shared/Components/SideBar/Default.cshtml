@@ -15,6 +15,8 @@
                     <a> @parent.Name</a>
                     <ul>
                         @{
+                            <li><a class="active" href="@($"/{culture}" +Url.Action("ProductsByCategory","Product",new{categoryId=parent.Id}))"><i class="icon-chevron-right"></i><localize>All</localize>
+                                </a></li>
                             var i = 0;
                             foreach (var child in children)
                             {
@@ -34,7 +36,7 @@
             }
             else
             {
-                <li><a href="products.html">@parent.Name</a></li>
+                <li><a href="@($"/{culture}" +Url.Action("ProductsByCategory","Product",new{categoryId=parent.Id}))">@parent.Name</a></li>
             }
         }
     </ul>

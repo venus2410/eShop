@@ -14,7 +14,7 @@ namespace eShop.Application.Catalog.Products
         Task<ServiceResult<bool>> Create(ProductCreateRequest request);
         Task<ServiceResult<bool>> Update(ProductUpdateRequest request);
         Task<int> Delete(int productId);
-        Task<ProductVM> GetById(int productId, string languageId);
+        Task<ServiceResult<ProductVM>> GetById(int productId, string languageId);
         Task<bool> UpdatePrice(int productId, decimal newPrice);
         Task<bool> UpdateStock(int productId, int addedStock);
         Task AddViewCount(int productId);

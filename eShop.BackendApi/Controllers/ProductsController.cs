@@ -32,10 +32,11 @@ namespace eShop.BackendApi.Controllers
             return Ok(result);
         }
         [HttpGet("{productId}/{languageId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(int productId, string languageId)
         {
             var result=await _productService.GetById(productId,languageId);
-            if (result == null) return BadRequest($"Cannot find product with id: {productId}");
+            if (!result.IsSucceed) return BadRequest(result);
             return Ok(result);
         }
 
