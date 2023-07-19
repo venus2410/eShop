@@ -23,5 +23,6 @@ namespace eShop.ViewModel.Catalog.Products
         public string ThumbnailImage { get; set; }
         public List<string> OtherImages { set; get; } 
         public List<string> Categories { get; set; } = new List<string>();
+        public int CategoryId { get; set; }
     }
 }

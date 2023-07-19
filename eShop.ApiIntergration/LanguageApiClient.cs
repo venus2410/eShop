@@ -25,7 +25,7 @@ namespace eShop.ApiIntergration
         }
         public async Task<ServiceResult<List<LanguageVM>>> GetLanguages()
         {
-            return await _baseApiClient.GetAllAsync<List<LanguageVM>>(baseURL);
+            return await _baseApiClient.GetGeneralAsync<List<LanguageVM>>(baseURL);
         }
     }
 }

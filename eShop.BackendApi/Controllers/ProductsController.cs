@@ -39,7 +39,13 @@ namespace eShop.BackendApi.Controllers
             if (!result.IsSucceed) return BadRequest(result);
             return Ok(result);
         }
-
+        [HttpGet("getforupdate/{productId}")]
+        public async Task<IActionResult> GetForUpdate(int productId)
+        {
+            var result = await _productService.GetForUpdate(productId);
+            if (!result.IsSucceed) return BadRequest(result);
+            return Ok(result);
+        }
         [HttpPost]
         [Consumes("multipart/form-data")]
         public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)

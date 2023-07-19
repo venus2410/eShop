@@ -77,7 +77,6 @@ namespace eShop.AdminApp.Controllers
         }
         public async Task<IActionResult> GetProductPaging(string keyword, int? categoryId, int pageIndex = 1, int pageSize = 5, string languageId = "vi")
         {
-            var a = Request.Query;
             var request = new GetManageProductPagingRequest
             {
                 Keyword = keyword,
@@ -141,11 +140,14 @@ namespace eShop.AdminApp.Controllers
             var translations = response.Data;
             var result = await _languageApiClient.GetLanguages();
             ViewBag.LanguagesList = result.Data;
-            var model = new ProductUpdateRequest
+            var model = (await _productApiClient.GetForUpdate(id)).Data;
+
+            ViewData["Categories"] = (await _catergoryApiClient.GetCatergories("vi")).Data.Select(x => new SelectListItem
             {
-                Id = id,
-                Translations = translations
-            };
+                Text = x.Name,
+                Value = x.Id.ToString(),
+                Selected=x.Id==model.CategoryId
+            });
 
             return PartialView("_Update", model);
         }

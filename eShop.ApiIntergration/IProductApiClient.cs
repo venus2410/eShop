@@ -15,5 +15,6 @@ namespace eShop.ApiIntergration
         Task<ServiceResult<List<ProductVM>>> GetLatestProduct(string languageId, int take);
         Task<ServiceResult<List<TranslationOfProduct>>> GetProductTranslation(int productId);
         Task<ServiceResult<ProductVM>> GetById(int productId, string languageId);
+        Task<ServiceResult<ProductUpdateRequest>> GetForUpdate(int productId);
     }
 }

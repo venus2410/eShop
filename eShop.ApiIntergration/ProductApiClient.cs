@@ -91,13 +91,19 @@ namespace eShop.ApiIntergration
         public async Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take)
         {
             string url = baseUrl + $"/featured/{languageId}/{take}";
-            return await _baseApiClient.GetAllAsync<List<ProductVM>>(url);
+            return await _baseApiClient.GetGeneralAsync<List<ProductVM>>(url);
+        }
+
+        public Task<ServiceResult<ProductUpdateRequest>> GetForUpdate(int productId)
+        {
+            var url = $"{baseUrl}/getforupdate/{productId}";
+            return _baseApiClient.GetGeneralAsync<ProductUpdateRequest>(url);
         }
 
         public async Task<ServiceResult<List<ProductVM>>> GetLatestProduct(string languageId, int take)
         {
             string url = baseUrl + $"/latest/{languageId}/{take}";
-            return await _baseApiClient.GetAllAsync<List<ProductVM>>(url);
+            return await _baseApiClient.GetGeneralAsync<List<ProductVM>>(url);
         }
 
         public async Task<ServiceResult<PageResult<ProductVM>>> GetPage(GetManageProductPagingRequest request)
@@ -105,13 +111,13 @@ namespace eShop.ApiIntergration
             string getURI = baseUrl + $"/paging?" + $"{nameof(request.PageIndex)}={request.PageIndex}&" + $"{nameof(request.PageSize)}={request.PageSize}&" + $"{nameof(request.Keyword)}={request.Keyword}&" + $"{nameof(request.LanguageId)}={request.LanguageId}&" + $"{nameof(request.CategoryId)}={request.CategoryId}";
             //Dictionary<string,string> dictionary=(Dictionary<string, string>) request;
             //QueryHelpers.AddQueryString(getURI, dictionary);
-            return await _baseApiClient.GetAllAsync<PageResult<ProductVM>>(getURI);
+            return await _baseApiClient.GetGeneralAsync<PageResult<ProductVM>>(getURI);
         }
 
         public async Task<ServiceResult<List<TranslationOfProduct>>> GetProductTranslation(int productId)
         {
             string url = baseUrl + $"/{productId}/translations";
-            return await _baseApiClient.GetAllAsync<List<TranslationOfProduct>>(url);
+            return await _baseApiClient.GetGeneralAsync<List<TranslationOfProduct>>(url);
         }
 
         public async Task<ServiceResult<bool>> Update(ProductUpdateRequest request)

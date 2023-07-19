@@ -55,7 +55,7 @@ namespace eShop.ApiIntergration
             return result;
         }
 
-        public async Task<ServiceResult<ReturnType>> GetAllAsync<ReturnType>(string url)
+        public async Task<ServiceResult<ReturnType>> GetGeneralAsync<ReturnType>(string url)
         {
             var client=CreateAuthenticatedClient();
 

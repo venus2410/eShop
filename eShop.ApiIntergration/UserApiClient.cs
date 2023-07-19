@@ -47,7 +47,7 @@ namespace eShop.ApiIntergration
                 $"{nameof(model.PageIndex)}={model.PageIndex}" +
                 $"&{nameof(model.PageSize)}={model.PageSize}" +
                 $"&{nameof(model.Keyword)}={model.Keyword}";
-            return await _baseApiClient.GetAllAsync<PageResult<UserViewModel>>(url);
+            return await _baseApiClient.GetGeneralAsync<PageResult<UserViewModel>>(url);
         }
 
         public async Task<ServiceResult<string>> Login(UserLoginRequest model)

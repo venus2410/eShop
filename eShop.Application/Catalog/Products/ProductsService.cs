@@ -19,6 +19,8 @@ using System.Xml.Linq;
 using eShop.ViewModel.Catalog.ProductImages;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Localization.Internal;
+using static eShop.Utilities.Constants.SystemConstant;
 
 namespace eShop.Application.Catalog.Products
 {
@@ -79,7 +81,7 @@ namespace eShop.Application.Catalog.Products
                     DateCreated = DateTime.Now,
                     ProductTranslations = productTranslations,
                     IsFeatured = request.IsFeatured ?? false,
-                    ProductInCategories=pics
+                    ProductInCategories = pics
                 };
 
                 //save image
@@ -135,27 +137,26 @@ namespace eShop.Application.Catalog.Products
             var product = await _context.Products.FindAsync(productId);
             if (product == null) return new ServiceResultFail<ProductVM>("Không tìm thấy");
             var productTranslation = await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId && x.LanguageId == languageId);
-            if (productTranslation == null)
+            productTranslation ??= await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId);
+            var productImages = _context.ProductImages.Where(x => x.ProductId == productId).OrderByDescending(x => x.IsDefault).Select(x => x.ImagePath).ToList();
+            var model = new ProductVM
             {
-                productTranslation= await _context.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == productId);
-            }
-            var productImages=_context.ProductImages.Where(x=>x.ProductId==productId).OrderByDescending(x=>x.IsDefault).Select(x=>x.ImagePath).ToList();
-            var model = new ProductVM();
-            model.Id = product.Id;
-            model.DateCreated = product.DateCreated;
-            model.LanguageId = languageId;
-            model.OriginalPrice = product.OriginalPrice;
-            model.Price = product.Price;
-            model.Stock = product.Stock;
-            model.ViewCount = product.ViewCount;
-            model.Name = productTranslation.Name ?? null;
-            model.Description = productTranslation.Description ?? null;
-            model.Details = productTranslation.Details ?? null;
-            model.SeoAlias = productTranslation.SeoAlias ?? null;
-            model.SeoDescription = productTranslation.SeoDescription ?? null;
-            model.SeoTitle = productTranslation.SeoTitle ?? null;
-            model.ThumbnailImage = productImages.FirstOrDefault();
-            model.OtherImages=productImages.Skip(1).Take(productImages.Count-1).ToList();
+                Id = product.Id,
+                DateCreated = product.DateCreated,
+                LanguageId = languageId,
+                OriginalPrice = product.OriginalPrice,
+                Price = product.Price,
+                Stock = product.Stock,
+                ViewCount = product.ViewCount,
+                Name = productTranslation.Name ?? null,
+                Description = productTranslation.Description ?? null,
+                Details = productTranslation.Details ?? null,
+                SeoAlias = productTranslation.SeoAlias ?? null,
+                SeoDescription = productTranslation.SeoDescription ?? null,
+                SeoTitle = productTranslation.SeoTitle ?? null,
+                ThumbnailImage = productImages.FirstOrDefault(),
+                OtherImages = productImages.Skip(1).Take(productImages.Count - 1).ToList()
+            };
             return new ServiceResultSuccess<ProductVM>(model);
         }
 
@@ -167,7 +168,7 @@ namespace eShop.Application.Catalog.Products
                 var query = from p in _context.Products
                             join pt in _context.ProductTranslations on p.Id equals pt.ProductId into ppt
                             from pt in ppt.DefaultIfEmpty()
-                            select new { p, pt};
+                            select new { p, pt };
                 //select new { p, pt };
                 //filter
 
@@ -180,9 +181,9 @@ namespace eShop.Application.Catalog.Products
                 if (request.CategoryId != null)
                 {
                     var matchedCategories = from c in _context.Categories
-                                          where c.Id == request.CategoryId || c.ParentId == request.CategoryId
-                                          select new { c };
-                    query = query.Where(x => _context.ProductInCategories.Any(y=>y.ProductId==x.p.Id && matchedCategories.Any(z=>z.c.Id==y.CategoryId)));
+                                            where c.Id == request.CategoryId || c.ParentId == request.CategoryId
+                                            select new { c };
+                    query = query.Where(x => _context.ProductInCategories.Any(y => y.ProductId == x.p.Id && matchedCategories.Any(z => z.c.Id == y.CategoryId)));
                 }
 
                 //paging
@@ -206,10 +207,10 @@ namespace eShop.Application.Catalog.Products
                         Stock = x.p.Stock,
                         ViewCount = x.p.ViewCount
                     }).ToListAsync();
-                foreach(var d in data)
+                foreach (var d in data)
                 {
-                    var images = _context.ProductImages.Where(x => x.ProductId == d.Id).OrderByDescending(x=>x.IsDefault).Select(x=>x.ImagePath).ToList();
-                    d.ThumbnailImage = images.FirstOrDefault()??null;
+                    var images = _context.ProductImages.Where(x => x.ProductId == d.Id).OrderByDescending(x => x.IsDefault).Select(x => x.ImagePath).ToList();
+                    d.ThumbnailImage = images.FirstOrDefault() ?? null;
                     if (images.Count >= 2)
                     {
                         d.OtherImages = images.Skip(1).Take(images.Count() - 1).ToList();
@@ -235,36 +236,43 @@ namespace eShop.Application.Catalog.Products
 
         public async Task<ServiceResult<bool>> Update(ProductUpdateRequest request)
         {
-            var product = await _context.Products.FindAsync(request.Id);
-            foreach (var translation in request.Translations)
+            try
             {
-                var productTranslation = await _context.ProductTranslations.Where(x => x.ProductId == request.Id && x.LanguageId == translation.LanguageId).FirstOrDefaultAsync();
-                if (product == null || productTranslation == null) { throw new EShopException($"Cannot find a product with id: {request.Id}"); }
+                var product = await _context.Products.FindAsync(request.Id);
+                foreach (var translation in request.Translations)
+                {
+                    var productTranslation = await _context.ProductTranslations.Where(x => x.ProductId == request.Id && x.LanguageId == translation.LanguageId).FirstOrDefaultAsync();
+                    if (product == null || productTranslation == null) { throw new EShopException($"Cannot find a product with id: {request.Id}"); }
 
-                productTranslation.Name = translation.Name;
-                productTranslation.SeoAlias = translation.SeoAlias;
-                productTranslation.SeoDescription = translation.SeoDescription;
-                productTranslation.SeoTitle = translation.SeoTitle;
-                productTranslation.Description = translation.Description;
-                productTranslation.Details = translation.Details;
+                    productTranslation.Name = translation.Name;
+                    productTranslation.SeoAlias = translation.SeoAlias;
+                    productTranslation.SeoDescription = translation.SeoDescription;
+                    productTranslation.SeoTitle = translation.SeoTitle;
+                    productTranslation.Description = translation.Description;
+                    productTranslation.Details = translation.Details;
+                }
+                //update categoryId
+                var productInCategory = await _context.ProductInCategories.Where(x => x.ProductId == request.Id).FirstOrDefaultAsync();
+                if (productInCategory != null)
+                {
+                    _context.ProductInCategories.Remove(productInCategory);
+                }
+                var newProductInCategory = new ProductInCategory
+                {
+                    CategoryId = request.CategoryId,
+                    ProductId = request.Id
+                };
+                _context.ProductInCategories.Add(newProductInCategory);
+
+                var result = await _context.SaveChangesAsync();
+                if (result <= 0) return new ServiceResultFail<bool>("Cập nhật thất bại");
+                return new ServiceResultSuccess<bool>();
+            }
+            catch (Exception e)
+            {
+                return new ServiceResultFail<bool>(e.Message.ToString());
             }
 
-
-            //save image
-            //if (request.ThumbnailImage != null)
-            //{
-            //    var thumbnailImage = await _context.ProductImages.FirstOrDefaultAsync(x => x.ProductId == request.Id && x.IsDefault);
-            //    if (thumbnailImage != null)
-            //    {
-            //        thumbnailImage.FileSize = request.ThumbnailImage.Length;
-            //        thumbnailImage.ImagePath = await this.SaveFile(request.ThumbnailImage);
-            //        _context.ProductImages.Update(thumbnailImage);
-            //    }
-            //}
-
-            var result = await _context.SaveChangesAsync();
-            if (result <= 0) return new ServiceResultFail<bool>("Cập nhật thất bại");
-            return new ServiceResultSuccess<bool>();
         }
         public async Task<bool> UpdatePrice(int productId, decimal newPrice)
         {
@@ -513,6 +521,79 @@ namespace eShop.Application.Catalog.Products
             {
                 return new ServiceResultFail<List<TranslationOfProduct>>(e.Message.ToString());
             }
+        }
+
+        public async Task<ServiceResult<ProductUpdateRequest>> GetForUpdate(int productId)
+        {
+            try
+            {
+                var product = await _context.Products.FindAsync(productId);
+                if (product == null) { return new ServiceResultFail<ProductUpdateRequest>("Không tìm thấy sản phẩm"); }
+                //translations already made
+                var query = from pt in _context.ProductTranslations
+                            join l in _context.Languages on pt.LanguageId equals l.Id
+                            where pt.ProductId == productId
+                            select new { pt, l };
+                var translations = await query.Select(x => new TranslationOfProduct
+                {
+                    Id = x.pt.Id,
+                    LanguageId = x.pt.LanguageId,
+                    LanguageName = x.l.Name,
+                    Name = x.pt.Name ?? "",
+                    Description = x.pt.Description ?? "",
+                    Details = x.pt.Details ?? "",
+                    SeoDescription = x.pt.SeoDescription ?? "",
+                    SeoTitle = x.pt.SeoTitle ?? "",
+                    SeoAlias = x.pt.SeoAlias ?? ""
+                }).ToListAsync();
+                //translation of language haven't made
+                var defaultInfor = ProductSetting.DefaultProductInfor;
+                var unmadeTranslations = await (from l in _context.Languages
+                                                where !query.Any(x => x.pt.ProductId == productId && x.pt.LanguageId == l.Id)
+                                                select new { l }).Select(x => new ProductTranslation
+                                                {
+                                                    ProductId = productId,
+                                                    Name = defaultInfor,
+                                                    Description = defaultInfor,
+                                                    Details = defaultInfor,
+                                                    SeoDescription = defaultInfor,
+                                                    SeoTitle = defaultInfor,
+                                                    SeoAlias = defaultInfor,
+                                                    LanguageId = x.l.Id
+                                                }).ToListAsync();
+                _context.ProductTranslations.AddRange(unmadeTranslations);
+                _context.SaveChanges();
+                translations.AddRange((from u in unmadeTranslations
+                                       join l in _context.Languages on u.LanguageId equals l.Id
+                                       select new { u, l }
+                    ).Select(x => new TranslationOfProduct
+                    {
+                        Id = x.u.Id,
+                        LanguageId = x.u.LanguageId,
+                        LanguageName = x.l.Name,
+                        Name = x.u.Name,
+                        Description = x.u.Description,
+                        Details = x.u.Details,
+                        SeoDescription = x.u.SeoDescription,
+                        SeoTitle = x.u.SeoTitle,
+                        SeoAlias = x.u.SeoAlias
+                    }).ToList());
+
+
+                var category = await _context.ProductInCategories.Where(x => x.ProductId == productId).Select(x => x.CategoryId).FirstOrDefaultAsync();
+                var result = new ProductUpdateRequest
+                {
+                    Id = productId,
+                    Translations = translations,
+                    CategoryId = category
+                };
+                return new ServiceResultSuccess<ProductUpdateRequest>(result);
+            }
+            catch (Exception e)
+            {
+                return new ServiceResultFail<ProductUpdateRequest>(e.Message.ToString());
+            }
+
         }
     }
 }
