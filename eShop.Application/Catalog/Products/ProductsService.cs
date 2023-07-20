@@ -294,32 +294,51 @@ namespace eShop.Application.Catalog.Products
 
         // FOR IMAGES
 
-        public async Task<int> AddImage(int productId, ProductImageCreateRequest request)
+        public async Task<ServiceResult<int>> AddImage(int productId, ProductImageCreateRequest request)
         {
             var product = await _context.Products.FindAsync(productId);
-            if (product == null) { return 0; }
-            if (request.ImageFile == null) { return 0; }
-            var productImage = new ProductImage()
+            if (product == null) { return new ServiceResultFail<int>("Không tìm thấy sản phẩm"); }
+            if (request.ImageFiles == null) { return new ServiceResultFail<int>("Không có ảnh"); }
+            var productImages = new List<ProductImage>();
+            foreach(var file in request.ImageFiles)
             {
-                ProductId = productId,
-                ImagePath = await SaveFile(request.ImageFile),
-                Caption = request.Caption,
-                IsDefault = request.IsDefault,
-                DateCreated = DateTime.Now,
-                SortOrder = request.SortOrder,
-                FileSize = request.ImageFile.Length,
+                var image= new ProductImage()
+                {
+                    ProductId = productId,
+                    ImagePath = await SaveFile(file),
+                    Caption = request.Caption,
+                    IsDefault = request.IsDefault,
+                    DateCreated = DateTime.Now,
+                    SortOrder = request.SortOrder,
+                    FileSize = file.Length,
+                };
+                productImages.Add(image);
+            }
+                 
+            await _context.ProductImages.AddRangeAsync(productImages);
+            var result= await _context.SaveChangesAsync();
+            return new ServiceResult<int> { 
+                IsSucceed=result>0,
+                Data= result,
+                Errors=result>0?null:"Thêm ảnh không thành công"
             };
-            await _context.ProductImages.AddAsync(productImage);
-            return await _context.SaveChangesAsync();
         }
-        public async Task<int> RemoveImage(int imageId)
+        public async Task<ServiceResult<int>> RemoveImages(List<int> imageIds)
         {
-            var productImage = await _context.ProductImages.FindAsync(imageId);
-            if (productImage == null) { return -1; }
+            var productImages = await _context.ProductImages.Where(x=>imageIds.Contains(x.Id)).ToListAsync();
+            var filePaths=productImages.Select(x=>x.ImagePath).ToList();
+            //delete in database
+            _context.ProductImages.RemoveRange(productImages);
+            //delete in folder
+            await _storageService.DeleteFilesAsync(filePaths);
 
-            _context.ProductImages.Remove(productImage);
-            await _context.SaveChangesAsync();
-            return productImage.Id;
+            var result = await _context.SaveChangesAsync();
+            return new ServiceResult<int>()
+            {
+                IsSucceed=result>0,
+                Data= result,
+                Errors=result>0?"":"Xóa ảnh không thành công"
+            };
         }
         public async Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request)
         {
@@ -351,9 +370,9 @@ namespace eShop.Application.Catalog.Products
             };
             return model;
         }
-        public async Task<List<ProductImageViewModel>> GetListImage(int productId)
+        public async Task<ServiceResult<List<ProductImageViewModel>>> GetListImage(int productId)
         {
-            return await _context.ProductImages.Where(x => x.ProductId == productId)
+            var images= await _context.ProductImages.Where(x => x.ProductId == productId)
                 .Select(x => new ProductImageViewModel
                 {
                     Id = x.Id,
@@ -365,6 +384,8 @@ namespace eShop.Application.Catalog.Products
                     SortOrder = x.SortOrder,
                     FileSize = x.FileSize
                 }).ToListAsync();
+            if (images == null) return new ServiceResultFail<List<ProductImageViewModel>>("Không tìm thấy ảnh");
+            return new ServiceResultSuccess<List<ProductImageViewModel>>(images);
         }
 
         private async Task<string> SaveFile(IFormFile file)

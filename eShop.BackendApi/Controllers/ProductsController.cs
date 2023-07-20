@@ -85,12 +85,9 @@ namespace eShop.BackendApi.Controllers
         public async Task<IActionResult> CreateImage(int productId,[FromForm] ProductImageCreateRequest request)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var imageId = await _productService.AddImage(productId, request);
-            if (imageId <= 0) return BadRequest();
-
-            var image = _productService.GetImageById(imageId);
-
-            return CreatedAtAction(nameof(GetImageById), new {id=productId}, image);
+            var result = await _productService.AddImage(productId, request);
+            if (!result.IsSucceed) return BadRequest(result);
+            return Ok(result);
         }
         [HttpPut("{productId}/images/{imageId}")]
         public async Task<IActionResult> UpdateImage(int imageId, [FromForm] ProductImageUpdateRequest request)
@@ -100,12 +97,12 @@ namespace eShop.BackendApi.Controllers
             if (affectedResult <= 0) return BadRequest();
             return Ok();
         }
-        [HttpDelete("{productId}/images/{imageId}")]
-        public async Task<IActionResult> RemoveImage(int imageId)
+        [HttpDelete("{productId}/images")]
+        public async Task<IActionResult> RemoveImages([FromQuery]List<int> imageIds)
         {
-            var affectedResult = await _productService.RemoveImage(imageId);
-            if (affectedResult <= 0) return BadRequest();
-            return Ok();
+            var result = await _productService.RemoveImages(imageIds);
+            if (!result.IsSucceed) return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpGet("{productId}/images/{imageId}")]
@@ -113,6 +110,13 @@ namespace eShop.BackendApi.Controllers
         {
             var result = await _productService.GetImageById(imageId);
             if (result == null) return BadRequest($"Cannot find image with id: {imageId}");
+            return Ok(result);
+        }
+        [HttpGet("{productId}/images")]
+        public async Task<IActionResult> GetProductImages(int productId)
+        {
+            var result = await _productService.GetListImage(productId);
+            if (!result.IsSucceed) return BadRequest($"Cannot find image with id: {productId}");
             return Ok(result);
         }
         [HttpGet("featured/{languageId}/{take}")]

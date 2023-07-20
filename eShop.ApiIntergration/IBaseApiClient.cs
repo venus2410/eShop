@@ -12,5 +12,6 @@ namespace eShop.ApiIntergration
         Task<ServiceResult<ReturnType>> PostWithFileAsync<ReturnType, Ptype>(string url, Ptype model);
         Task<ServiceResult<ReturnType>> PutAsync<ReturnType, Ptype>(string url, string id, Ptype model);
         Task<ServiceResult<ReturnType>> DeleteAsync<ReturnType>(string url, string id);
+        Task<ServiceResult<ReturnType>> DeleteListAsync<ReturnType>(string url);
     }
 }

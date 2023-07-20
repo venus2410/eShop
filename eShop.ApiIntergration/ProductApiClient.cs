@@ -1,16 +1,20 @@
 ﻿using eShop.Utilities.Constants;
 using eShop.ViewModel.Catalog.Common;
+using eShop.ViewModel.Catalog.ProductImages;
 using eShop.ViewModel.Catalog.Products;
 using eShop.ViewModel.System.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Policy;
 using System.Threading.Tasks;
+using System.Web;
 using static eShop.Utilities.Constants.SystemConstant;
 
 namespace eShop.ApiIntergration
@@ -28,6 +32,42 @@ namespace eShop.ApiIntergration
             _httpContextAccessor = httpContextAccessor;
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+        }
+
+        public async Task<ServiceResult<int>> AddImage(int productId, ProductImageCreateRequest request)
+        {
+            var sessions = _httpContextAccessor
+                .HttpContext
+            .Session
+            .GetString(AppSetting.Token);
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[AppSetting.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var requestContent = new MultipartFormDataContent();
+            if(request.ImageFiles!= null)
+            {
+                foreach(var image in request.ImageFiles)
+                {
+                    byte[] data;
+                    using (var br = new BinaryReader(image.OpenReadStream()))
+                    {
+                        data = br.ReadBytes((int)image.OpenReadStream().Length);
+                    }
+                    ByteArrayContent bytes = new ByteArrayContent(data);
+                    requestContent.Add(bytes, nameof(ProductImageCreateRequest.ImageFiles), image.FileName);
+                }
+            }
+            
+
+            requestContent.Add(new StringContent(request.Caption), nameof(ProductImageCreateRequest.Caption));
+            requestContent.Add(new StringContent(request.IsDefault.ToString()), nameof(ProductImageCreateRequest.IsDefault));
+            requestContent.Add(new StringContent(request.SortOrder.ToString()), nameof(ProductImageCreateRequest.SortOrder));
+
+            var response = await client.PostAsync($"/api/products/{productId}/images", requestContent);
+            var body = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ServiceResult<int>>(body);
         }
 
         public async Task<ServiceResult<bool>> Create(ProductCreateRequest request)
@@ -76,11 +116,8 @@ namespace eShop.ApiIntergration
             requestContent.Add(new StringContent(languageId), "languageId");
 
             var response = await client.PostAsync($"/api/products/", requestContent);
-            if (response.IsSuccessStatusCode)
-            {
-                return new ServiceResultSuccess<bool>();
-            }
-            return new ServiceResultFail<bool>(response.StatusCode.ToString());
+            var body = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ServiceResult<bool>>(body);
         }
 
         public async Task<ServiceResult<ProductVM>> GetById(int productId, string languageId)
@@ -98,6 +135,12 @@ namespace eShop.ApiIntergration
         {
             var url = $"{baseUrl}/getforupdate/{productId}";
             return _baseApiClient.GetGeneralAsync<ProductUpdateRequest>(url);
+        }
+
+        public async Task<ServiceResult<List<ProductImageViewModel>>> GetImages(int productId)
+        {
+            var url = $"{baseUrl}/{productId}/images";
+            return await _baseApiClient.GetGeneralAsync<List<ProductImageViewModel>>(url);
         }
 
         public async Task<ServiceResult<List<ProductVM>>> GetLatestProduct(string languageId, int take)
@@ -118,6 +161,17 @@ namespace eShop.ApiIntergration
         {
             string url = baseUrl + $"/{productId}/translations";
             return await _baseApiClient.GetGeneralAsync<List<TranslationOfProduct>>(url);
+        }
+
+        public async Task<ServiceResult<bool>> RemoveImages(List<int> imageIds, int productId)
+        {
+            var url = $"{baseUrl}/{productId}/images?";
+            var queryString = HttpUtility.ParseQueryString(string.Empty);
+            foreach(var imageId in imageIds)
+            {
+                queryString.Add("imageIds",imageId.ToString());
+            }
+            return await _baseApiClient.DeleteListAsync<bool>(url + queryString.ToString());
         }
 
         public async Task<ServiceResult<bool>> Update(ProductUpdateRequest request)

@@ -2,6 +2,10 @@
 @using eShop.ViewModel.Catalog.Common
 @model PageResult<eShop.ViewModel.Catalog.Products.ProductVM>
 
+@{ 
+    var cultureInfor = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+}
+
 <div class="row">
     @if (TempData["Message"] != null)
     {
@@ -16,37 +20,28 @@
         <table class="table">
             <thead class="position-sticky top-0" style="z-index:10;background-color:white;">
                 <tr>
-                    <th>
+                    <th scope="col">
                         ID
                     </th>
-                    <th>
+                    <th scope="col">
                         Price
                     </th>
-                    <th>
+                    <th scope="col">
                         OriginalPrice
                     </th>
-                    <th>
+                    <th scope="col">
                         Stock
                     </th>
-                    <th>
+                    <th scope="col">
                         ViewCount
                     </th>
-                    <th>
-                        DateCreated
-                    </th>
-                    <th>
+                    <th scope="col">
                         Name
                     </th>
-                    <th>
-                        SeoDescription
-                    </th>
-                    <th>
-                        SeoTitle
-                    </th>
-                    <th>
+                    <th scope="col">
                         SeoAlias
                     </th>
-                    <th></th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -54,13 +49,13 @@
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Id)
+                            @item.Id
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Price)
+                            @String.Format(cultureInfor, "{0:c0}", item.Price)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.OriginalPrice)
+                            @String.Format(cultureInfor, "{0:c0}", item.OriginalPrice)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Stock)
@@ -69,37 +64,57 @@
                             @Html.DisplayFor(modelItem => item.ViewCount)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.DateCreated)
-                        </td>
-                        <td>
                             @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-
-                        <td>
-                            @Html.DisplayFor(modelItem => item.SeoDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.SeoTitle)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.SeoAlias)
                         </td>
 
-                        <td>
-                            <button class="btn btn-outline-primary btn-edit" @*onclick="loadUpdateModal('@item.Id')"*@ data-id="@item.Id">
-                                <!--Edit icon-->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                                </svg>
-                            </button>
-                            <button class="btn btn-outline-danger btn-delete" data-id="@item.Id">
-                                <!--Delete icon-->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
-                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
-                                </svg>
-                            </button>
+                        <td width="20%">
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn btn-outline-primary btn-edit" @*onclick="loadUpdateModal('@item.Id')"*@ data-id="@item.Id">
+                                        <!--Edit icon-->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-delete" data-id="@item.Id">
+                                        <!--Delete icon-->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+                                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <button class="btn btn-outline-success btn-addimage" data-id="@item.Id">
+                                        <!--Add image-->
+                                        <?xml version="1.0" encoding="utf-8" ?>
+                                        <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M13 4H8.8C7.11984 4 6.27976 4 5.63803 4.32698C5.07354 4.6146 4.6146 5.07354 4.32698 5.63803C4 6.27976 4 7.11984 4 8.8V15.2C4 16.8802 4 17.7202 4.32698 18.362C4.6146 18.9265 5.07354 19.3854 5.63803 19.673C6.27976 20 7.11984 20 8.8 20H15.2C16.8802 20 17.7202 20 18.362 19.673C18.9265 19.3854 19.3854 18.9265 19.673 18.362C20 17.7202 20 16.8802 20 15.2V11" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M4 16L8.29289 11.7071C8.68342 11.3166 9.31658 11.3166 9.70711 11.7071L13 15M13 15L15.7929 12.2071C16.1834 11.8166 16.8166 11.8166 17.2071 12.2071L20 15M13 15L15.25 17.25" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M18.5 3V5.5M18.5 8V5.5M18.5 5.5H16M18.5 5.5H21" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-removeimage" data-id="@item.Id">
+                                        <!--Remove images-->
+                                        <?xml version="1.0" encoding="utf-8" ?>
+                                        <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M21.9998 12.6978C21.9983 14.1674 21.9871 15.4165 21.9036 16.4414C21.8067 17.6308 21.6081 18.6246 21.1636 19.45C20.9676 19.814 20.7267 20.1401 20.4334 20.4334C19.601 21.2657 18.5405 21.6428 17.1966 21.8235C15.8835 22 14.2007 22 12.0534 22H11.9466C9.79929 22 8.11646 22 6.80345 21.8235C5.45951 21.6428 4.39902 21.2657 3.56664 20.4334C2.82871 19.6954 2.44763 18.777 2.24498 17.6376C2.04591 16.5184 2.00949 15.1259 2.00192 13.3967C2 12.9569 2 12.4917 2 12.0009V11.9466C1.99999 9.79929 1.99998 8.11646 2.17651 6.80345C2.3572 5.45951 2.73426 4.39902 3.56664 3.56664C4.39902 2.73426 5.45951 2.3572 6.80345 2.17651C7.97111 2.01952 9.47346 2.00215 11.302 2.00024C11.6873 1.99983 12 2.31236 12 2.69767C12 3.08299 11.6872 3.3952 11.3019 3.39561C9.44749 3.39757 8.06751 3.41446 6.98937 3.55941C5.80016 3.7193 5.08321 4.02339 4.5533 4.5533C4.02339 5.08321 3.7193 5.80016 3.55941 6.98937C3.39683 8.19866 3.39535 9.7877 3.39535 12C3.39535 12.2702 3.39535 12.5314 3.39567 12.7844L4.32696 11.9696C5.17465 11.2278 6.45225 11.2704 7.24872 12.0668L11.2392 16.0573C11.8785 16.6966 12.8848 16.7837 13.6245 16.2639L13.9019 16.0689C14.9663 15.3209 16.4064 15.4076 17.3734 16.2779L20.0064 18.6476C20.2714 18.091 20.4288 17.3597 20.5128 16.3281C20.592 15.3561 20.6029 14.1755 20.6044 12.6979C20.6048 12.3126 20.917 12 21.3023 12C21.6876 12 22.0002 12.3125 21.9998 12.6978Z" fill="#1C274C" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M17.5 11C15.3787 11 14.318 11 13.659 10.341C13 9.68198 13 8.62132 13 6.5C13 4.37868 13 3.31802 13.659 2.65901C14.318 2 15.3787 2 17.5 2C19.6213 2 20.682 2 21.341 2.65901C22 3.31802 22 4.37868 22 6.5C22 8.62132 22 9.68198 21.341 10.341C20.682 11 19.6213 11 17.5 11ZM16.0303 3.96967C15.7374 3.67678 15.2626 3.67678 14.9697 3.96967C14.6768 4.26256 14.6768 4.73744 14.9697 5.03033L16.4393 6.5L14.9697 7.96967C14.6768 8.26256 14.6768 8.73744 14.9697 9.03033C15.2626 9.32322 15.7374 9.32322 16.0303 9.03033L17.5 7.56066L18.9697 9.03033C19.2626 9.32322 19.7374 9.32322 20.0303 9.03033C20.3232 8.73744 20.3232 8.26256 20.0303 7.96967L18.5607 6.5L20.0303 5.03033C20.3232 4.73744 20.3232 4.26256 20.0303 3.96967C19.7374 3.67678 19.2626 3.67678 18.9697 3.96967L17.5 5.43934L16.0303 3.96967Z" fill="#1C274C" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                
+                            </div>
+                            
                         </td>
                     </tr>
                 }

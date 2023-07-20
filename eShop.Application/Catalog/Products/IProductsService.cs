@@ -20,11 +20,11 @@ namespace eShop.Application.Catalog.Products
         Task<bool> UpdateStock(int productId, int addedStock);
         Task AddViewCount(int productId);
         Task<ServiceResult<PageResult<ProductVM>>> GetByPaging(GetManageProductPagingRequest request);
-        Task<int> AddImage(int productId, ProductImageCreateRequest request);
-        Task<int> RemoveImage(int imageId);
+        Task<ServiceResult<int>> AddImage(int productId, ProductImageCreateRequest request);
+        Task<ServiceResult<int>> RemoveImages(List<int> imageIds);
         Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request);
         Task<ProductImageViewModel> GetImageById(int imageId);
-        Task<List<ProductImageViewModel>> GetListImage(int productId);
+        Task<ServiceResult<List<ProductImageViewModel>>> GetListImage(int productId);
         Task<PageResult<ProductVM>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
         Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take);
         Task<ServiceResult<List<ProductVM>>> GetLatestProduct(string languageId, int take);

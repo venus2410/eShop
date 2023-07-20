@@ -1,6 +1,7 @@
 ﻿using eShop.ApiIntergration;
 using eShop.Utilities.Constants;
 using eShop.ViewModel.Catalog.Common;
+using eShop.ViewModel.Catalog.ProductImages;
 using eShop.ViewModel.Catalog.Products;
 using eShop.ViewModel.System.Users;
 using Microsoft.AspNetCore.Http;
@@ -63,7 +64,7 @@ namespace eShop.AdminApp.Controllers
             {
                 Keyword = keyword,
                 CategoryId = categoryId,
-                PageIndex = pageIndex,  
+                PageIndex = pageIndex,
                 PageSize = pageSize,
                 LanguageId = languageId
             };
@@ -109,9 +110,11 @@ namespace eShop.AdminApp.Controllers
                 model.Translations.Add(translation);
             }
             var languageId = "vi";
-            ViewData["Categories"] =(await _catergoryApiClient.GetCatergories(languageId)).Data.Select(x=>new SelectListItem { Text=x.Name,
-                Value=x.Id.ToString()
-                });
+            ViewData["Categories"] = (await _catergoryApiClient.GetCatergories(languageId)).Data.Select(x => new SelectListItem
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
+            });
 
             return PartialView("_Create", model);
         }
@@ -123,7 +126,7 @@ namespace eShop.AdminApp.Controllers
                 TempData["Message"] = "Dữ liệu không hợp lệ";
                 return RedirectToAction("Index");
             }
-            var result=await _productApiClient.Create(request);
+            var result = await _productApiClient.Create(request);
             if (result.IsSucceed)
             {
                 TempData["Message"] = "Tạo mới thành công";
@@ -146,11 +149,13 @@ namespace eShop.AdminApp.Controllers
             {
                 Text = x.Name,
                 Value = x.Id.ToString(),
-                Selected=x.Id==model.CategoryId
+                Selected = x.Id == model.CategoryId
             });
 
             return PartialView("_Update", model);
         }
+        [TempData]
+        public string Message { get; set; }
         [HttpPost]
         public async Task<IActionResult> Update(ProductUpdateRequest request)
         {
@@ -159,7 +164,7 @@ namespace eShop.AdminApp.Controllers
                 TempData["Message"] = "Dữ liệu không hợp lệ";
                 return RedirectToAction("Index");
             }
-            var result=await _productApiClient.Update(request);
+            var result = await _productApiClient.Update(request);
             if (result.IsSucceed)
             {
                 TempData["Message"] = "Cập nhật thành công";
@@ -167,6 +172,54 @@ namespace eShop.AdminApp.Controllers
             else
             {
                 TempData["Message"] = "Cập nhật không thành công";
+            }
+            return RedirectToAction("Index");
+        }
+        public IActionResult AddImage(int productId)
+        {
+            ViewData["ProductId"] = productId;
+            return PartialView("_AddImage");
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddImage(int productId, ProductImageCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                Message = "Dữ liệu không hợp lệ";
+            }
+            var result = await _productApiClient.AddImage(productId, request);
+            if (result.IsSucceed)
+            {
+                Message = "Thêm ảnh thành công";
+            }
+            else
+            {
+                Message = "Thêm ảnh không thành công";
+            }
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> RemoveImage(int productId)
+        {
+            ViewData["ProductId"]=productId;
+            var images = await _productApiClient.GetImages(productId);
+            return PartialView("_RemoveImage", images.Data);
+        }
+        [HttpPost]
+        public async Task<IActionResult> RemoveImage(List<SelectItem> images, int productId)
+        {
+            if (!ModelState.IsValid)
+            {
+                Message = "Dữ liệu không hợp lệ";
+            }
+            var deleteImages = images.Where(x => x.Selected).Select(x => int.Parse(x.Id)).ToList();
+            var result = await _productApiClient.RemoveImages(deleteImages, productId);
+            if (result.IsSucceed)
+            {
+                Message = "Xóa ảnh thành công";
+            }
+            else
+            {
+                Message = "Xóa ảnh không thành công";
             }
             return RedirectToAction("Index");
         }

@@ -1,4 +1,5 @@
 ﻿using eShop.ViewModel.Catalog.Common;
+using eShop.ViewModel.Catalog.ProductImages;
 using eShop.ViewModel.Catalog.Products;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -16,5 +17,8 @@ namespace eShop.ApiIntergration
         Task<ServiceResult<List<TranslationOfProduct>>> GetProductTranslation(int productId);
         Task<ServiceResult<ProductVM>> GetById(int productId, string languageId);
         Task<ServiceResult<ProductUpdateRequest>> GetForUpdate(int productId);
+        Task<ServiceResult<int>> AddImage(int productId, ProductImageCreateRequest request);
+        Task<ServiceResult<List<ProductImageViewModel>>> GetImages(int productId);
+        Task<ServiceResult<bool>> RemoveImages(List<int> imageIds, int productId);
     }
 }
