@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using eShop.Utilities.Constants;
 using static eShop.Utilities.Constants.SystemConstant;
 using Microsoft.Extensions.Configuration;
+using System.Threading;
 
 namespace eShop.WebApp.Controllers
 {
@@ -60,13 +61,23 @@ namespace eShop.WebApp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult SetCultureCookie(string cltr, string returnUrl)
+        public IActionResult SetCultureCookie(string cltr, string path, string querystrings)
         {
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(cltr)),
                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
                 );
+            if (path.Count(x => x == '/') >= 2)
+            {
+                var index=path.IndexOf('/',2);
+                path= $"/{cltr}"+path.Substring(index, path.Length-index);
+            }
+            else
+            {
+                path = $"/{cltr}";
+            }
+            var returnUrl = path + querystrings;
 
             return LocalRedirect(returnUrl);
         }

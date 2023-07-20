@@ -17,10 +17,18 @@ namespace eShop.BackendApi.Controllers
         }
         [HttpGet()]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAll(string? languageId )
+        public async Task<IActionResult> GetAll(string? languageId)
         {
-            var result=await _catergoriesService.GetAll(languageId);
-            if(result.IsSucceed) return Ok(result);
+            var result = await _catergoriesService.GetAll(languageId);
+            if (result.IsSucceed) return Ok(result);
+            return BadRequest(result);
+        }
+        [HttpGet("{categoryId}/{languageId}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetById(int categoryId, string languageId)
+        {
+            var result = await _catergoriesService.GetById(categoryId,languageId);
+            if (result.IsSucceed) return Ok(result);
             return BadRequest(result);
         }
     }

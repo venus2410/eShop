@@ -16,5 +16,6 @@ namespace eShop.ViewModel.Catalog.Products
         [DataType(DataType.Upload)]
         public IFormFile ThumbnailImage { set; get; }
         public bool? IsFeatured { get; set; }
+        public int CategoryId { get; set; }
     }
 }

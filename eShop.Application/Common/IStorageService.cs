@@ -12,6 +12,7 @@ namespace eShop.Application.Common
 
         Task SaveFileAsync(Stream mediaBinaryStream, string fileName);
 
-        Task DeleteFileAsync(string fileName);
+        Task DeleteFileAsync(string filePath);
+        Task DeleteFilesAsync(List<string> filePaths);
     }
 }

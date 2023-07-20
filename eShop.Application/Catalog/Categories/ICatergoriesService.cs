@@ -10,5 +10,6 @@ namespace eShop.Application.Catalog.Categories
     public interface ICatergoriesService
     {
         Task<ServiceResult<List<CatergoryVM>>> GetAll(string languageId);
+        Task<ServiceResult<CatergoryVM>> GetById(int categoryId, string languageId);
     }
 }

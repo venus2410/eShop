@@ -4,6 +4,7 @@
     <ul id="sideManu" class="nav nav-tabs nav-stacked">
         @{
             var parents = Model.Where(x => x.ParentId == null);
+            var culture = CultureInfo.CurrentCulture.Name;
         }
         @foreach (var parent in parents)
         {
@@ -14,17 +15,19 @@
                     <a> @parent.Name</a>
                     <ul>
                         @{
+                            <li><a class="active" href="@($"/{culture}" +Url.Action("ProductsByCategory","Product",new{categoryId=parent.Id}))"><i class="icon-chevron-right"></i><localize>All</localize>
+                                </a></li>
                             var i = 0;
                             foreach (var child in children)
                             {
                                 if (i == 0)
                                 {
-                                    <li><a class="active" href="products.html"><i class="icon-chevron-right"></i>@child.Name </a></li>
+                                    <li><a class="active" href="@($"/{culture}" +Url.Action("ProductsByCategory","Product",new{categoryId=child.Id}))"><i class="icon-chevron-right"></i>@child.Name </a></li>
                                     i++;
                                 }
                                 else
                                 {
-                                    <li><a href="products.html"><i class="icon-chevron-right"></i>@child.Name</a></li>
+                                    <li><a href="@($"/{culture}" +Url.Action("ProductsByCategory","Product",new{categoryId=child.Id}))"><i class="icon-chevron-right"></i>@child.Name</a></li>
                                 }
                             }
                         }
@@ -33,7 +36,7 @@
             }
             else
             {
-                <li><a href="products.html">@parent.Name</a></li>
+                <li><a href="@($"/{culture}" +Url.Action("ProductsByCategory","Product",new{categoryId=parent.Id}))">@parent.Name</a></li>
             }
         }
     </ul>

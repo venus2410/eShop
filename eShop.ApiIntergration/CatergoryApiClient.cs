@@ -18,7 +18,13 @@ namespace eShop.ApiIntergration
         }
         public async Task<ServiceResult<List<CatergoryVM>>> GetCatergories(string languageId)
         {
-            return await _baseApiClient.GetAllAsync<List<CatergoryVM>>(baseURL+$"?languageId={languageId}");
+            return await _baseApiClient.GetGeneralAsync<List<CatergoryVM>>(baseURL+$"?languageId={languageId}");
+        }
+
+        public async Task<ServiceResult<CatergoryVM>> GetById(int categoryId, string languageId)
+        {
+            var url = $"{baseURL}/{categoryId}/{languageId}";
+            return await _baseApiClient.GetGeneralAsync<CatergoryVM>(url);
         }
     }
 }

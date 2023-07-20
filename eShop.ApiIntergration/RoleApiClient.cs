@@ -22,7 +22,7 @@ namespace eShop.ApiIntergration
         }
         public async Task<ServiceResult<List<RoleVM>>> GetAll()
         {
-            return await _baseApiClient.GetAllAsync<List<RoleVM>>(baseURL);
+            return await _baseApiClient.GetGeneralAsync<List<RoleVM>>(baseURL);
         }
     }
 }

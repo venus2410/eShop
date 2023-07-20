@@ -100,7 +100,10 @@ namespace eShop.WebApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
+                    name: "default without culture",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "default with culture",
                     pattern: "{culture=vi}/{controller=Home}/{action=Index}/{id?}");
             });
         }

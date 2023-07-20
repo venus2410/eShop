@@ -1,0 +1,120 @@
+﻿@model eShop.ViewModel.Catalog.Common.PageResult<eShop.ViewModel.Catalog.Products.ProductVM>
+@{
+    ViewData["Title"] = "ProductsByCategory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var category = ViewBag.Category as eShop.ViewModel.Catalog.Catergories.CatergoryVM;
+    var baseAddress = ViewData["BaseAddress"] as string;
+    var culture = CultureInfo.CurrentCulture.Name;
+    var cultureInfor = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+    var baseUrlToDetail = $"/{culture}/Product/Detail/";
+}
+
+<h1><localize>ProductsByCategory</localize></h1>
+<h3> @category.Name <small class="pull-right"> @Model.TotalRecords <localize>products are available</localize></small></h3>
+<hr class="soft" />
+<p>
+    @category.Description
+</p>
+<hr class="soft" />
+<form class="form-horizontal span6">
+    <div class="control-group">
+        <label class="control-label alignL">Sort By</label>
+        <select>
+            <option>Priduct name A - Z</option>
+            <option>Priduct name Z - A</option>
+            <option>Priduct Stoke</option>
+            <option>Price Lowest first</option>
+        </select>
+    </div>
+</form>
+
+<div id="myTab" class="pull-right">
+    <a href="#listView" data-toggle="tab"><span class="btn btn-large"><i class="icon-list"></i></span></a>
+    <a href="#blockView" data-toggle="tab"><span class="btn btn-large btn-primary"><i class="icon-th-large"></i></span></a>
+</div>
+<br class="clr" />
+<div class="tab-content">
+    <div class="tab-pane" id="listView">
+        @foreach (var item in Model.Items)
+        {
+            <div class="row">
+                <div class="span2">
+                    <img src="@(baseAddress+item.ThumbnailImage)" alt="@item.Name" class="image-fit" />
+                </div>
+                <div class="span4">
+                    <h3>New | Available</h3>
+                    <hr class="soft" />
+                    <h5>@item.Name</h5>
+                    <p>
+                        @item.Description
+                    </p>
+                    <a class="btn btn-small pull-right" href="@(baseUrlToDetail+item.Id.ToString())">
+                        <localize>
+                            View Details
+                        </localize>
+                    </a>
+                    <br class="clr" />
+                </div>
+                <div class="span3 alignR">
+                    <form class="form-horizontal qtyFrm">
+                        <h3> @string.Format(cultureInfor, "{0:c0}", item.Price)</h3>
+                        <label class="checkbox">
+                            <input type="checkbox">  Adds product to compair
+                        </label><br />
+
+                        <a href="@(baseUrlToDetail+item.Id.ToString())" class="btn btn-large btn-primary">
+                            <localize>
+                                Add to cart
+                            </localize> <i class=" icon-shopping-cart"></i>
+                        </a>
+                        <a href="@(baseUrlToDetail+item.Id.ToString())" class="btn btn-large"><i class="icon-zoom-in"></i></a>
+
+                    </form>
+                </div>
+            </div>
+            <hr class="soft" />
+        }
+    </div>
+
+    <div class="tab-pane  active" id="blockView">
+        <ul class="thumbnails">
+            @foreach (var item in Model.Items)
+            {
+                <li class="span3">
+                    <div class="thumbnail">
+                        <a href="@(baseUrlToDetail+item.Id.ToString())"><img src="@(baseAddress+item.ThumbnailImage)" alt="@item.Name" class="image-fit" /></a>
+                        <div class="caption">
+                            <h5>@item.Name</h5>
+                            <p>
+                                @item.Description
+                            </p>
+                            <h4 style="text-align:center">
+                                <a class="btn" href="@(baseUrlToDetail+item.Id.ToString())"> <i class="icon-zoom-in"></i></a> <a class="btn" href="#">
+                                    <localize>
+                                        Add to cart
+                                    </localize><i class="icon-shopping-cart"></i>
+                                </a> <a class="btn btn-primary" href="#">@string.Format(cultureInfor, "{0:c0}", item.Price)</a>
+                            </h4>
+                        </div>
+                    </div>
+                </li>
+            }
+
+        </ul>
+        <hr class="soft" />
+    </div>
+</div>
+@if (Model.TotalRecords > 0)
+{
+    <a href="compair.html" class="btn btn-large pull-right">Compair Product</a>
+    @await Component.InvokeAsync("Pager", Model)
+    <br class="clr" />
+}
+else
+{
+    <div class="alert alert-error">
+        <localize>
+            Not found
+        </localize>
+    </div>
+}

@@ -55,7 +55,7 @@ namespace eShop.ApiIntergration
             return result;
         }
 
-        public async Task<ServiceResult<ReturnType>> GetAllAsync<ReturnType>(string url)
+        public async Task<ServiceResult<ReturnType>> GetGeneralAsync<ReturnType>(string url)
         {
             var client=CreateAuthenticatedClient();
 
@@ -65,15 +65,21 @@ namespace eShop.ApiIntergration
             var result = JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
             return result;
         }
-        public async Task<ServiceResult<ReturnType>> GetByIdAsync<ReturnType>(string url, string id)
+#nullable enable
+        public async Task<ServiceResult<ReturnType>> GetByIdAsync<ReturnType>(string url, string id, string? languageId)
         {
             var client = CreateAuthenticatedClient();
 
-            var response = await client.GetAsync($"{url}/{id}");
+            var route = $"{url}/{id}";
+            if(!string.IsNullOrEmpty(languageId))
+            {
+                route += $"/{languageId}";
+            }
+
+            var response = await client.GetAsync(route);
 
             var body = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
-            return result;
+            return JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
         }
         public async Task<ServiceResult<ReturnType>> PostAsync<ReturnType,Ptype>(string url, Ptype model)
         {
@@ -133,8 +139,7 @@ namespace eShop.ApiIntergration
             var response = await client.PostAsync(url, httpContent);
 
             var body = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
-            return result;
+            return JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
         }
         public async Task<ServiceResult<ReturnType>> PutAsync<ReturnType, Ptype>(string url,string id, Ptype model)
         {
@@ -146,8 +151,7 @@ namespace eShop.ApiIntergration
             var response = await client.PutAsync($"{url}/{id}", httpContent);
 
             var body = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
-            return result;
+            return JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
         }
         public async Task<ServiceResult<ReturnType>> DeleteAsync<ReturnType>(string url, string id)
         {
@@ -156,8 +160,16 @@ namespace eShop.ApiIntergration
             var response = await client.DeleteAsync($"{url}/{id}");
 
             var body = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
-            return result;
+            return JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
+        }
+        public async Task<ServiceResult<ReturnType>> DeleteListAsync<ReturnType>(string url)
+        {
+            var client = CreateAuthenticatedClient();
+
+            var response = await client.DeleteAsync(url);
+
+            var body = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
         }
         //public async Task<ServiceResult<ReturnType>> Test<ReturnType, Ptype>(string url, Ptype model, Func<string,HttpContent,Task<HttpResponseMessage>> func)
         //{
@@ -172,6 +184,6 @@ namespace eShop.ApiIntergration
         //    var result = JsonConvert.DeserializeObject<ServiceResult<ReturnType>>(body);
         //    return result;
         //}
-        
+
     }
 }

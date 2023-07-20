@@ -1,16 +1,20 @@
 ﻿using eShop.Utilities.Constants;
 using eShop.ViewModel.Catalog.Common;
+using eShop.ViewModel.Catalog.ProductImages;
 using eShop.ViewModel.Catalog.Products;
 using eShop.ViewModel.System.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Policy;
 using System.Threading.Tasks;
+using System.Web;
 using static eShop.Utilities.Constants.SystemConstant;
 
 namespace eShop.ApiIntergration
@@ -28,6 +32,42 @@ namespace eShop.ApiIntergration
             _httpContextAccessor = httpContextAccessor;
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+        }
+
+        public async Task<ServiceResult<int>> AddImage(int productId, ProductImageCreateRequest request)
+        {
+            var sessions = _httpContextAccessor
+                .HttpContext
+            .Session
+            .GetString(AppSetting.Token);
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration[AppSetting.BaseAddress]);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", sessions);
+
+            var requestContent = new MultipartFormDataContent();
+            if(request.ImageFiles!= null)
+            {
+                foreach(var image in request.ImageFiles)
+                {
+                    byte[] data;
+                    using (var br = new BinaryReader(image.OpenReadStream()))
+                    {
+                        data = br.ReadBytes((int)image.OpenReadStream().Length);
+                    }
+                    ByteArrayContent bytes = new ByteArrayContent(data);
+                    requestContent.Add(bytes, nameof(ProductImageCreateRequest.ImageFiles), image.FileName);
+                }
+            }
+            
+
+            requestContent.Add(new StringContent(request.Caption), nameof(ProductImageCreateRequest.Caption));
+            requestContent.Add(new StringContent(request.IsDefault.ToString()), nameof(ProductImageCreateRequest.IsDefault));
+            requestContent.Add(new StringContent(request.SortOrder.ToString()), nameof(ProductImageCreateRequest.SortOrder));
+
+            var response = await client.PostAsync($"/api/products/{productId}/images", requestContent);
+            var body = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ServiceResult<int>>(body);
         }
 
         public async Task<ServiceResult<bool>> Create(ProductCreateRequest request)
@@ -59,38 +99,54 @@ namespace eShop.ApiIntergration
             requestContent.Add(new StringContent(request.Prices.Price.ToString()), "Prices.Price");
             requestContent.Add(new StringContent(request.Prices.OriginalPrice.ToString()), "Prices.OriginalPrice");
             requestContent.Add(new StringContent(request.Stock.ToString()), "stock");
+            requestContent.Add(new StringContent(request.CategoryId.ToString()), "CategoryId");
+            var translations = nameof(ProductCreateRequest.Translations);
             for (int i = 0; i < request.Translations.Count; i++)
             {
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Name) ? "" : request.Translations[i].Name.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.Name));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Description) ? "" : request.Translations[i].Description.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.Description));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Name) ? "" : request.Translations[i].Name.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.Name));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Description) ? "" : request.Translations[i].Description.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.Description));
 
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Details) ? "" : request.Translations[i].Details.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.Details));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoDescription) ? "" : request.Translations[i].SeoDescription.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.SeoDescription));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoTitle) ? "" : request.Translations[i].SeoTitle.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.SeoTitle));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoAlias) ? "" : request.Translations[i].SeoAlias.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.SeoAlias));
-                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].LanguageId) ? "" : request.Translations[i].LanguageId.ToString()), nameof(TranslationOfProduct) + $"s[{i}]." + nameof(TranslationOfProduct.LanguageId));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].Details) ? "" : request.Translations[i].Details.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.Details));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoDescription) ? "" : request.Translations[i].SeoDescription.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.SeoDescription));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoTitle) ? "" : request.Translations[i].SeoTitle.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.SeoTitle));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].SeoAlias) ? "" : request.Translations[i].SeoAlias.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.SeoAlias));
+                requestContent.Add(new StringContent(string.IsNullOrEmpty(request.Translations[i].LanguageId) ? "" : request.Translations[i].LanguageId.ToString()), translations + $"[{i}]." + nameof(TranslationOfProduct.LanguageId));
             }
 
             requestContent.Add(new StringContent(languageId), "languageId");
 
             var response = await client.PostAsync($"/api/products/", requestContent);
-            if (response.IsSuccessStatusCode)
-            {
-                return new ServiceResultSuccess<bool>();
-            }
-            return new ServiceResultFail<bool>(response.StatusCode.ToString());
+            var body = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<ServiceResult<bool>>(body);
+        }
+
+        public async Task<ServiceResult<ProductVM>> GetById(int productId, string languageId)
+        {
+            return await _baseApiClient.GetByIdAsync<ProductVM>(baseUrl,productId.ToString(),languageId);
         }
 
         public async Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take)
         {
             string url = baseUrl + $"/featured/{languageId}/{take}";
-            return await _baseApiClient.GetAllAsync<List<ProductVM>>(url);
+            return await _baseApiClient.GetGeneralAsync<List<ProductVM>>(url);
+        }
+
+        public Task<ServiceResult<ProductUpdateRequest>> GetForUpdate(int productId)
+        {
+            var url = $"{baseUrl}/getforupdate/{productId}";
+            return _baseApiClient.GetGeneralAsync<ProductUpdateRequest>(url);
+        }
+
+        public async Task<ServiceResult<List<ProductImageViewModel>>> GetImages(int productId)
+        {
+            var url = $"{baseUrl}/{productId}/images";
+            return await _baseApiClient.GetGeneralAsync<List<ProductImageViewModel>>(url);
         }
 
         public async Task<ServiceResult<List<ProductVM>>> GetLatestProduct(string languageId, int take)
         {
             string url = baseUrl + $"/latest/{languageId}/{take}";
-            return await _baseApiClient.GetAllAsync<List<ProductVM>>(url);
+            return await _baseApiClient.GetGeneralAsync<List<ProductVM>>(url);
         }
 
         public async Task<ServiceResult<PageResult<ProductVM>>> GetPage(GetManageProductPagingRequest request)
@@ -98,13 +154,24 @@ namespace eShop.ApiIntergration
             string getURI = baseUrl + $"/paging?" + $"{nameof(request.PageIndex)}={request.PageIndex}&" + $"{nameof(request.PageSize)}={request.PageSize}&" + $"{nameof(request.Keyword)}={request.Keyword}&" + $"{nameof(request.LanguageId)}={request.LanguageId}&" + $"{nameof(request.CategoryId)}={request.CategoryId}";
             //Dictionary<string,string> dictionary=(Dictionary<string, string>) request;
             //QueryHelpers.AddQueryString(getURI, dictionary);
-            return await _baseApiClient.GetAllAsync<PageResult<ProductVM>>(getURI);
+            return await _baseApiClient.GetGeneralAsync<PageResult<ProductVM>>(getURI);
         }
 
         public async Task<ServiceResult<List<TranslationOfProduct>>> GetProductTranslation(int productId)
         {
             string url = baseUrl + $"/{productId}/translations";
-            return await _baseApiClient.GetAllAsync<List<TranslationOfProduct>>(url);
+            return await _baseApiClient.GetGeneralAsync<List<TranslationOfProduct>>(url);
+        }
+
+        public async Task<ServiceResult<bool>> RemoveImages(List<int> imageIds, int productId)
+        {
+            var url = $"{baseUrl}/{productId}/images?";
+            var queryString = HttpUtility.ParseQueryString(string.Empty);
+            foreach(var imageId in imageIds)
+            {
+                queryString.Add("imageIds",imageId.ToString());
+            }
+            return await _baseApiClient.DeleteListAsync<bool>(url + queryString.ToString());
         }
 
         public async Task<ServiceResult<bool>> Update(ProductUpdateRequest request)

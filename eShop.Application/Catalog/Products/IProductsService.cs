@@ -14,19 +14,17 @@ namespace eShop.Application.Catalog.Products
         Task<ServiceResult<bool>> Create(ProductCreateRequest request);
         Task<ServiceResult<bool>> Update(ProductUpdateRequest request);
         Task<int> Delete(int productId);
-        Task<ProductVM> GetById(int productId, string languageId);
+        Task<ServiceResult<ProductVM>> GetById(int productId, string languageId);
+        Task<ServiceResult<ProductUpdateRequest>> GetForUpdate(int productId);
         Task<bool> UpdatePrice(int productId, decimal newPrice);
         Task<bool> UpdateStock(int productId, int addedStock);
         Task AddViewCount(int productId);
         Task<ServiceResult<PageResult<ProductVM>>> GetByPaging(GetManageProductPagingRequest request);
-        Task<int> AddImage(int productId, ProductImageCreateRequest request);
-
-        Task<int> RemoveImage(int imageId);
-
+        Task<ServiceResult<int>> AddImage(int productId, ProductImageCreateRequest request);
+        Task<ServiceResult<int>> RemoveImages(List<int> imageIds);
         Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request);
-
         Task<ProductImageViewModel> GetImageById(int imageId);
-        Task<List<ProductImageViewModel>> GetListImage(int productId);
+        Task<ServiceResult<List<ProductImageViewModel>>> GetListImage(int productId);
         Task<PageResult<ProductVM>> GetAllByCategoryId(string languageId, GetPublicProductPagingRequest request);
         Task<ServiceResult<List<ProductVM>>> GetFeaturedProduct(string languageId, int take);
         Task<ServiceResult<List<ProductVM>>> GetLatestProduct(string languageId, int take);

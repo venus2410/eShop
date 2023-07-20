@@ -18,7 +18,7 @@ namespace eShop.ApiIntergration
         }
         public async Task<ServiceResult<List<SlideVM>>> GetAll()
         {
-            return await _baseApiClient.GetAllAsync<List<SlideVM>>(baseURL);
+            return await _baseApiClient.GetGeneralAsync<List<SlideVM>>(baseURL);
         }
     }
 }

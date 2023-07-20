@@ -76,6 +76,7 @@
 <!-- Modal -->
 
 @section Scripts{
+    
     <script src="~/js/bootbox.min.js"></script>
     <script>
         setTimeout(function () {
@@ -153,7 +154,32 @@
 
         //for create
 
-
+        //add image
+        function loadAddImageModal(id) {
+            $.ajax({
+                url: '@Url.Action("AddImage","Product")',
+                data: {
+                    productId:id
+                },
+                success: function (data) {
+                    $("#modalHere").html(data);
+                    $("#exampleModal").modal('show');
+                }
+            });
+        }
+        //remove image
+        function loadRemoveImagesModal(id) {
+            $.ajax({
+                url: '@Url.Action("RemoveImage","Product")',
+                data: {
+                    productId:id
+                },
+                success: function (data) {
+                    $("#modalHere").html(data);
+                    $("#exampleModal").modal('show');
+                }
+            });
+        }
 
         //for search
         $("#pageSizeSelect").on('change', function () {
@@ -179,7 +205,7 @@
                 var id = $(this).data('id');
                 loadUpdateModal(id);
         });
-        //dor delete
+        //for delete
         $(document).on('click', '.btn-delete', function () {
                 var id = $(this).data('id');
                 bootbox.confirm("Bạn chắc chắn muốn xóa?", function (result) {
@@ -187,6 +213,16 @@
                         deleteUser(id);
                     }
                 });
-            });
+        });
+        //for add image
+        $(document).on('click', '.btn-addimage', function () {
+            var id = $(this).data('id');
+            loadAddImageModal(id);
+        });
+        //for remove images
+        $(document).on('click', '.btn-removeimage', function () {
+            var id = $(this).data('id');
+            loadRemoveImagesModal(id);
+        });
     </script>
 }

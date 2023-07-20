@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 
 namespace eShop.Utilities.Constants
@@ -14,10 +15,14 @@ namespace eShop.Utilities.Constants
             public const string BaseAddress = "BaseAddress";
             public const string Bearer = "Bearer";
         }
+        public class Currency
+        {
+        }
         public class ProductSetting
         {
             public const int NumberOfFeaturedProducts = 16;
             public const int NumberOfLatestProducts = 6;
+            public const string DefaultProductInfor = "Default Infor";
         }
     }
 }
