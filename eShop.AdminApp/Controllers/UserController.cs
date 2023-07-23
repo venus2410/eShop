@@ -62,15 +62,23 @@ namespace eShop.AdminApp.Controllers
             return PartialView("_Create");
         }
         [HttpPost]
-        public async Task<JsonResult> Create(UserCreateRequest request)
+        public async Task<IActionResult> Create(UserCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
-                var rs = new ServiceResultFail<bool>("Dữ liệu không hợp lệ");
-                return Json(rs);
+                TempData["Message"] = "Dữ liệu không hợp lệ";
+                return RedirectToAction("Index");
             }
             var result = await _userApiClient.Create(request);
-            return Json(result);
+            if (result.IsSucceed)
+            {
+                TempData["Message"] = "Tạo mới thành công";
+            }
+            else
+            {
+                TempData["Message"] = result.Errors;
+            }
+            return RedirectToAction("Index");
         }
         [HttpGet]
         public async Task<PartialViewResult> Update(Guid Id)
@@ -98,11 +106,19 @@ namespace eShop.AdminApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var rs = new ServiceResultFail<bool>("Dữ liệu không hợp lệ");
-                return Json(rs);
+                TempData["Message"] = "Dữ liệu không hợp lệ";
+                return RedirectToAction("Index");
             }
             var result = await _userApiClient.Update(request);
-            return Json(result);
+            if (result.IsSucceed)
+            {
+                TempData["Message"] = "Cập nhật thành công";
+            }
+            else
+            {
+                TempData["Message"] = "Cập nhật không thành công";
+            }
+            return RedirectToAction("Index");
         }
         [HttpPost]
         public async Task<IActionResult> Logout()

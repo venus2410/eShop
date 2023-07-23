@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+    <comment>User/Create</comment>
+  </data>
   <data name="Contact" xml:space="preserve">
     <value>Contact</value>
     <comment>Layout</comment>
@@ -125,17 +129,45 @@
     <value>Delivery</value>
     <comment>Layout</comment>
   </data>
+  <data name="Dob" xml:space="preserve">
+    <value>Day of birth</value>
+    <comment>User/Create</comment>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+    <comment>User/Create</comment>
+  </data>
   <data name="Featured Products" xml:space="preserve">
     <value>Featured Products</value>
     <comment>Home/Index</comment>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First name</value>
+    <comment>User/Create</comment>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last name</value>
+    <comment>User/Create</comment>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Login</value>
     <comment>Layout</comment>
   </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+    <comment>User/Create</comment>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Phone number</value>
+    <comment>User/Create</comment>
+  </data>
   <data name="Specials Offer" xml:space="preserve">
     <value>Specials Offer</value>
     <comment>Layout</comment>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User name</value>
+    <comment>User/Create</comment>
   </data>
   <data name="VIEW" xml:space="preserve">
     <value>VIEW</value>

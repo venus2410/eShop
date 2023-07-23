@@ -129,6 +129,10 @@
     <value>Tất cả</value>
     <comment>Navbar</comment>
   </data>
+  <data name="ALREADY REGISTERED ?" xml:space="preserve">
+    <value>BẠN ĐÃ CÓ TÀI KHOẢN</value>
+    <comment>Login/Login</comment>
+  </data>
   <data name="Color" xml:space="preserve">
     <value>Màu</value>
     <comment>Product/Detail</comment>
@@ -149,6 +153,10 @@
     <value>Sản phẩm tiêu biểu</value>
     <comment>Home/Index</comment>
   </data>
+  <data name="Forget password?" xml:space="preserve">
+    <value>Quên mật khẩu?</value>
+    <comment>Login/Login</comment>
+  </data>
   <data name="items in stock" xml:space="preserve">
     <value>sản phẩm trong giỏ hàng</value>
     <comment>Product/Detail</comment>
@@ -161,9 +169,17 @@
     <value>Đăng nhập</value>
     <comment>Layout</comment>
   </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Đăng xuất</value>
+    <comment>Layout</comment>
+  </data>
   <data name="Not found" xml:space="preserve">
     <value>Không tìm thấy</value>
     <comment>Product/ProductsByCategory</comment>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Mật khẩu</value>
+    <comment>Login/Login</comment>
   </data>
   <data name="Product Details" xml:space="preserve">
     <value>Chi tiết</value>
@@ -185,9 +201,17 @@
     <value>Sản phẩm liên quan</value>
     <comment>Product/Detail</comment>
   </data>
+  <data name="Sign in" xml:space="preserve">
+    <value>Đăng nhập</value>
+    <comment>Login/Login</comment>
+  </data>
   <data name="Specials Offer" xml:space="preserve">
     <value>Ưu đãi</value>
     <comment>Layout</comment>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Tên đăng nhập</value>
+    <comment>Login/Login</comment>
   </data>
   <data name="Vietnamese" xml:space="preserve">
     <value>Tiếng Việt</value>

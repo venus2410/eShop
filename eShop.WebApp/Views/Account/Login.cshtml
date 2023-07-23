@@ -1,0 +1,59 @@
+﻿@model eShop.ViewModel.System.Users.UserLoginRequest
+@inject LazZiya.ExpressLocalization.ISharedCultureLocalizer _loc
+@{
+
+}
+<div class="row">
+    <div class="span4">
+        <div class="well">
+            <h5>CREATE YOUR ACCOUNT</h5><br />
+            Enter your e-mail address to create an account.<br /><br /><br />
+            <form asp-action="Login" asp-controller="Login">
+                <div class="control-group">
+                    <label class="control-label" for="inputEmail0">E-mail address</label>
+                    <div class="controls">
+                        <input class="span3" type="text" id="inputEmail0" placeholder="Email">
+                    </div>
+                </div>
+                <div class="controls">
+                    <button type="submit" class="btn block">Create Your Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="span1"> &nbsp;</div>
+    <div class="span4">
+        <div class="well">
+            <h5>
+                <localize>
+                    ALREADY REGISTERED ?
+                </localize>
+            </h5>
+            <form asp-action="Login" asp-controller="Account" method="post">
+                <div class="control-group">
+                    @*<label class="control-label" for="inputEmail1"><localize>UserName</localize></label>*@
+                    <div class="controls">
+                        <input class="span3" type="text" id="inputEmail1" placeholder="@_loc["UserName"]" name="UserName">
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    @*<label class="control-label" for="inputPassword1">
+                            <localize>Password</localize>
+                        </label>*@
+                    <div class="controls">
+                        <input type="password" class="span3" id="inputPassword1" placeholder="@_loc["Password"]" name="Password">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn">
+                            <localize>Sign in</localize>
+                        </button> <a href="forgetpass.html" localize-content>Forget password?</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

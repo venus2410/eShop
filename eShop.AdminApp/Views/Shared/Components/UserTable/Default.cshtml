@@ -1,11 +1,14 @@
 ﻿@using eShop.ViewModel.System.Users
 @using eShop.ViewModel.Catalog.Common
 @model PageResult<UserViewModel>
-        <div class="row">
-            <div class="alert alert-success" role="alert" id="alertDiv" style="display:none">
-
-            </div>
+<div class="row">
+    @if (TempData["Message"] != null)
+    {
+        <div id="msgAlert" class="alert alert-success" role="alert">
+            @TempData["Message"]
         </div>
+    }
+</div>
         <table class="table table-bordered">
             <thead>
                 <tr>

@@ -13,7 +13,7 @@
         <li class="breadcrumb-item active">Danh sách người dùng</li>
     </ol>
     <div class="card mb-4">
-        
+
         <div class="card-header">
             <div class="row">
                 <div class="col-md-3">
@@ -74,6 +74,11 @@
 @section Scripts{
     <script src="~/js/bootbox.min.js"></script>
     <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+    <script>
         //create
         function loadCreatModal() {
             $(this).off('click');
@@ -85,11 +90,11 @@
                 }
             });
         }
-        function createUser() {
+        @*function createUser() {
             if ($("#createForm").valid()) {
                 var data = $("#createForm").serialize();
-        //console.log(data);
-        //alert(data);
+                console.log(data);
+                //alert(data);
                 $.ajax({
                     type: 'POST',
                     url: '@Url.Action("Create","User")',
@@ -115,7 +120,7 @@
                 });
             }
 
-        }
+        }*@
         //update
         function loadUpdateModal(id) {
             $.ajax({
@@ -127,7 +132,7 @@
                 }
             });
         }
-        function updateUser() {
+        @*function updateUser() {
             if ($("#updateForm").valid()) {
                 var data = $("#updateForm").serialize();
         //console.log(data);
@@ -159,7 +164,7 @@
                 });
             }
 
-        }
+        }*@
         //delete
         function deleteUser(id) {
             $.ajax({
