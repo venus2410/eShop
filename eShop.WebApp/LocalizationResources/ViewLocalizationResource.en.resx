@@ -129,6 +129,10 @@
     <value>All</value>
     <comment>Navbar</comment>
   </data>
+  <data name="ALREADY REGISTERED ?" xml:space="preserve">
+    <value>ALREADY REGISTERED ?</value>
+    <comment>Login/Login</comment>
+  </data>
   <data name="Color" xml:space="preserve">
     <value>Color</value>
     <comment>Product/Detail</comment>
@@ -149,6 +153,10 @@
     <value>Featured Products</value>
     <comment>Home/Index</comment>
   </data>
+  <data name="Forget password?" xml:space="preserve">
+    <value>Forget password?</value>
+    <comment>Login/Login</comment>
+  </data>
   <data name="items in stock" xml:space="preserve">
     <value>item(s) in stock</value>
     <comment>Product/Detail</comment>
@@ -161,9 +169,17 @@
     <value>Login</value>
     <comment>Layout</comment>
   </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+    <comment>Layout</comment>
+  </data>
   <data name="Not found" xml:space="preserve">
     <value>Oops! Not Found</value>
     <comment>Product/ProductsByCategory</comment>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+    <comment>Login/Login</comment>
   </data>
   <data name="Product Details" xml:space="preserve">
     <value>Product Details</value>
@@ -185,9 +201,17 @@
     <value>Related Products</value>
     <comment>Product/Detail</comment>
   </data>
+  <data name="Sign in" xml:space="preserve">
+    <value>Sign in</value>
+    <comment>Login/Login</comment>
+  </data>
   <data name="Specials Offer" xml:space="preserve">
     <value>Specials Offer</value>
     <comment>Layout</comment>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User Name</value>
+    <comment>Login/Login</comment>
   </data>
   <data name="Vietnamese" xml:space="preserve">
     <value>Vietnamese</value>

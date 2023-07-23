@@ -2,3 +2,6 @@
     height: 170px;
     object-fit: contain;
 }
+a:has(img) {
+    height: 170px;
+}

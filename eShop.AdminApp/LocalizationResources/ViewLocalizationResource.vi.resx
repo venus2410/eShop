@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ConfirmPassword1" xml:space="preserve">
+    <value>Xác nhận mật khẩu</value>
+    <comment>User/Create</comment>
+  </data>
   <data name="Contact" xml:space="preserve">
     <value>Liên hệ</value>
     <comment>Layout</comment>
@@ -125,17 +129,45 @@
     <value>Vận chuyển</value>
     <comment>Layout</comment>
   </data>
+  <data name="Dob1" xml:space="preserve">
+    <value>Ngày sinh</value>
+    <comment>User/Create</comment>
+  </data>
+  <data name="Email1" xml:space="preserve">
+    <value>Email</value>
+    <comment>User/Create</comment>
+  </data>
   <data name="Featured Products" xml:space="preserve">
     <value>Sản phẩm tiêu biểu</value>
     <comment>Home/Index</comment>
+  </data>
+  <data name="FirstName1" xml:space="preserve">
+    <value>Tên</value>
+    <comment>User/Create</comment>
+  </data>
+  <data name="LastName1" xml:space="preserve">
+    <value>Họ</value>
+    <comment>User/Create</comment>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Đăng nhập</value>
     <comment>Layout</comment>
   </data>
+  <data name="Password1" xml:space="preserve">
+    <value>Mật khẩu</value>
+    <comment>User/Create</comment>
+  </data>
+  <data name="PhoneNumber1" xml:space="preserve">
+    <value>Số điện thoại</value>
+    <comment>User/Create</comment>
+  </data>
   <data name="Specials Offer" xml:space="preserve">
     <value>Ưu đãi</value>
     <comment>Layout</comment>
+  </data>
+  <data name="UserName1" xml:space="preserve">
+    <value>Tên đăng nhập</value>
+    <comment>User/Create</comment>
   </data>
   <data name="VIEW" xml:space="preserve">
     <value>XEM</value>
