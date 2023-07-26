@@ -18,8 +18,8 @@
                             <div class="container">
                                 <a href="@slide.Url"><img style="width:100%" src="@slide.Image" alt="@slide.Name" /></a>
                                 <div class="carousel-caption">
-                                    <h4>@slide.Name</h4>
-                                    <p>@slide.Description</p>
+                                    <h4 class="short-name">@slide.Name</h4>
+                                    <p class="short-description">@slide.Description</p>
                                 </div>
                             </div>
                         </div>
@@ -30,8 +30,8 @@
                             <div class="container">
                                 <a href="@slide.Url"><img style="width:100%" src="@slide.Image" alt="@slide.Name" /></a>
                                 <div class="carousel-caption">
-                                    <h4>@slide.Name</h4>
-                                    <p>@slide.Description</p>
+                                    <h4 class="short-name">@slide.Name</h4>
+                                    <p class="short-description">@slide.Description</p>
                                 </div>
                             </div>
                         </div>
@@ -62,9 +62,9 @@
                                     <li class="span3">
                                         <div class="thumbnail">
                                             <i class="tag"></i>
-                                            <a href="@(baseUrlToDetail+item.Id.ToString())"><img class="image-fit" src="@(Model.BaseAddress + item.ThumbnailImage)" alt="@item.Name"></a>
+                                            <a href="@(baseUrlToDetail+item.Id.ToString())"><img src="@(Model.BaseAddress + item.ThumbnailImage)" alt="@item.Name"></a>
                                             <div class="caption">
-                                                <h5 class="d-inline-block text-truncate" style="text-overflow:ellipsis;overflow:hidden;white-space:nowrap;">@item.Name</h5>
+                                                <h5 class="d-inline-block short-name">@item.Name</h5>
                                                 <h4><a class="btn" href="@(baseUrlToDetail+item.Id.ToString())" localize-content>VIEW</a> <span class="pull-right">@string.Format(cultureInfor, "{0:c0}", item.Price)</span></h4>
                                             </div>
                                         </div>
@@ -86,7 +86,7 @@
     {
         <li class="span3">
             <div class="thumbnail">
-                <a href="@(baseUrlToDetail+item.Id.ToString())"><img src="@(Model.BaseAddress + item.ThumbnailImage)" class="image-fit" alt="@item.Name" /></a>
+                <a href="@(baseUrlToDetail+item.Id.ToString())"><img src="@(Model.BaseAddress + item.ThumbnailImage)" alt="@item.Name" /></a>
                 <div class="caption">
                     <h5>@item.Name</h5>
                     @*<p>

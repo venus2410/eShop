@@ -1,0 +1,71 @@
+﻿@model eShop.ViewModel.System.Users.UserCreateRequest
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="well">
+    <form class="form-horizontal" asp-action="Register" asp-controller="Account">
+        <h4>Your personal information</h4>
+        <div asp-validation-summary="ModelOnly" class="text-error"></div>
+        <div class="control-group">
+            <label class="control-label" asp-for="FirstName"></label>
+            <div class="controls">
+                <input asp-for="FirstName">
+                <span asp-validation-for="FirstName" class="text-error"></span>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" asp-for="LastName"></label>
+            <div class="controls">
+                <input asp-for="LastName">
+                <span asp-validation-for="LastName" class="text-error"></span>
+            </div>
+
+        </div>
+        <div class="control-group">
+            <label class="control-label" asp-for="Email"></label>
+            <div class="controls">
+                <input asp-for="Email">
+                <span asp-validation-for="Email" class="text-error"></span>
+            </div>
+
+        </div>
+        <div class="control-group">
+            <label class="control-label" asp-for="UserName"></label>
+            <div class="controls">
+                <input asp-for="UserName">
+                <span asp-validation-for="UserName" class="text-error"></span>
+            </div>
+
+        </div>
+        <div class="control-group">
+            <label class="control-label" asp-for="Password"></label>
+            <div class="controls">
+                <input asp-for="Password">
+                <span asp-validation-for="Password" class="text-error"></span>
+            </div>
+
+        </div>
+        <div class="control-group">
+            <label class="control-label" asp-for="ConfirmPassword"></label>
+            <div class="controls">
+                <input asp-for="ConfirmPassword">
+                <span asp-validation-for="ConfirmPassword" class="text-error"></span>
+            </div>
+
+        </div>
+
+        <div class="control-group">
+            <div class="controls">
+                <input type="hidden" name="email_create" value="1">
+                <input type="hidden" name="is_new_customer" value="1">
+                <input class="btn btn-large btn-success" type="submit" value="Register" />
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts{
+    @*<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>*@
+}

@@ -21,6 +21,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Localization.Internal;
 using static eShop.Utilities.Constants.SystemConstant;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace eShop.Application.Catalog.Products
 {
@@ -185,7 +186,43 @@ namespace eShop.Application.Catalog.Products
                                             select new { c };
                     query = query.Where(x => _context.ProductInCategories.Any(y => y.ProductId == x.p.Id && matchedCategories.Any(z => z.c.Id == y.CategoryId)));
                 }
-
+                //filter data
+                if (Enum.IsDefined(typeof(ProductOrder), request.OrderBy))
+                {
+                    switch (request.OrderBy)
+                    {
+                        case ProductOrder.NameZA:
+                            {
+                                query = query.OrderByDescending(x => x.pt.Name);
+                                break;
+                            }
+                        case ProductOrder.PriceLowToHigh:
+                            {
+                                query = query.OrderBy(x => x.p.Price);
+                                break;
+                            }
+                        case ProductOrder.PriceHighToLow:
+                            {
+                                query = query.OrderByDescending(x => x.p.Price);
+                                break;
+                            }
+                        case ProductOrder.MostRecent:
+                            {
+                                query = query.OrderBy(x => x.p.DateCreated);
+                                break;
+                            }
+                        case ProductOrder.LeastRecent:
+                            {
+                                query = query.OrderByDescending(x => x.p.DateCreated);
+                                break;
+                            }
+                        default:
+                            {
+                                query = query.OrderBy(x => x.pt.Name);
+                                break;
+                            }
+                    }
+                }
                 //paging
                 int totalRecord = await query.CountAsync();
                 //error at take???
@@ -216,6 +253,8 @@ namespace eShop.Application.Catalog.Products
                         d.OtherImages = images.Skip(1).Take(images.Count() - 1).ToList();
                     }
                 }
+
+
 
                 // return data
                 var result = new PageResult<ProductVM>()
@@ -300,9 +339,9 @@ namespace eShop.Application.Catalog.Products
             if (product == null) { return new ServiceResultFail<int>("Không tìm thấy sản phẩm"); }
             if (request.ImageFiles == null) { return new ServiceResultFail<int>("Không có ảnh"); }
             var productImages = new List<ProductImage>();
-            foreach(var file in request.ImageFiles)
+            foreach (var file in request.ImageFiles)
             {
-                var image= new ProductImage()
+                var image = new ProductImage()
                 {
                     ProductId = productId,
                     ImagePath = await SaveFile(file),
@@ -314,19 +353,20 @@ namespace eShop.Application.Catalog.Products
                 };
                 productImages.Add(image);
             }
-                 
+
             await _context.ProductImages.AddRangeAsync(productImages);
-            var result= await _context.SaveChangesAsync();
-            return new ServiceResult<int> { 
-                IsSucceed=result>0,
-                Data= result,
-                Errors=result>0?null:"Thêm ảnh không thành công"
+            var result = await _context.SaveChangesAsync();
+            return new ServiceResult<int>
+            {
+                IsSucceed = result > 0,
+                Data = result,
+                Errors = result > 0 ? null : "Thêm ảnh không thành công"
             };
         }
         public async Task<ServiceResult<int>> RemoveImages(List<int> imageIds)
         {
-            var productImages = await _context.ProductImages.Where(x=>imageIds.Contains(x.Id)).ToListAsync();
-            var filePaths=productImages.Select(x=>x.ImagePath).ToList();
+            var productImages = await _context.ProductImages.Where(x => imageIds.Contains(x.Id)).ToListAsync();
+            var filePaths = productImages.Select(x => x.ImagePath).ToList();
             //delete in database
             _context.ProductImages.RemoveRange(productImages);
             //delete in folder
@@ -335,9 +375,9 @@ namespace eShop.Application.Catalog.Products
             var result = await _context.SaveChangesAsync();
             return new ServiceResult<int>()
             {
-                IsSucceed=result>0,
-                Data= result,
-                Errors=result>0?"":"Xóa ảnh không thành công"
+                IsSucceed = result > 0,
+                Data = result,
+                Errors = result > 0 ? "" : "Xóa ảnh không thành công"
             };
         }
         public async Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request)
@@ -372,7 +412,7 @@ namespace eShop.Application.Catalog.Products
         }
         public async Task<ServiceResult<List<ProductImageViewModel>>> GetListImage(int productId)
         {
-            var images= await _context.ProductImages.Where(x => x.ProductId == productId)
+            var images = await _context.ProductImages.Where(x => x.ProductId == productId)
                 .Select(x => new ProductImageViewModel
                 {
                     Id = x.Id,

@@ -183,7 +183,7 @@ namespace eShop.Application.System.Users
         {
             try
             {
-                if (await _userManager.Users.AnyAsync(u => u.UserName == request.Email))
+                if (await _userManager.Users.AnyAsync(u => u.UserName == request.UserName))
                 {
                     return new ServiceResultFail<bool>("Tên đăng nhập đã tồn tại");
                 }
@@ -204,7 +204,12 @@ namespace eShop.Application.System.Users
                 var result = await _userManager.CreateAsync(user, request.Password);
                 if (!result.Succeeded)
                 {
-                    return new ServiceResultFail<bool>("Đăng ký không thành công");
+                    var errors = "";
+                    foreach (var error in result.Errors)
+                    {
+                        errors += error.Description + "\n";
+                    }
+                    return new ServiceResultFail<bool>(errors);
                 }
 
                 //create role for user

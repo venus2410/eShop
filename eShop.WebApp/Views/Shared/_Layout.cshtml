@@ -92,19 +92,8 @@
                     <span class="icon-bar"></span>
                 </a>
                 <div class="navbar-inner">
-                    <a class="brand" href="index.html"><img src="/themes/images/logo.png" alt="Bootsshop" /></a>
-                    <form class="form-inline navbar-search" method="post" action="products.html">
-                        <input id="srchFld" class="srchTxt" type="text" />
-                        <select class="srchTxt">
-                            <option>All</option>
-                            <option>CLOTHES </option>
-                            <option>FOOD AND BEVERAGES </option>
-                            <option>HEALTH & BEAUTY </option>
-                            <option>SPORTS & LEISURE </option>
-                            <option>BOOKS & ENTERTAINMENTS </option>
-                        </select>
-                        <button type="submit" id="submitButton" class="btn btn-primary">Go</button>
-                    </form>
+                    <a class="brand" href="@Url.ActionLink("Index","Home")"><img src="/themes/images/logo.png" alt="Bootsshop" /></a>
+                    @await Component.InvokeAsync("SearchBar");
                     <ul id="topMenu" class="nav pull-right">
                         <li class=""><a asp-route-culture="@culture" localize-content>Specials Offer</a></li>
                         <li class=""><a asp-route-culture="@culture" localize-content>Delivery</a></li>
@@ -189,7 +178,7 @@
 
     <script src="/themes/js/bootshop.js"></script>
     <script src="/themes/js/jquery.lightbox-0.5.js"></script>
-
+    @RenderSection("Scripts",false)
     <!-- Themes switcher section ============================================================================================= -->
     <div id="secectionBox">
         <link rel="stylesheet" href="/themes/switch/themeswitch.css" type="text/css" media="screen" />

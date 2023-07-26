@@ -151,7 +151,8 @@ namespace eShop.ApiIntergration
 
         public async Task<ServiceResult<PageResult<ProductVM>>> GetPage(GetManageProductPagingRequest request)
         {
-            string getURI = baseUrl + $"/paging?" + $"{nameof(request.PageIndex)}={request.PageIndex}&" + $"{nameof(request.PageSize)}={request.PageSize}&" + $"{nameof(request.Keyword)}={request.Keyword}&" + $"{nameof(request.LanguageId)}={request.LanguageId}&" + $"{nameof(request.CategoryId)}={request.CategoryId}";
+            string getURI = baseUrl + $"/paging?" + $"{nameof(request.PageIndex)}={request.PageIndex}&" + $"{nameof(request.PageSize)}={request.PageSize}&" + $"{nameof(request.Keyword)}={request.Keyword}&" + $"{nameof(request.LanguageId)}={request.LanguageId}&" + $"{nameof(request.CategoryId)}={request.CategoryId}&" + $"{nameof(request.OrderBy)}={request.OrderBy}";
+
             //Dictionary<string,string> dictionary=(Dictionary<string, string>) request;
             //QueryHelpers.AddQueryString(getURI, dictionary);
             return await _baseApiClient.GetGeneralAsync<PageResult<ProductVM>>(getURI);

@@ -15,6 +15,10 @@ namespace eShop.Utilities.Constants
             public const string BaseAddress = "BaseAddress";
             public const string Bearer = "Bearer";
         }
+        public class UserSetting
+        {
+            public const string DefaultRoleNameForUser = "user";
+        }
         public class Currency
         {
         }
@@ -22,6 +26,7 @@ namespace eShop.Utilities.Constants
         {
             public const int NumberOfFeaturedProducts = 16;
             public const int NumberOfLatestProducts = 6;
+            public const int NumberOfProductWebAppTable = 9;
             public const string DefaultProductInfor = "Default Infor";
         }
     }
