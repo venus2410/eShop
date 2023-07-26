@@ -1,7 +1,23 @@
-﻿.image-fit {
+﻿/*.image-fit {
     height: 170px;
     object-fit: contain;
-}
-a:has(img) {
+}*/
+div.thumbnail > a > img {
     height: 170px;
+    min-height: 170px;
+    object-fit: contain;
+}
+.short-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height:2rem;
+}
+.short-name {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height:2rem;
 }

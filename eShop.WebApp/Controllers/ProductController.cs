@@ -49,5 +49,14 @@ namespace eShop.WebApp.Controllers
             if(!product.IsSucceed) return NotFound();
             return View(product.Data);
         }
+        public async Task<IActionResult> Search(string culture, GetManageProductPagingRequest request)
+        {
+            TempData["CategoryId"] = request.CategoryId;
+            TempData["Keyword"] = request.Keyword;
+            request.PageSize = ProductSetting.NumberOfProductWebAppTable;
+            request.LanguageId=culture;
+            var products = (await _productApi.GetPage(request)).Data;
+            return View(products);
+        }
     }
 }

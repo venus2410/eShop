@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using eShop.ViewModel.Catalog.Common;
 
 namespace eShop.WebApp.Controllers
 {
@@ -83,6 +84,58 @@ namespace eShop.WebApp.Controllers
             ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
 
             return principal;
+        }
+        public IActionResult Register(string email)
+        {
+            var user = new UserCreateRequest()
+            {
+                Email = email
+            };
+            return View(user);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(UserCreateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+            request.Roles.Add(new SelectItem
+            {
+                Name = UserSetting.DefaultRoleNameForUser,
+                Selected = true
+            });
+            var createResult = await _userApiClient.Create(request);
+            if (!createResult.IsSucceed)
+            {
+                ModelState.AddModelError("", createResult.Errors);
+                return View(request);
+            }
+
+            var loginResult = await _userApiClient.Login(new UserLoginRequest
+            {
+                UserName = request.UserName,
+                Password = request.Password,
+                RememberMe = true
+            });
+            if (!loginResult.IsSucceed)
+            {
+                ModelState.AddModelError("", loginResult.Errors);
+                return View(request);
+            }
+
+            var userPrincipal = this.ValidateToken(loginResult.Data);
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTime.Now.AddHours(2),
+                IsPersistent = true
+            };
+            HttpContext.Session.SetString(AppSetting.Token, loginResult.Data);
+            await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        userPrincipal,
+                        authProperties);
+            return RedirectToAction("Index", "Home");
         }
     }
 }
