@@ -118,6 +118,21 @@ namespace eShop.Data.Extensions
                 RoleId = roleId,
                 UserId = adminId
             });
+
+            //new for user role
+            var userRoleId = new Guid("919C87C2-7256-43B6-8889-0473962F26F9");
+            modelBuilder.Entity<AppRole>().HasData(new AppRole
+            {
+                Id = userRoleId,
+                Name = "user",
+                NormalizedName = "user",
+                Description = "User role"
+            });
+
+            
+            //new for user
+
+
             modelBuilder.Entity<Slide>().HasData(
               new Slide() { Id = 1, Name = "Second Thumbnail label", Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.", SortOrder = 1, Url = "#", Image = "/themes/images/carousel/1.png", Status = Status.Active },
               new Slide() { Id = 2, Name = "Second Thumbnail label", Description = "Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.", SortOrder = 2, Url = "#", Image = "/themes/images/carousel/2.png", Status = Status.Active },

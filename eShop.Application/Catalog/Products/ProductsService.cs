@@ -521,7 +521,7 @@ namespace eShop.Application.Catalog.Products
                 var query = from p in _context.Products
                             join pt in _context.ProductTranslations on p.Id equals pt.ProductId
                             join pi in _context.ProductImages on p.Id equals pi.ProductId
-                            where pt.LanguageId == languageId && p.IsFeatured == true
+                            where pt.LanguageId == languageId
                             select new { p, pt, pi };
                 var result = await query.OrderByDescending(x => x.p.DateCreated).Take(take).Select(x => new ProductVM
                 {
