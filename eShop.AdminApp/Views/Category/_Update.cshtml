@@ -1,8 +1,7 @@
 ﻿@using eShop.ViewModel.System.Languages
-@model eShop.ViewModel.Catalog.Products.ProductCreateRequest
+@model eShop.ViewModel.Catalog.Catergories.CategoryUpdateVM
 @{
     var languages = ViewBag.LanguagesList as List<eShop.ViewModel.System.Languages.LanguageVM>;
-    var productSearching = ViewBag.productSearching as eShop.ViewModel.Catalog.Products.ProductSearching;
     var catergories = ViewBag.Categories;
 }
 
@@ -19,67 +18,46 @@
                         <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
                         <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
                     </svg>
-                    Tạo mới
+                    Cập nhật
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form enctype="multipart/form-data" id="createForm" asp-action="Create" asp-controller="Product" method="post">
+            <form enctype="multipart/form-data" id="createForm" asp-action="Update" asp-controller="Category" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <!-- Latest compiled and minified CSS -->
+                <input type="hidden" asp-for="Id"/>
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group col-md-4">
-                            <label asp-for="Prices.Price" class="control-label"></label>
-                            <input asp-for="Prices.Price" class="form-control" />
-                            <span asp-validation-for="Prices.Price" class="text-danger"></span>
+                            <label asp-for="ParentId" class="control-label"></label>
+                            <select asp-for="ParentId" class="form-select" asp-items="catergories"><option value="0">Không chọn</option></select>
+                            <span asp-validation-for="ParentId" class="text-danger"></span>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
-                        <div class="form-group col-md-4">
-                            <label asp-for="Prices.OriginalPrice" class="control-label"></label>
-                            <input asp-for="Prices.OriginalPrice" class="form-control" />
-                            <span asp-validation-for="Prices.OriginalPrice" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label asp-for="IsFeatured" class="control-label"></label>
-                            <input asp-for="IsFeatured" class="form-control" />
-                            <span asp-validation-for="IsFeatured" class="text-danger"></span>
-                        </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-4">
-                            <label asp-for="Stock" class="control-label"></label>
-                            <input asp-for="Stock" class="form-control" />
-                            <span asp-validation-for="Stock" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label asp-for="ThumbnailImage" class="control-label"></label>
-                            <input asp-for="ThumbnailImage" class="form-control" />
-                            <span asp-validation-for="ThumbnailImage" class="text-danger"></span>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label asp-for="CategoryId" class="control-label"></label>
-                            <select asp-for="CategoryId" class="form-select" asp-items="catergories"></select>
-                            <span asp-validation-for="CategoryId" class="text-danger"></span>
-                        </div>
+
                     </div>
                     <hr />
 
                     <div class="row">
                         <div class="col-md-12">
                             <ul class="nav nav-tabs" id="pills-tab" role="tablist">
-                                @for (int i = 0; i < languages.Count; i++)
+                                @for (int i = 0; i < Model.Translations.Count; i++)
                                 {
+                                    var language = languages.Find(x => x.Id == Model.Translations[i].LanguageId);
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link@(i==0?" active":"")" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-@i" type="button" role="tab" aria-controls="pills-home" aria-selected="@(i==0)">@languages[i].Name</button>
+                                        <button class="nav-link@(i==0?" active":"")" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-@i" type="button" role="tab" aria-controls="pills-home" aria-selected="@(i==0)">@language.Name</button>
                                     </li>
                                 }
                             </ul>
                             <div class="tab-content">
-                                @for (int i = 0; i < languages.Count; i++)
+                                @for (int i = 0; i < Model.Translations.Count; i++)
                                 {
                                     <div class="tab-pane fade@(i==0?" show active":"")" id="pills-@i" role="tabpanel" aria-labelledby="pills-home-tab">
+                                        <input asp-for="Translations[i].Id" class="form-control" type="hidden" />
                                         <input asp-for="Translations[i].LanguageId" class="form-control" type="hidden" />
                                         <div class="row">
                                             <div class="form-group col-md-3">
@@ -103,21 +81,6 @@
                                                 <span asp-validation-for="Translations[i].SeoDescription" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            @{
-                                                var rows = 10;
-                                            }
-                                            <div class="form-group col-md-6">
-                                                <label asp-for="Translations[i].Details" class="control-label"></label>
-                                                <textarea asp-for="Translations[i].Details" class="form-control" rows="@rows"></textarea>
-                                                <span asp-validation-for="Translations[i].Details" class="text-danger"></span>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label asp-for="Translations[i].Description" class="control-label"></label>
-                                                <textarea asp-for="Translations[i].Description" class="form-control" rows="@rows"></textarea>
-                                                <span asp-validation-for="Translations[i].Description" class="text-danger"></span>
-                                            </div>
-                                        </div>
                                     </div>
                                 }
                             </div>
@@ -126,24 +89,24 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary" @*onclick="create()"*@>Tạo mới</button>
+                    <button type="submit" class="btn btn-primary" @*onclick="create()"*@>Cập nhật</button>
                 </div>
             </form>
-            
+
         </div>
     </div>
 </div>
 <script>
-    document.querySelectorAll('textarea').forEach(e => {
-        ClassicEditor
-            .create(e)
-            .then(editor => {
-                editor.model.document.on('change:data', (evt, data) => {
-                    /*e.innerHTML = editor.getData();*/
-                });
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    });
+    //document.querySelectorAll('textarea').forEach(e => {
+    //    ClassicEditor
+    //        .create(e)
+    //        .then(editor => {
+    //            editor.model.document.on('change:data', (evt, data) => {
+    //                /*e.innerHTML = editor.getData();*/
+    //            });
+    //        })
+    //        .catch(error => {
+    //            console.error(error);
+    //        });
+    //});
 </script>

@@ -20,8 +20,8 @@ namespace eShop.AdminApp.Controllers
         private readonly IProductApiClient _productApiClient;
         private readonly ILanguageApiClient _languageApiClient;
         private readonly IRoleApiClient _roleApiClient;
-        private readonly ICatergoryApiClient _catergoryApiClient;
-        public ProductController(IProductApiClient userApiClient, ILanguageApiClient languageApiClient, IRoleApiClient roleApiClient, ICatergoryApiClient catergoryApiClient)
+        private readonly ICategoryApiClient _catergoryApiClient;
+        public ProductController(IProductApiClient userApiClient, ILanguageApiClient languageApiClient, IRoleApiClient roleApiClient, ICategoryApiClient catergoryApiClient)
         {
             _productApiClient = userApiClient;
             _roleApiClient = roleApiClient;

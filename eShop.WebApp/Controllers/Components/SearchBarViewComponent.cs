@@ -8,9 +8,9 @@ namespace eShop.WebApp.Controllers.Components
 {
     public class SearchBarViewComponent : ViewComponent
     {
-        private readonly ICatergoryApiClient _categoryApiClient;
+        private readonly ICategoryApiClient _categoryApiClient;
 
-        public SearchBarViewComponent(ICatergoryApiClient categoryApiClient)
+        public SearchBarViewComponent(ICategoryApiClient categoryApiClient)
         {
             _categoryApiClient = categoryApiClient;
         }

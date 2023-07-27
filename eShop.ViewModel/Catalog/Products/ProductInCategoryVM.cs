@@ -9,7 +9,7 @@ namespace eShop.ViewModel.Catalog.Products
 {
     public class ProductInCategoryVM
     {
-        public CatergoryVM Catergory { get; set; }
+        public CategoryVM Catergory { get; set; }
         public PageResult<ProductVM> Products { get; set; }
     }
 }

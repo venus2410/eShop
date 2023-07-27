@@ -8,9 +8,9 @@ namespace eShop.WebApp.Controllers.Components
 {
     public class SideBarViewComponent : ViewComponent
     {
-        private readonly ICatergoryApiClient _categoryApiClient;
+        private readonly ICategoryApiClient _categoryApiClient;
 
-        public SideBarViewComponent(ICatergoryApiClient categoryApiClient)
+        public SideBarViewComponent(ICategoryApiClient categoryApiClient)
         {
             _categoryApiClient = categoryApiClient;
         }

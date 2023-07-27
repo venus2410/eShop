@@ -1,4 +1,5 @@
 ﻿using eShop.ViewModel.Catalog.Common;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,6 +26,7 @@ namespace eShop.ViewModel.System.Users
         [Display(Name = "Email")]
         [Required]
         [DataType(DataType.EmailAddress, ErrorMessage = "Invalid email")]
+        [Remote(action: "IsValidEmail", controller: "User", AdditionalFields =nameof(Id),ErrorMessage = "Email has already used")]
         public string Email { get; set; }
 
         [Display(Name = "Số điện thoại")]

@@ -1,0 +1,219 @@
+﻿@model eShop.ViewModel.System.Roles.RoleVM
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Danh sách vai trò</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+        <li class="breadcrumb-item active">Danh sách sản phẩm</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-outline-success" id="create" onclick="loadCreatModal()">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                            <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                            <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
+                        </svg>
+                        Tạo mới
+                    </button>
+                </div>
+                <div class="col-md-10">
+                    <div class="row justify-content-between">
+                        <div class="col-md-2">
+                            <select class="form-select w-auto" aria-label="Default select example" name="pagesize" id="pageSizeSelect" asp-items="@ViewBag.pageSizes">
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <div class="d-flex">
+                                <div class="input-group">
+                                    <div class="form-outline">
+                                        <input type="search" id="keyword" class="form-control" value="@ViewBag.keywork" />
+                                    </div>
+                                    <button id="search-button" type="button" class="btn btn-primary">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body table-responsive" id="tableData">
+            @await Component.InvokeAsync("ProductTable", Model)
+        </div>
+    </div>
+</div>
+
+<!--Modal-->
+<!-- Button trigger modal -->
+<div id="modalHere">
+
+</div>
+
+<!-- Modal -->
+
+@section Scripts{
+
+    <script src="~/js/bootbox.min.js"></script>
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+    <script>
+        //create
+        function loadCreatModal() {
+            $.ajax({
+                url: '@Url.Action("Create","Product")',
+                success: function (data) {
+                    $("#modalHere").html(data);
+                    $("#exampleModal").modal('show');
+                }
+
+            });
+        }
+
+        //update
+        function loadUpdateModal(id) {
+            $.ajax({
+                url: '@Url.Action("Update","Product")',
+                data: {id:id},
+                success: function (data) {
+                    $("#modalHere").html(data);
+                    $("#exampleModal").modal('show');
+                }
+            });
+        }
+
+        //delete
+        function deleteUser(id) {
+            $.ajax({
+                url:'@Url.Action("Delete","User")',
+                method: "Post",
+                data: { id: id },
+                async:false,
+                success: function (data) {
+                    if (data.isSucceed == true) {
+                        alertForm("Xóa thành công");
+                        setInterval(function () {
+                            location.reload();
+                        }, 2000);
+                    }
+                    else {
+                        bootbox.alert(data.errors);
+                    }
+                },
+                error: function () {
+                    bootbox.alert("Xóa không thành công!");
+                }
+                });
+        }
+        function getPaging(pageIndex=1) {
+            var keyword = $('#keyword').val();
+            var pageSize = $('#pageSizeSelect').val();
+            var languageId = $('#languageIdSelect').val();
+            var categoryId = $('#categoryIdSelect').val();
+            $.ajax({
+                url: '@Url.Action("GetProductPaging", "Product")',
+                data: {
+                    pageIndex: pageIndex,
+                    keyword:keyword,
+                    pageSize:pageSize,
+                    languageId:languageId,
+                    categoryId:categoryId
+                },
+                success: function (data) {
+                    console.log("success");
+                    $("#tableData").html(data);
+                }
+            });
+        }
+
+        //for create
+
+        //add image
+        function loadAddImageModal(id) {
+            $.ajax({
+                url: '@Url.Action("AddImage","Product")',
+                data: {
+                    productId:id
+                },
+                success: function (data) {
+                    $("#modalHere").html(data);
+                    $("#exampleModal").modal('show');
+                }
+            });
+        }
+        //remove image
+        function loadRemoveImagesModal(id) {
+            $.ajax({
+                url: '@Url.Action("RemoveImage","Product")',
+                data: {
+                    productId:id
+                },
+                success: function (data) {
+                    $("#modalHere").html(data);
+                    $("#exampleModal").modal('show');
+                }
+            });
+        }
+
+        //for search
+        $("#pageSizeSelect").on('change', function () {
+            getPaging();
+        });
+        $("#categoryIdSelect").on('change', function () {
+            getPaging();
+        });
+        $("#languageIdSelect").on('change', function () {
+            getPaging();
+        });
+        $("#search-button").on('click', function () {
+            getPaging();
+        });
+        $(document).on('click', '.page-link', function () {
+            var pIndex = $(this).data("pageindex");
+            console.log(pIndex);
+                getPaging(pIndex);
+            });
+
+        //for edit
+        $(document).on('click', '.btn-edit', function () {
+                var id = $(this).data('id');
+                loadUpdateModal(id);
+        });
+        //for delete
+        $(document).on('click', '.btn-delete', function () {
+                var id = $(this).data('id');
+                bootbox.confirm("Bạn chắc chắn muốn xóa?", function (result) {
+                    if (result) {
+                        deleteUser(id);
+                    }
+                });
+        });
+        //for add image
+        $(document).on('click', '.btn-addimage', function () {
+            var id = $(this).data('id');
+            loadAddImageModal(id);
+        });
+        //for remove images
+        $(document).on('click', '.btn-removeimage', function () {
+            var id = $(this).data('id');
+            loadRemoveImagesModal(id);
+        });
+    </script>
+}
+
+

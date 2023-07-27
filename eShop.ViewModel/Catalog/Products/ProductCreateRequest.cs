@@ -15,7 +15,7 @@ namespace eShop.ViewModel.Catalog.Products
         public List<TranslationOfProduct> Translations { get; set; }=new List<TranslationOfProduct>();
         [DataType(DataType.Upload)]
         public IFormFile ThumbnailImage { set; get; }
-        public bool? IsFeatured { get; set; }
+        public bool IsFeatured { get; set; }
         public int CategoryId { get; set; }
     }
 }

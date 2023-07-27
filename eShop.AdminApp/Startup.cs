@@ -86,7 +86,7 @@ namespace eShop.AdminApp
             services.AddTransient<IRoleApiClient, RoleApiClient>();
             services.AddTransient<ILanguageApiClient, LanguageApiClient>();
             services.AddTransient<IProductApiClient, ProductApiClient>();
-            services.AddTransient<ICatergoryApiClient, CatergoryApiClient>();
+            services.AddTransient<ICategoryApiClient, CategoryApiClient>();
 
             
 

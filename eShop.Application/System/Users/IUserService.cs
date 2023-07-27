@@ -16,5 +16,7 @@ namespace eShop.Application.System.Users
         Task<ServiceResult<UserViewModel>> GetUserById(Guid id);
         Task<ServiceResult<bool>> Delete(Guid id);
         Task<ServiceResult<bool>> RoleAssign(Guid Id,UserRoleAssignRequest request);
+        Task<ServiceResult<bool>> IsValidUserName(string userName,Guid? Id);
+        Task<ServiceResult<bool>> IsValidEmail(string email, Guid? Id);
     }
 }

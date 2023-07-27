@@ -10,5 +10,6 @@ namespace eShop.ViewModel.Catalog.Products
         public int Id { set; get; }
         public List<TranslationOfProduct> Translations { get; set; } = new List<TranslationOfProduct>();
         public int CategoryId { get; set; }
+        public bool IsFeatured { get; set; }
     }
 }

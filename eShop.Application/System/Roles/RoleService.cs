@@ -19,6 +19,22 @@ namespace eShop.Application.System.Roles
             _rolemaManager = rolemaManager;
         }
 
+        public async Task<ServiceResult<bool>> Create(RoleVM model)
+        {
+            var role = new AppRole
+            {
+                Name = model.Name,
+                NormalizedName = model.Name,
+                Description = model.Description
+            };
+            var result = await _rolemaManager.CreateAsync(role);
+            if(result.Succeeded)
+            {
+                return new ServiceResultSuccess<bool>();
+            }
+            return new ServiceResultFail<bool>();
+        }
+
         public async Task<ServiceResult<List<RoleVM>>> GetAll()
         {
             var roles =await _rolemaManager.Roles.Select(m => new RoleVM

@@ -81,7 +81,7 @@ namespace eShop.Application.Catalog.Products
                     ViewCount = 0,
                     DateCreated = DateTime.Now,
                     ProductTranslations = productTranslations,
-                    IsFeatured = request.IsFeatured ?? false,
+                    IsFeatured = request.IsFeatured==true?true:false,
                     ProductInCategories = pics
                 };
 
@@ -156,7 +156,8 @@ namespace eShop.Application.Catalog.Products
                 SeoDescription = productTranslation.SeoDescription ?? null,
                 SeoTitle = productTranslation.SeoTitle ?? null,
                 ThumbnailImage = productImages.FirstOrDefault(),
-                OtherImages = productImages.Skip(1).Take(productImages.Count - 1).ToList()
+                OtherImages = productImages.Skip(1).Take(productImages.Count - 1).ToList(),
+                IsFeatured=product.IsFeatured??false
             };
             return new ServiceResultSuccess<ProductVM>(model);
         }
@@ -278,6 +279,11 @@ namespace eShop.Application.Catalog.Products
             try
             {
                 var product = await _context.Products.FindAsync(request.Id);
+
+                //update is featured
+                product.IsFeatured = request.IsFeatured;
+
+                //update translations
                 foreach (var translation in request.Translations)
                 {
                     var productTranslation = await _context.ProductTranslations.Where(x => x.ProductId == request.Id && x.LanguageId == translation.LanguageId).FirstOrDefaultAsync();
@@ -646,7 +652,8 @@ namespace eShop.Application.Catalog.Products
                 {
                     Id = productId,
                     Translations = translations,
-                    CategoryId = category
+                    CategoryId = category,
+                    IsFeatured=product.IsFeatured==true?true:false
                 };
                 return new ServiceResultSuccess<ProductUpdateRequest>(result);
             }
