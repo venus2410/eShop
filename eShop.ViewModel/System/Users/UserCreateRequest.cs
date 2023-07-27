@@ -1,4 +1,5 @@
 ﻿using eShop.ViewModel.Catalog.Common;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,6 +24,7 @@ namespace eShop.ViewModel.System.Users
         [Display(Name = "Email")]
         [Required]
         [DataType(DataType.EmailAddress, ErrorMessage = "Invalid email")]
+        [Remote(action: "IsValidEmail", controller: "User", ErrorMessage = "Email has already used")]
         public string Email { get; set; }
 
         [Display(Name = "Số điện thoại")]
@@ -30,6 +32,7 @@ namespace eShop.ViewModel.System.Users
 
         [Display(Name = "Tên đăng nhập")]
         [Required]
+        [Remote(action:"IsValidUserName", controller:"User", ErrorMessage ="User name has already used")]
         public string UserName { get; set; }
 
         [Display(Name = "Mật khẩu")]

@@ -10,5 +10,6 @@ namespace eShop.Application.System.Roles
     public interface IRoleService
     {
         Task<ServiceResult<List<RoleVM>>> GetAll();
+        Task<ServiceResult<bool>> Create(RoleVM model);
     }
 }

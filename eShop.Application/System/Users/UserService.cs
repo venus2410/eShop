@@ -67,11 +67,12 @@ namespace eShop.Application.System.Users
                 {
                     return new ServiceResultFail<UserViewModel>("Không tìm thấy người dùng");
                 }
-                var rolesOfUSer=(List<string>)await _userManager.GetRolesAsync(user);
-                var allRoles=_roleManager.Roles.Select(r => new SelectItem { 
-                    Id=r.Id.ToString(),
-                    Name=r.Name,
-                    Selected=rolesOfUSer.Any(x=>x==r.Name)
+                var rolesOfUSer = (List<string>)await _userManager.GetRolesAsync(user);
+                var allRoles = _roleManager.Roles.Select(r => new SelectItem
+                {
+                    Id = r.Id.ToString(),
+                    Name = r.Name,
+                    Selected = rolesOfUSer.Any(x => x == r.Name)
                 }).ToList();
                 var result = new UserViewModel
                 {
@@ -82,7 +83,7 @@ namespace eShop.Application.System.Users
                     Email = user.Email,
                     UserName = user.UserName,
                     Dob = user.Dob,
-                    Roles=allRoles
+                    Roles = allRoles
                 };
                 return new ServiceResultSuccess<UserViewModel>(result);
             }
@@ -136,6 +137,30 @@ namespace eShop.Application.System.Users
             }
 
 
+        }
+
+        public async Task<ServiceResult<bool>> IsValidEmail(string email, Guid? Id)
+        {
+            bool result;
+            if (Id != null)
+            {
+                result = !await _userManager.Users.AnyAsync(x => x.Id != Id && x.Email == email);
+                return new ServiceResult<bool> { IsSucceed = result, Data = result };
+            }
+            result = !await _userManager.Users.AnyAsync(x => x.Email == email);
+            return new ServiceResult<bool> { IsSucceed = result, Data = result };
+        }
+
+        public async Task<ServiceResult<bool>> IsValidUserName(string userName, Guid? Id)
+        {
+            bool result;
+            if (Id != null)
+            {
+                result = !await _userManager.Users.AnyAsync(x => x.Id != Id && x.UserName == userName);
+                return new ServiceResult<bool> { IsSucceed = result, Data = result };
+            }
+            result = !await _userManager.Users.AnyAsync(x => x.UserName == userName);
+            return new ServiceResult<bool> { IsSucceed = result, Data = result };
         }
 
         public async Task<ServiceResult<string>> Login(UserLoginRequest request)
@@ -213,7 +238,7 @@ namespace eShop.Application.System.Users
                 }
 
                 //create role for user
-                var roles=request.Roles.Where(r=>r.Selected).Select(r=>r.Name).ToList();
+                var roles = request.Roles.Where(r => r.Selected).Select(r => r.Name).ToList();
                 await _userManager.AddToRolesAsync(user, roles);
 
                 return new ServiceResultSuccess<bool>();
@@ -287,16 +312,16 @@ namespace eShop.Application.System.Users
                 }
 
                 //update roles of user
-                var existingRoles =await _userManager.GetRolesAsync(user);
-                var newRoles=request.Roles.Where(r=>r.Selected).Select(r => r.Name).ToList();
-                foreach(var r in existingRoles)
+                var existingRoles = await _userManager.GetRolesAsync(user);
+                var newRoles = request.Roles.Where(r => r.Selected).Select(r => r.Name).ToList();
+                foreach (var r in existingRoles)
                 {
                     if (!newRoles.Contains(r))
                     {
                         await _userManager.RemoveFromRoleAsync(user, r);
                     }
                 }
-                foreach(var r in newRoles)
+                foreach (var r in newRoles)
                 {
                     if (!existingRoles.Contains(r))
                     {

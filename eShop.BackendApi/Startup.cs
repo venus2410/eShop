@@ -108,7 +108,7 @@ namespace eShop.BackendApi
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ILanguageService, LanguageService>();
-            services.AddTransient<ICatergoriesService, CatergoriesService>();
+            services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<ISlidesService, SlidesService>();
 
             services.AddControllers();

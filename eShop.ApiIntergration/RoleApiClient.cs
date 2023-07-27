@@ -24,5 +24,10 @@ namespace eShop.ApiIntergration
         {
             return await _baseApiClient.GetGeneralAsync<List<RoleVM>>(baseURL);
         }
+
+        public async Task<ServiceResult<bool>> Create(RoleVM model)
+        {
+            return await _baseApiClient.PostAsync<bool,RoleVM>(baseURL,model);
+        }
     }
 }

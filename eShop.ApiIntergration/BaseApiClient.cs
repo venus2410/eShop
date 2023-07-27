@@ -22,7 +22,7 @@ namespace eShop.ApiIntergration
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly string token;
-        public BaseApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor contextAccessor)
+       public BaseApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor contextAccessor)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;

@@ -110,5 +110,25 @@ namespace eShop.BackendApi.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("usernamevalidate/{userName}/{id?}")]
+        public async Task<IActionResult> ValidateUserName(string userName, Guid? id)
+        {
+            var result=await _userService.IsValidUserName(userName, id);
+            if (result.IsSucceed)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet("emailvalidate/{email}/{id?}")]
+        public async Task<IActionResult> ValidateEmail(string email, Guid? id)
+        {
+            var result = await _userService.IsValidEmail(email, id);
+            if (result.IsSucceed)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
     }
 }

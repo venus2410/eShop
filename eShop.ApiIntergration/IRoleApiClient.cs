@@ -8,5 +8,6 @@ namespace eShop.ApiIntergration
     public interface IRoleApiClient
     {
         public Task<ServiceResult<List<RoleVM>>> GetAll();
+        public Task<ServiceResult<bool>> Create(RoleVM model);
     }
 }

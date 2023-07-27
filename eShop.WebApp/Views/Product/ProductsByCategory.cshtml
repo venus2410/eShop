@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "ProductsByCategory";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var category = ViewBag.Category as eShop.ViewModel.Catalog.Catergories.CatergoryVM;
+    var category = ViewBag.Category as eShop.ViewModel.Catalog.Catergories.CategoryVM;
     var baseAddress = ViewData["BaseAddress"] as string;
     var culture = CultureInfo.CurrentCulture.Name;
     var cultureInfor = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");

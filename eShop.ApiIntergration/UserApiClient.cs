@@ -59,5 +59,25 @@ namespace eShop.ApiIntergration
         {
             return await _baseApiClient.PutAsync<bool,UserUpdateRequest>(baseURL,request.Id.ToString(), request);
         }
+
+        public async Task<ServiceResult<bool>> IsValidUserName(string userName, Guid? id)
+        {
+            var url = $"{baseURL}/usernamevalidate/{userName}/";
+            if (id != null)
+            {
+                url += id.ToString();
+            }
+            return await _baseApiClient.GetGeneralAsync<bool>(url);
+        }
+
+        public async Task<ServiceResult<bool>> IsValidEmail(string email, Guid? id)
+        {
+            var url = $"{baseURL}/emailvalidate/{email}/";
+            if (id != null)
+            {
+                url += id.ToString();
+            }
+            return await _baseApiClient.GetGeneralAsync<bool>(url);
+        }
     }
 }

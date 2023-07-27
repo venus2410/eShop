@@ -14,9 +14,9 @@ namespace eShop.WebApp.Controllers
     {
         private readonly ISharedCultureLocalizer _loc;
         private readonly IProductApiClient _productApi;
-        private readonly ICatergoryApiClient _catergoryApi;
+        private readonly ICategoryApiClient _catergoryApi;
         private readonly IConfiguration _configuration;
-        public ProductController(ISharedCultureLocalizer loc, ICatergoryApiClient catergoryApi, IProductApiClient productApi,IConfiguration configuration)
+        public ProductController(ISharedCultureLocalizer loc, ICategoryApiClient catergoryApi, IProductApiClient productApi,IConfiguration configuration)
         {
             _loc = loc;
             _catergoryApi = catergoryApi;

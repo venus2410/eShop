@@ -13,5 +13,7 @@ namespace eShop.ApiIntergration
         public Task<ServiceResult<bool>> Create(UserCreateRequest request);
         public Task<ServiceResult<bool>> Update(UserUpdateRequest request);
         public Task<ServiceResult<bool>> Delete(Guid Id);
+        public Task<ServiceResult<bool>> IsValidUserName(string userName,Guid? id);
+        public Task<ServiceResult<bool>> IsValidEmail(string email, Guid? id);
     }
 }

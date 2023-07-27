@@ -133,5 +133,19 @@ namespace eShop.AdminApp.Controllers
             var result = await _userApiClient.Delete(request.Id);
             return Json(result); 
         }
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult IsValidUserName(string userName, Guid? id)
+        {
+            var result=_userApiClient.IsValidUserName(userName, id);
+            if (result.Result.IsSucceed) return Json(true);
+            return Json(false);
+        }
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult IsValidEmail(string email, Guid? id)
+        {
+            var result = _userApiClient.IsValidEmail(email, id);
+            if (result.Result.IsSucceed) return Json(true);
+            return Json(false);
+        }
     }
 }
