@@ -1,5 +1,6 @@
 ﻿using eShop.ApiIntergration;
 using eShop.ViewModel.Catalog.Catergories;
+using eShop.ViewModel.Catalog.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Globalization;
@@ -98,6 +99,28 @@ namespace eShop.AdminApp.Controllers
                 TempData["Message"] = "Cập nhật không thành công";
             }
             return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var serviceResult=new ServiceResult<bool>();
+            if (!ModelState.IsValid)
+            {
+                serviceResult.IsSucceed = false;
+                serviceResult.Errors= "Dữ liệu không hợp lệ";
+                return Json(serviceResult);
+            }
+            var result = await _categoryApiClient.Delete(id);
+            if (result.IsSucceed)
+            {
+                serviceResult.IsSucceed = true;
+            }
+            else
+            {
+                serviceResult.IsSucceed = false;
+                serviceResult.Errors = "Xóa không thành công";
+            }
+            return Json(serviceResult);
         }
     }
 }
