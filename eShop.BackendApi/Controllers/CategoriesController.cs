@@ -55,6 +55,17 @@ namespace eShop.BackendApi.Controllers
             if (result.IsSucceed) return Ok(result);
             return BadRequest(result);
         }
+        [HttpDelete("{categoryId}")]
+        public async Task<IActionResult> Delete(int categoryId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ServiceResultFail<bool>("Invalid Input"));
+            }
+            var result = await _catergoriesService.Delete(categoryId);
+            if (result.IsSucceed) return Ok(result);
+            return BadRequest(result);
+        }
         [HttpGet("updatemodel/{categoryId}")]
         public async Task<IActionResult> GetForUpdate(int categoryId)
         {

@@ -160,12 +160,13 @@
 
         }*@
         //delete
-        function deleteUser(id) {
+        function deleteCategory(id) {
             $.ajax({
-                url:'@Url.Action("Delete","User")',
+                url: '@Url.Action("Delete","Category")',
                 method: "Post",
-                data: { id: id },
-                async:false,
+                data: {
+                    id:id
+                },
                 success: function (data) {
                     if (data.isSucceed == true) {
                         alertForm("Xóa thành công");
@@ -222,16 +223,17 @@
             });
 
         //for edit
-        $(document).off('click','.btn-edit').on('click', '.btn-edit', function () {
+        $(document).off('click','.btn-edit').on('click','.btn-edit', function () {
                 var id = $(this).data('id');
                 loadUpdateModal(id);
         });
         //for delete
         $(document).on('click', '.btn-delete', function () {
-                var id = $(this).data('id');
+            var id = $(this).data('id');
+            console.log(id);
                 bootbox.confirm("Bạn chắc chắn muốn xóa?", function (result) {
                     if (result) {
-                        deleteUser(id);
+                        deleteCategory(id);
                     }
                 });
             });

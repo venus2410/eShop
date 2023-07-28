@@ -12,6 +12,7 @@ namespace eShop.ApiIntergration
         Task<ServiceResult<CategoryVM>> GetById(int categoryId,string languageId);
         Task<ServiceResult<bool>> Create(CategoryCreateVM model);
         Task<ServiceResult<bool>> Update(CategoryUpdateVM model);
+        Task<ServiceResult<bool>> Delete(int categoryId);
         Task<ServiceResult<CategoryUpdateVM>> GetForUpdate(int categoryId);
     }
 }

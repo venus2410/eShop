@@ -47,9 +47,20 @@ namespace eShop.Application.Catalog.Categories
             }
         }
 
-        public Task<ServiceResult<bool>> Delete(int categoryId)
+        public async Task<ServiceResult<bool>> Delete(int categoryId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var category =await _context.Categories.FindAsync(categoryId);
+                _context.Categories.Remove(category);
+                var result=await _context.SaveChangesAsync();
+                if (result > 0) return new ServiceResultSuccess<bool>();
+                return new ServiceResultFail<bool>("Fail to delete");
+            }
+            catch (Exception e)
+            {
+                return new ServiceResultFail<bool>(e.Message.ToString());
+            }
         }
 
         public async Task<ServiceResult<List<CategoryVM>>> GetAll(string? languageId)

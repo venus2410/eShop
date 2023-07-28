@@ -4,6 +4,7 @@ using eShop.ViewModel.Catalog.Common;
 using eShop.ViewModel.System.Languages;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace eShop.ApiIntergration
@@ -41,6 +42,11 @@ namespace eShop.ApiIntergration
         {
             var url = $"{baseURL}/updatemodel/{categoryId}";
             return await _baseApiClient.GetGeneralAsync<CategoryUpdateVM>(url);
+        }
+
+        public async Task<ServiceResult<bool>> Delete(int categoryId)
+        {
+            return await _baseApiClient.DeleteAsync<bool>(baseURL,categoryId.ToString());
         }
     }
 }
