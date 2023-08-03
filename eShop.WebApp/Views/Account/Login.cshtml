@@ -30,6 +30,7 @@
                 </localize>
             </h5>
             <form asp-action="Login" asp-controller="Account" method="post">
+                <input type="hidden" name="returnUrl" value="@ViewBag.returnUrl" />
                 <div class="control-group">
                     @*<label class="control-label" for="inputEmail1"><localize>UserName</localize></label>*@
                     <div class="controls">

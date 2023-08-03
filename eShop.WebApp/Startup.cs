@@ -73,7 +73,7 @@ namespace eShop.WebApp
             services.AddTransient<IProductApiClient, ProductApiClient>();
             services.AddTransient<ICategoryApiClient, CategoryApiClient>();
             services.AddTransient<IUserApiClient, UserApiClient>();
-
+            services.AddTransient<ICartApiClient,CartApiClient>();
 
             services.AddSession(option => option.IdleTimeout = TimeSpan.FromMinutes(30));
 

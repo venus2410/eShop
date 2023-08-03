@@ -1,4 +1,6 @@
-﻿@inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> _locOptions
+﻿@using System
+@using System.Web
+@inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> _locOptions
 @{
     var culture = CultureInfo.CurrentCulture.Name;
     var cultureName = CultureInfo.CurrentCulture.EnglishName;
@@ -106,6 +108,7 @@
                                 }
                                 else
                                 {
+                                    
                                     <a href="@Url.ActionLink("Login","Account")" role="button" style="padding-right:0"><span class="btn btn-large btn-success"><localize>Login</localize></span></a>
                                 }
                             }
@@ -172,8 +175,7 @@
         </div><!-- Container End -->
     </div>
     <!-- Placed at the end of the document so the pages load faster ============================================= -->
-    <script src="~/lib/FromAdminApp/jquery/dist/jquery.min.js"></script>
-    <a href="~/lib/FromAdminApp/jquery/dist/jquery.min.map">~/lib/FromAdminApp/jquery/dist/jquery.min.map</a>
+    <script src="/lib/FromAdminApp/jquery/dist/jquery.min.js"></script>
     <script src="/themes/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="/themes/js/google-code-prettify/prettify.js"></script>
 

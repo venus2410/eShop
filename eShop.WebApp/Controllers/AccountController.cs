@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using eShop.ViewModel.Catalog.Common;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace eShop.WebApp.Controllers
 {
@@ -29,12 +30,13 @@ namespace eShop.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Login()
         {
+            ViewBag.returnUrl = Request.GetTypedHeaders().Referer.ToString();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Remove(AppSetting.Token);
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(UserLoginRequest request)
+        public async Task<IActionResult> Login(UserLoginRequest request, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -59,7 +61,7 @@ namespace eShop.WebApp.Controllers
                         userPrincipal,
                         authProperties);
 
-            return RedirectToAction("Index", "Home");
+            return new RedirectResult(returnUrl);
         }
         [HttpPost]
         public async Task<IActionResult> Logout()
