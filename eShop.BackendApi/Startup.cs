@@ -1,3 +1,4 @@
+using eShop.Application.Catalog.Carts;
 using eShop.Application.Catalog.Categories;
 using eShop.Application.Catalog.Products;
 using eShop.Application.Catalog.Slides;
@@ -110,6 +111,7 @@ namespace eShop.BackendApi
             services.AddTransient<ILanguageService, LanguageService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<ISlidesService, SlidesService>();
+            services.AddTransient<ICartsService,CartsService>();
 
             services.AddControllers();
             string issuer = Configuration.GetValue<string>("Tokens:Issuer");
